@@ -8,7 +8,8 @@
       "schematics": {
         "@ionic/angular-toolkit:page": {
           "styleext": "scss",
-          "standalone": true
+          "standalone": true,
+          "spec": false
         }
       },
       "root": "",
@@ -133,10 +134,15 @@
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
-      "styleext": "scss"
+      "styleext": "scss",
+      "spec": false
+    },
+    "@ionic/angular-toolkit:service": {
+      "spec": false
     },
     "@ionic/angular-toolkit:page": {
-      "styleext": "scss"
+      "styleext": "scss",
+      "spec": false
     },
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true

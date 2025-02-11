@@ -1,7 +1,7 @@
 {
   "name": "settlers-dice",
   "version": "0.0.1",
-  "author": "Ionic Framework",
+  "author": "Appforia",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
@@ -21,12 +21,19 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "@capacitor-community/keep-awake": "^7.0.0",
+    "@capacitor/android": "^7.0.1",
     "@capacitor/app": "7.0.0",
     "@capacitor/core": "7.0.1",
-    "@capacitor/haptics": "7.0.0",
+    "@capacitor/haptics": "^7.0.0",
     "@capacitor/keyboard": "7.0.0",
+    "@capacitor/preferences": "^7.0.0",
+    "@capacitor/screen-reader": "^7.0.0",
+    "@capacitor/share": "^7.0.0",
     "@capacitor/status-bar": "7.0.0",
+    "@capawesome/capacitor-android-edge-to-edge-support": "^7.0.0",
     "@ionic/angular": "^8.0.0",
+    "dexie": "^4.0.11",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -60,5 +67,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.6.3"
   },
-  "description": "An Ionic project"
+  "description": "An Appforia project"
 }

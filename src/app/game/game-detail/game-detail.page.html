@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>game-detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">game-detail</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (activeGame) {
+    <ion-list>
+      <ion-item>
+        <ion-input readonly label="Created On" [value]="activeGame.createdOn | date" labelPlacement="stacked"/>
+      </ion-item>
+      <ion-item>
+        <ion-input readonly label="Roster" [value]="activeGame.roster | concatRoster" labelPlacement="stacked"/>
+      </ion-item>
+      <ion-item>
+        <ion-input readonly label="Total Rolls" [value]="activeGame.rollCount | number" labelPlacement="stacked"/>
+      </ion-item>
+    </ion-list>
+
+    <ion-button routerLink="/playground">Continue Game</ion-button>
+    <ion-button (click)="deleteGame()">Delete Game</ion-button>
+  } @else {
+    <div>Nothing to see here</div>
+  }
+
+</ion-content>

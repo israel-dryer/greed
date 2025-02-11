@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Player</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="showCreatePlayerDialog()">
+        <ion-icon slot="icon-only" icon="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Players</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list inset>
+    @for (player of players; track player.id) {
+      <ion-item detail (click)="setupPlayerDetail(player)">{{ player.name }}</ion-item>
+    }
+  </ion-list>
+
+</ion-content>

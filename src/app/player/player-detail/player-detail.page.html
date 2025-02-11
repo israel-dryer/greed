@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>player-detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">player-detail</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (!player) {
+    <div>No active player selected</div>
+  } @else {
+    <div>
+      <div>{{ player.name }}</div>
+      <ion-button (click)="showEditPlayerNameDialog()">Edit</ion-button>
+      <ion-button (click)="showBookmarkPlayerDialog()">
+        <ion-icon slot="start" [name]="player.isUser === 1 ? 'bookmark' : 'bookmark-outline'"></ion-icon>
+        Bookmark
+      </ion-button>
+      <ion-button (click)="showDeletePlayerDialog()">Delete</ion-button>
+    </div>
+  }
+
+</ion-content>

@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>playground</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">playground</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div *ngIf="playService.diceTotal !== 0" style="text-align: center; font-size: 24px">
+    <div>{{ playService.diceTotal }}</div>
+    <div>{{ playService.diceActionResult }}</div>
+
+  </div>
+  <div *ngIf="playService.activeGame">
+    <div style="display: flex; justify-content: space-between">
+      <div><span>Next:</span><span>{{ playService.nextPlayer?.name }}</span></div>
+      <div *ngIf="playService.prevPlayer"><span>Prev:</span><span>{{ playService.prevPlayer.name }}</span></div>
+    </div>
+    <ion-button (click)="rollDice()">Roll Dice</ion-button>
+    <ion-button (click)="showActionSheet()">Options</ion-button>
+    <ion-button (click)="showAlchemyDialog()">Alchemist</ion-button>
+
+  </div>
+</ion-content>

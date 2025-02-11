@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>game-list</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">game-list</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    @for (game of games; track game.id) {
+      <ion-item detail (click)="handleItemClicked(game)">
+        <ion-label>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <ion-text>{{ game.createdOn | date }}</ion-text>
+            <ion-note>{{ game.roster | concatRoster }}</ion-note>
+          </div>
+        </ion-label>
+        <ion-avatar slot="end" *ngIf="game.winnerName">
+          <ion-label>{{game.winnerName[0]}}</ion-label>
+        </ion-avatar>
+      </ion-item>
+    }
+  </ion-list>
+
+</ion-content>

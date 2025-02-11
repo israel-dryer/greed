@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Settings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list inset>
+    <ion-list-header>
+      <ion-label color="primary">Application</ion-label>
+    </ion-list-header>
+    <ion-item detail routerLink="/game-list">
+      <ion-icon aria-hidden="true" slot="start" name="dice"></ion-icon>
+      <ion-label>Games</ion-label>
+    </ion-item>
+    <ion-item detail routerLink="/player-list">
+      <ion-icon slot="start" aria-hidden="true" name="people"></ion-icon>
+      <ion-label>Players</ion-label>
+    </ion-item>
+    <ion-item detail routerLink="/app-storage">
+      <ion-icon slot="start" aria-hidden="true" name="server"></ion-icon>
+      <ion-label>Storage</ion-label>
+    </ion-item>
+  </ion-list>
+
+  @if (settings) {
+    <ion-list inset>
+      <ion-list-header>
+        <ion-label color="primary">Sound Effects</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-toggle [checked]="settings.rollingDice" (ionChange)="handleSettingsChange('rollingDice', $event)">Rolling Dice</ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-toggle [checked]="settings.robberLaugh" (ionChange)="handleSettingsChange('robberLaugh', $event)">Robber Laugh</ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-toggle [checked]="settings.barbarianAttack" (ionChange)="handleSettingsChange('barbarianAttack', $event)">Barbarian Attack</ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-toggle [checked]="settings.gameOver" (ionChange)="handleSettingsChange('gameOver', $event)">Game Over</ion-toggle>
+      </ion-item>
+    </ion-list>
+
+    <ion-list inset>
+      <ion-list-header>
+        <ion-label color="primary">Other</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-toggle  [checked]="settings.rollHaptics" (ionChange)="handleSettingsChange('rollHaptics', $event)">Roll Haptics</ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-toggle [checked]="settings.fairDice" (ionChange)="handleSettingsChange('fairDice', $event)">Use Fair Dice</ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-toggle [checked]="settings.rollAnnouncer" (ionChange)="handleSettingsChange('rollAnnouncer', $event)">Roll Announcer</ion-toggle>
+      </ion-item>
+    </ion-list>
+  }
+
+
+</ion-content>

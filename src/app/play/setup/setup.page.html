@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>setup</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">setup</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    @for (player of players; track player.id) {
+      <ion-item>
+        <ion-checkbox (click)="handleSelectedPlayer(player.id!)"
+                      [value]="selectedRosterIds.includes(player.id!)">{{ player.name }}
+        </ion-checkbox>
+      </ion-item>
+    }
+  </ion-list>
+
+  <ion-list>
+    <ion-item>
+      <ion-toggle [checked]="useFairDice" (ionChange)="handleFairDiceChanged()">Use Fair Dice</ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle [checked]="isSeafarers" (ionChange)="handleSeafarersChanged()">Seafarers Expansion</ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle [checked]="isCitiesKnights" (ionChange)="handleCitiesKnightsChanged()">Cities & Knights Expansion
+      </ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <ion-button [disabled]="selectedRosterIds.length < 2" (click)="startGame()">Start Game</ion-button>
+</ion-content>

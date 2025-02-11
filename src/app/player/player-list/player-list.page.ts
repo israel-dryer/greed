@@ -6,7 +6,7 @@ import {
   IonContent,
   IonHeader, IonIcon,
   IonItem,
-  IonList,
+  IonList, IonText,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
@@ -15,14 +15,14 @@ import {PlayerService} from "../player.service";
 import {Player} from "../../shared/types";
 import {Router} from "@angular/router";
 import {addIcons} from "ionicons";
-import {add} from 'ionicons/icons'
+import {add, bookmark} from 'ionicons/icons'
 
 @Component({
   selector: 'app-player-list',
   templateUrl: './player-list.page.html',
   styleUrls: ['./player-list.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonButton, IonButtons, IonBackButton, IonIcon]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonButton, IonButtons, IonBackButton, IonIcon, IonText]
 })
 export class PlayerListPage implements OnInit {
 
@@ -32,7 +32,7 @@ export class PlayerListPage implements OnInit {
   players: Player[] = [];
 
   constructor() {
-    addIcons({add})
+    addIcons({add, bookmark})
   }
 
   ngOnInit() {

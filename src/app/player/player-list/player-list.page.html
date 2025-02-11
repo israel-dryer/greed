@@ -21,7 +21,12 @@
 
   <ion-list inset>
     @for (player of players; track player.id) {
-      <ion-item detail (click)="setupPlayerDetail(player)">{{ player.name }}</ion-item>
+      <ion-item detail (click)="setupPlayerDetail(player)">
+        <div style="display: flex; gap: .5rem">
+          <ion-text>{{ player.name }}</ion-text>
+          <ion-icon color="danger" *ngIf="player.isUser" aria-hidden="true" name="bookmark"></ion-icon>
+        </div>
+      </ion-item>
     }
   </ion-list>
 

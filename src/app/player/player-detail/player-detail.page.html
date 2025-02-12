@@ -1,4 +1,5 @@
 <ion-header [translucent]="true">
+  <!-- Standard Toolbar -->
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
@@ -16,6 +17,8 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+
+  <!-- Segment Control -->
   <ion-toolbar>
     <ion-segment value="summary">
       <ion-segment-button value="summary" content-id="summary">
@@ -37,6 +40,4 @@
       <app-player-histogram *ngIf="player" [player]="player"></app-player-histogram>
     </ion-segment-content>
   </ion-segment-view>
-
-
 </ion-content>

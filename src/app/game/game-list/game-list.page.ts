@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
-  IonAvatar,
+  IonAvatar, IonBackButton, IonButtons,
   IonContent,
   IonHeader,
   IonItem,
@@ -23,7 +23,7 @@ import {Router} from "@angular/router";
   templateUrl: './game-list.page.html',
   styleUrls: ['./game-list.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonLabel, IonText, IonNote, ConcatRosterPipe, IonAvatar]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonLabel, IonText, IonNote, ConcatRosterPipe, IonAvatar, IonButtons, IonBackButton]
 })
 export class GameListPage implements OnInit {
 

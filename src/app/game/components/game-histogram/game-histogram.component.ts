@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Game} from "../../../shared/types";
 
 @Component({
   selector: 'app-game-histogram',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./game-histogram.component.scss'],
 })
 export class GameHistogramComponent  implements OnInit {
+
+  @Input() game!: Game;
 
   constructor() { }
 

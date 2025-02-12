@@ -1,3 +1,32 @@
-<p>
-  game-summary works!
-</p>
+<ion-list inset>
+  <ion-item>
+    <ion-input readonly labelPlacement="stacked" [value]="game.createdOn | date : 'short'">
+      <ion-label slot="label" color="medium">Start Date</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly labelPlacement="stacked" [value]="game.roster | concatRoster">
+      <ion-label slot="label" color="medium">Roster</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item *ngIf="game.winnerName">
+    <ion-input readonly labelPlacement="stacked" [value]="game.winnerName">
+      <ion-label slot="label" color="medium">Winner</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item *ngIf="game.completedOn">
+    <ion-input readonly labelPlacement="stacked" [value]="game.completedOn | date : 'short'">
+      <ion-label slot="label" color="medium">Completed On</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly labelPlacement="stacked" [value]="gameDuration">
+      <ion-label slot="label" color="medium">Duration</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly labelPlacement="stacked" [value]="game.rollCount | number">
+      <ion-label slot="label" color="medium">Total Rolls</ion-label>
+    </ion-input>
+  </ion-item>
+</ion-list>

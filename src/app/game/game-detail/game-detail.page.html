@@ -1,33 +1,46 @@
 <ion-header [translucent]="true">
+  <!-- Standard Toolbar -->
   <ion-toolbar>
-    <ion-title>game-detail</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Game Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon size="small" slot="icon-only" name="trash" (click)="deleteGame()"/>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <!-- Segment Control -->
+  <ion-toolbar>
+    <ion-segment value="summary">
+      <ion-segment-button value="summary" content-id="summary">
+        <ion-label>Summary</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="rolls" content-id="rolls">
+        <ion-label>Rolls</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="histogram" content-id="histogram">
+        <ion-label>Histogram</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">game-detail</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<!-- TODO The height of the rolls page is causing the summary page to be scrollable -->
 
-  @if (activeGame) {
-    <ion-list>
-      <ion-item>
-        <ion-input readonly label="Created On" [value]="activeGame.createdOn | date" labelPlacement="stacked"/>
-      </ion-item>
-      <ion-item>
-        <ion-input readonly label="Roster" [value]="activeGame.roster | concatRoster" labelPlacement="stacked"/>
-      </ion-item>
-      <ion-item>
-        <ion-input readonly label="Total Rolls" [value]="activeGame.rollCount | number" labelPlacement="stacked"/>
-      </ion-item>
-    </ion-list>
-
-    <ion-button routerLink="/playground">Continue Game</ion-button>
-    <ion-button (click)="deleteGame()">Delete Game</ion-button>
-  } @else {
-    <div>Nothing to see here</div>
-  }
+<ion-content fullscreen>
+  <ion-segment-view>
+    <ion-segment-content id="summary">
+      <app-game-summary *ngIf="activeGame" [game]="activeGame"></app-game-summary>
+    </ion-segment-content>
+    <ion-segment-content id="rolls">
+      <app-game-rolls *ngIf="activeGame" [gameId]="activeGame.id!"></app-game-rolls>
+    </ion-segment-content>
+    <ion-segment-content id="histogram">
+      <app-game-histogram *ngIf="activeGame" [game]="activeGame"></app-game-histogram>
+    </ion-segment-content>
+  </ion-segment-view>
 
 </ion-content>

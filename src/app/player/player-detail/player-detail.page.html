@@ -16,49 +16,27 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment value="summary">
+      <ion-segment-button value="summary" content-id="summary">
+        <ion-label>Summary</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="histogram" content-id="histogram">
+        <ion-label>Histogram</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">player-detail</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content fullscreen>
+  <ion-segment-view>
+    <ion-segment-content id="summary">
+      <app-player-summary *ngIf="player" [player]="player"></app-player-summary>
+    </ion-segment-content>
+    <ion-segment-content id="histogram">
+      <app-player-histogram *ngIf="player" [player]="player"></app-player-histogram>
+    </ion-segment-content>
+  </ion-segment-view>
 
-  <ion-list *ngIf="!player" inset>
-    <ion-item>
-      <ion-label>No player selected</ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ion-list *ngIf="player" inset>
-    <ion-item>
-      <ion-input readonly label="Last Played" [value]="lastPlayed" labelPlacement="stacked"/>
-    </ion-item>
-    <ion-item>
-      <ion-input readonly label="Hours Played" [value]="hoursPlayed" labelPlacement="stacked"/>
-    </ion-item>
-    <ion-item>
-      <ion-input readonly label="Total Rolls" [value]="totalRolls" labelPlacement="stacked"/>
-    </ion-item>
-    <ion-item>
-      <ion-input readonly label="Games Played" [value]="gamesPlayed" labelPlacement="stacked"/>
-    </ion-item>
-    <ion-item>
-      <ion-input readonly label="Games Won" [value]="gamesWon" labelPlacement="stacked"/>
-    </ion-item>
-    <ion-item>
-      <ion-input readonly label="Win Rate" [value]="winRate" labelPlacement="stacked"/>
-    </ion-item>
-    <ion-item>
-      <ion-input readonly label="Longest Win Streak" [value]="longestWinStreak" labelPlacement="stacked"/>
-    </ion-item>
-    <ion-item>
-      <ion-input readonly label="Fastest Win" [value]="fastestWin" labelPlacement="stacked"/>
-    </ion-item>
-    <ion-item>
-      <ion-input readonly label="Robber Rate" [value]="robberRate" labelPlacement="stacked"/>
-    </ion-item>
-  </ion-list>
 
 </ion-content>

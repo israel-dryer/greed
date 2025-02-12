@@ -1,3 +1,47 @@
-<p>
-  player-summary works!
-</p>
+<ion-list inset>
+  <ion-item>
+    <ion-input readonly [value]="lastPlayed" labelPlacement="floating">
+      <ion-label slot="label" color="medium">Last Played</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly [value]="hoursPlayed" labelPlacement="floating">
+      <ion-label slot="label" color="medium">Hours Played</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly [value]="totalRolls" labelPlacement="floating">
+      <ion-label slot="label" color="medium">Total Rolls</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly [value]="gamesPlayed" labelPlacement="floating">
+      <ion-label slot="label" color="medium">Games Played</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly [value]="gamesWon" labelPlacement="floating">
+      <ion-label slot="label" color="medium">Games Won</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly [value]="winRate" labelPlacement="floating">
+      <ion-label slot="label" color="medium">Win Rate</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly [value]="longestWinStreak" labelPlacement="floating">
+      <ion-label slot="label" color="medium">Longest Win Streak</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly [value]="fastestWin" labelPlacement="floating">
+      <ion-label slot="label" color="medium">Fastest Win (minutes)</ion-label>
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input readonly [value]="robberRate" labelPlacement="floating">
+      <ion-label slot="label" color="medium">Robber Rate</ion-label>
+    </ion-input>
+  </ion-item>
+</ion-list>

@@ -1,3 +1,27 @@
-<p>
-  player-histogram works!
-</p>
+<div class="ph-chart-container">
+    @for (col of rolls; track col.toString() + $index) {
+      <div class="ph-bar-container">
+        <div
+          class="ph-bar-label"
+          [ngStyle]="{
+            color: backgroundChart
+              ? 'var(--ion-color-medium)'
+              : 'var(--ion-color-dark)',
+          }">
+          {{ col === 0 ? "" : col }}
+        </div>
+        <div
+          [ngClass]="[
+            'ph-bar-line',
+            backgroundChart ? 'ph-inactive-bar' : 'ph-active-bar',
+          ]"
+          [ngStyle]="{
+            height:
+              maxValue === 0
+                ? 0
+                : ((col / maxValue) * 100).toString() + '%',
+          }"></div>
+        <div class="ph-axis-label">{{ backgroundChart ? " " : $index + 2 }}</div>
+      </div>
+    }
+</div>

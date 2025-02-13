@@ -9,11 +9,24 @@
   gap: 1rem;
 }
 
+
+.s-section-header {
+  --background: var(--ion-color-light);
+}
+
 section {
   border-radius: .5rem;
   overflow: hidden;
   border: 1px solid var(--ion-color-light-shade);
 }
+
+
+@media (prefers-color-scheme: dark) {
+  .s-section-header {
+    --background: var(--ion-background-color-step-100);
+  }
+}
+
 
  .md .s-selection-indicator {
   width: 19px;
@@ -32,14 +45,4 @@ section {
   font-size: 18px;
   font-weight: bold;
   color: var(--ion-color-primary);
-}
-
-.s-section-header {
-  --background: var(--ion-color-light);
-}
-
-@media (prefers-color-scheme: dark) {
-  .s-section-header {
-    --background: var(--ion-background-color-step-100);
-  }
 }

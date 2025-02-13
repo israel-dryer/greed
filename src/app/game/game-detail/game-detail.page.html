@@ -6,16 +6,17 @@
     </ion-buttons>
     <ion-title>Game Details</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon size="small" slot="icon-only" name="trash" (click)="deleteGame()"/>
+      <ion-button (click)="deleteGame()">
+        
+        <ion-icon size="small" slot="icon-only" name="trash"/>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 
   <!-- Segment Control -->
   <ion-toolbar>
-    <ion-segment value="summary">
-      <ion-segment-button value="summary" content-id="summary">
+    <ion-segment [value]="showSummary ? 'summary' : 'rolls'">
+      <ion-segment-button *ngIf="showSummary" value="summary" content-id="summary">
         <ion-label>Summary</ion-label>
       </ion-segment-button>
       <ion-segment-button value="rolls" content-id="rolls">
@@ -28,18 +29,17 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- TODO The height of the rolls page is causing the summary page to be scrollable -->
-
 <ion-content fullscreen>
   <ion-segment-view>
-    <ion-segment-content id="summary">
+    <ion-segment-content *ngIf="showSummary" id="summary">
       <app-game-summary *ngIf="activeGame" [game]="activeGame"></app-game-summary>
     </ion-segment-content>
     <ion-segment-content id="rolls">
-      <app-game-rolls *ngIf="activeGame" [gameId]="activeGame.id!"></app-game-rolls>
+      <app-game-rolls *ngIf="activeGame" [rolls]="rolls"
+                      [isCitiesKnights]="activeGame.isCitiesKnights === 1"></app-game-rolls>
     </ion-segment-content>
     <ion-segment-content id="histogram">
-      <app-game-histogram *ngIf="activeGame" [game]="activeGame"></app-game-histogram>
+      <app-game-histogram *ngIf="activeGame" [rolls]="rolls" [game]="activeGame"></app-game-histogram>
     </ion-segment-content>
   </ion-segment-view>
 

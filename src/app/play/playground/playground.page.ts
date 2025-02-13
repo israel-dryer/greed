@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
-  AlertController,
+  AlertController, IonActionSheet,
   IonButton,
   IonContent,
   IonHeader,
@@ -10,22 +10,28 @@ import {
   IonToolbar
 } from '@ionic/angular/standalone';
 import {PlayService} from '../play.service';
-import {ActionSheetButton, ActionSheetController, AlertInput} from "@ionic/angular";
-import {Router} from "@angular/router";
+import {ActionSheetButton, AlertInput} from "@ionic/angular";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-playground',
   templateUrl: './playground.page.html',
   styleUrls: ['./playground.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonActionSheet, RouterLink]
 })
 export class PlaygroundPage {
 
-  readonly actionSheetController = inject(ActionSheetController);
   readonly alertController = inject(AlertController);
   readonly playService = inject(PlayService);
   readonly router = inject(Router);
+
+  actionSheetButtons: ActionSheetButton[] = [
+    {text: 'Undo Roll', data: {action: 'undo'}},
+    {text: 'End Game', data: {action: 'end'}},
+    {text: 'Settings', data: {action: 'settings'}},
+    {text: 'Cancel', role: 'cancel', data: {action: 'cancel'}}
+  ];
 
   async rollDice(alchemyDice?: any) {
     this.playService.playSoundRollingDice();
@@ -76,30 +82,17 @@ export class PlaygroundPage {
     await alert.present();
   }
 
-  async showActionSheet() {
-    const undoDisabled = (this.playService.activeGame?.rollCount ?? 0) === 0;
-    const actionSheetButtons: ActionSheetButton[] = [
-      {text: 'Undo Roll', data: {action: 'undo'}, disabled: undoDisabled},
-      {text: 'End Game', data: {action: 'end'}},
-      {text: 'Settings', data: {action: 'settings'}},
-      {text: 'Cancel', role: 'cancel', data: {action: 'cancel'}}
-    ];
-    const sheet = await this.actionSheetController.create({
-      buttons: actionSheetButtons
-    });
-    sheet.onDidDismiss().then((event) => this.handleActionSheetDidDismiss(event));
-    await sheet.present();
-  }
-
   async handleActionSheetDidDismiss(event: any) {
     console.log(event);
-    const {data, role} = event;
+    const {data, role} = event.detail;
     if (role === 'backdrop' || role === 'cancel') {
       return;
     } else if (data.action === 'end') {
       await this.showSelectWinnerAlert();
     } else if (data.action === 'undo') {
-      await this.playService.undoLastRoll();
+      if (this.playService.activeGame?.lastRoll) {
+        await this.playService.undoLastRoll();
+      }
     } else if (data.action === 'settings') {
       await this.router.navigate(['/app-settings']);
     }

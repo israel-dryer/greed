@@ -21,8 +21,12 @@
       <div *ngIf="playService.prevPlayer"><span>Prev:</span><span>{{ playService.prevPlayer.name }}</span></div>
     </div>
     <ion-button (click)="rollDice()">Roll Dice</ion-button>
-    <ion-button (click)="showActionSheet()">Options</ion-button>
+    <ion-button id="show-action-sheet">Options</ion-button>
     <ion-button (click)="showAlchemyDialog()">Alchemist</ion-button>
-
+    <ion-button [routerLink]="['/game-detail']" [queryParams]="{summary: false}">Game Stats</ion-button>
   </div>
+
+  <ion-action-sheet trigger="show-action-sheet"
+                    (ionActionSheetDidDismiss)="handleActionSheetDidDismiss($event)"
+                    [buttons]="actionSheetButtons"/>
 </ion-content>

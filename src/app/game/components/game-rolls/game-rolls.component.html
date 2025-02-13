@@ -1,20 +1,26 @@
-<ion-grid style="height: 100%; overflow-y: scroll">
-  <ion-row class="gr-header">
-    <ion-col>#</ion-col>
-    <ion-col class="gr-total-col">Total</ion-col>
-    <ion-col>D1</ion-col>
-    <ion-col>D2</ion-col>
-    <ion-col *ngIf="isCitiesKnights">Action</ion-col>
-    <ion-col>Player</ion-col>
-  </ion-row>
-  @for (roll of rolls; track roll.id) {
-    <ion-row class="gr-row">
-      <ion-col>{{ roll.id }}</ion-col>
-      <ion-col class="gr-total-col">{{ roll.total }}</ion-col>
-      <ion-col>{{ roll.dice1 }}</ion-col>
-      <ion-col>{{ roll.dice2 }}</ion-col>
-      <ion-col *ngIf="isCitiesKnights">{{ roll.diceAction }}</ion-col>
-      <ion-col>{{ roll.playerName }}</ion-col>
-    </ion-row>
-  }
-</ion-grid>
+<div class="container">
+  <table class="gr-styled-table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Total</th>
+      <th>D1</th>
+      <th>D2</th>
+      <th *ngIf="isCitiesKnights">Action</th>
+      <th>Player</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (roll of rolls; track roll.id) {
+        <tr>
+          <td>{{ roll.id }}</td>
+          <td class="gr-total-col">{{ roll.total }}</td>
+          <td>{{ roll.dice1 }}</td>
+          <td>{{ roll.dice2 }}</td>
+          <td *ngIf="isCitiesKnights">{{ roll.diceAction }}</td>
+          <td>{{ roll.playerName }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

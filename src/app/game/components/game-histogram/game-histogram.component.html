@@ -1,3 +1,54 @@
-<p>
-  game-histogram works!
-</p>
+<div class="gh-container">
+  <div class="gh-chips">
+    @for (player of roster; track player) {
+      <ion-chip [ngClass]="!rosterFilter.includes(player) ? 'gh-chip-inactive' : ''"
+                [color]="rosterFilter.includes(player) ? 'primary' : undefined"
+                (click)="handleChipClicked(player)">{{ player }}
+      </ion-chip>
+    }
+  </div>
+
+  <div class="charts-container">
+    <div *ngIf="rosterFilter.length !== 0" class="ph-chart-container">
+      @for (col of baseRolls; track col.toString() + $index) {
+        <div class="ph-bar-container">
+          <div
+            class="ph-bar-label"
+            [ngStyle]="{
+            color: rosterFilter.length > 0
+              ? 'var(--ion-color-medium)'
+              : 'var(--ion-color-dark)',
+          }">
+            {{ col === 0 ? "" : col }}
+          </div>
+          <div
+            [ngClass]="['ph-bar-line', rosterFilter.length > 0 ? 'ph-inactive-bar' : 'ph-active-bar']"
+            [ngStyle]="{
+            height:
+              maxValue === 0
+                ? 0
+                : ((col / maxValue) * 100).toString() + '%',
+          }"></div>
+          <div class="ph-axis-label">{{ backgroundChart ? " " : $index + 2 }}</div>
+        </div>
+      }
+    </div>
+
+    <div class="ph-chart-container">
+      @for (col of filteredRolls; track col.toString() + $index) {
+        <div class="ph-bar-container">
+          <div
+            class="ph-bar-label"
+            [ngStyle]="{color: 'var(--ion-color-dark)'}">
+            {{ col === 0 ? "" : col }}
+          </div>
+          <div
+            [ngClass]="['ph-bar-line', 'ph-active-bar']"
+            [ngStyle]="{
+            height: maxValue === 0 ? 0 : ((col / maxValue) * 100).toString() + '%'}"></div>
+          <div class="ph-axis-label">{{ $index + 2 }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

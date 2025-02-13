@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
@@ -16,8 +16,8 @@
 
   <div class="s-content-container">
     <section>
-      <ion-item class="s-section-header" lines="none">
-        <ion-label>Application</ion-label>
+      <ion-item class="sd-section-header" lines="full">
+        <ion-label color="primary">Application</ion-label>
       </ion-item>
       <ion-list lines="none">
         <ion-item detail routerLink="/game-list">
@@ -41,8 +41,8 @@
 
     @if (settings) {
       <section>
-        <ion-item class="s-section-header" lines="none">
-          <ion-label>Sound Effects</ion-label>
+        <ion-item class="sd-section-header" lines="full">
+          <ion-label color="primary">Sound Effects</ion-label>
         </ion-item>
         <ion-list lines="none">
           <ion-item>
@@ -71,8 +71,8 @@
       </section>
 
       <section>
-        <ion-item class="s-section-header" lines="none">
-          <ion-label>Other</ion-label>
+        <ion-item class="sd-section-header" lines="full">
+          <ion-label color="primary">Other</ion-label>
         </ion-item>
         <ion-list lines="none">
           <ion-item>
@@ -87,8 +87,7 @@
           </ion-item>
           <ion-item>
             <ion-toggle [checked]="settings.rollAnnouncer" (ionChange)="handleSettingsChange('rollAnnouncer', $event)">
-              Roll
-              Announcer
+              Roll Announcer
             </ion-toggle>
           </ion-item>
         </ion-list>

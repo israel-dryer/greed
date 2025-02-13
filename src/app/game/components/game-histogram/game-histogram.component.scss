@@ -31,8 +31,19 @@
   position: relative;
 }
 
-.ph-chart-container {
+.md .ph-chart-container {
   height: calc(100vh - 170px);
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  position: absolute;
+  top: 0;
+}
+
+.ios .ph-chart-container {
+  height: calc(100vh - 155px);
   width: 100%;
   padding: 1rem;
   display: flex;

@@ -1,7 +1,10 @@
 .container {
-  padding: 1rem;
+  box-sizing: border-box;
+  margin-top: .5rem;
+  padding-inline: 1rem;
+  padding-bottom: 1rem;
   position: relative;
-  height: 100%;
+  height: calc(100% - .25rem);
   overflow-y: scroll;
 }
 
@@ -37,6 +40,10 @@
 
 .gr-styled-table tbody tr:nth-of-type(even) {
   background-color: var(--ion-color-light-tint);
+}
+
+.gr-styled-table tbody tr:nth-of-type(odd) {
+  background-color: var(--ion-item-background);
 }
 
 .gr-styled-table tbody tr:last-of-type {

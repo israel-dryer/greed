@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
@@ -14,21 +14,24 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list inset>
-    @for (game of games; track game.id) {
-      <ion-item detail (click)="handleItemClicked(game)">
-        <ion-label>
-          <div style="display: flex; flex-direction: column; gap: 4px;">
-            <ion-text>{{ game.createdOn | date }}</ion-text>
-            <ion-note>{{ game.roster | concatRoster }}</ion-note>
-          </div>
-        </ion-label>
-        <!-- TODO Avatar Color is Off -->
-        <ion-avatar slot="end" *ngIf="game.winnerName" style="align-items: center; display: flex; background-color: var(--ion-color-medium); justify-content: center;">
-          <ion-label>{{game.winnerName[0]}}</ion-label>
-        </ion-avatar>
-      </ion-item>
-    }
-  </ion-list>
+  <section class="sd-list-section" style="margin: 1rem;">
+    <ion-list>
+      @for (game of games; track game.id) {
+        <ion-item detail (click)="handleItemClicked(game)">
+          <ion-label>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <ion-text>{{ game.createdOn | date }}</ion-text>
+              <ion-note>{{ game.roster | concatRoster }}</ion-note>
+            </div>
+          </ion-label>
+          <!-- TODO Avatar Color is Off -->
+          <ion-avatar slot="end" *ngIf="game.winnerName"
+                      style="align-items: center; display: flex; background-color: var(--ion-color-light-shade); justify-content: center;">
+            <ion-label>{{ game.winnerName[0] }}</ion-label>
+          </ion-avatar>
+        </ion-item>
+      }
+    </ion-list>
+  </section>
 
 </ion-content>

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Game, Histogram, Roll} from "../../../shared/types";
-import {IonChip} from "@ionic/angular/standalone";
+import {IonChip, IonText} from "@ionic/angular/standalone";
 import {NgClass, NgIf, NgStyle} from "@angular/common";
 import {createHistogram} from "../../../shared/utilities";
 
@@ -12,7 +12,8 @@ import {createHistogram} from "../../../shared/utilities";
     IonChip,
     NgClass,
     NgStyle,
-    NgIf
+    NgIf,
+    IonText
   ]
 })
 export class GameHistogramComponent implements OnInit {

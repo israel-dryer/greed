@@ -9,7 +9,6 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader,
   IonTitle, IonToggle,
   IonToolbar
 } from '@ionic/angular/standalone';
@@ -26,7 +25,7 @@ import {PlayerService} from "../../player/player.service";
   templateUrl: './app-settings.page.html',
   styleUrls: ['./app-settings.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, RouterLink, IonListHeader, IonLabel, IonToggle, IonIcon, IonButtons, IonBackButton]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, RouterLink, IonLabel, IonToggle, IonIcon, IonButtons, IonBackButton]
 })
 export class AppSettingsPage implements OnInit {
 

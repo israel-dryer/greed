@@ -31,8 +31,14 @@
  * For more info, please see:
  * https://ionicframework.com/docs/theming/dark-mode
  */
+@import '@ionic/angular/css/palettes/high-contrast.always.css';
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
-@import '@ionic/angular/css/palettes/high-contrast.system.css';
+.sd-list-section {
+  border-radius: .5rem;
+  overflow: hidden;
+  border: 1px solid var(--ion-color-light-shade);
+}
+
+.md .sd-tabs-border {
+  border-bottom: 1px solid var(--ion-color-light-shade);
+}

@@ -11,20 +11,20 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit() {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-
-    if (prefersDark.matches) {
-      EdgeToEdge.setBackgroundColor({color: '#1f1f1f'}).then();
-    } else {
-      EdgeToEdge.setBackgroundColor({color: '#fff'}).then();
-    }
-
-    prefersDark.addEventListener('change', (mediaQuery) => {
-      if (mediaQuery.matches) {
-        EdgeToEdge.setBackgroundColor({color: '#1f1f1f'}).then();
-      } else {
-        EdgeToEdge.setBackgroundColor({color: '#fff'}).then();
-      }
-    });
+    // const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    //
+    // if (prefersDark.matches) {
+    //   EdgeToEdge.setBackgroundColor({color: '#1f1f1f'}).then();
+    // } else {
+    //   EdgeToEdge.setBackgroundColor({color: '#fff'}).then();
+    // }
+    //
+    // prefersDark.addEventListener('change', (mediaQuery) => {
+    //   if (mediaQuery.matches) {
+    //     EdgeToEdge.setBackgroundColor({color: '#1f1f1f'}).then();
+    //   } else {
+    //     EdgeToEdge.setBackgroundColor({color: '#fff'}).then();
+    //   }
+    // });
   }
 }

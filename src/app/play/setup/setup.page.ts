@@ -2,12 +2,15 @@ import {Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
-  IonButton,
+  IonAccordion,
+  IonAccordionGroup,
+  IonAlert, IonBackButton, IonBadge,
+  IonButton, IonButtons,
   IonCheckbox,
   IonContent,
   IonHeader,
-  IonItem,
-  IonList,
+  IonItem, IonLabel,
+  IonList, IonListHeader,
   IonTitle,
   IonToggle,
   IonToolbar
@@ -26,7 +29,7 @@ import {Router} from "@angular/router";
   templateUrl: './setup.page.html',
   styleUrls: ['./setup.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonCheckbox, IonItem, IonToggle, IonButton]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonCheckbox, IonItem, IonToggle, IonButton, IonListHeader, IonLabel, IonAlert, IonAccordionGroup, IonAccordion, IonBadge, IonButtons, IonBackButton]
 })
 export class SetupPage implements OnInit {
 
@@ -51,10 +54,17 @@ export class SetupPage implements OnInit {
   }
 
   handleSelectedPlayer(id: number) {
-    if (id in this.selectedRosterIds) {
-      this.selectedRosterIds = this.selectedRosterIds.filter(id => id !== id);
+    if (this.selectedRosterIds.includes(id)) {
+      // remove player
+      this.selectedRosterIds = this.selectedRosterIds.filter(x => x !== id);
     } else {
-      this.selectedRosterIds.push(id);
+      if (this.selectedRosterIds.length === 6) {
+        // too many players
+        return;
+      } else {
+        // add player
+        this.selectedRosterIds.push(id);
+      }
     }
   }
 

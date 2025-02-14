@@ -26,16 +26,11 @@ export class StatisticsService {
 
     let fastestWinSeconds = 0;
     let gamesWon = 0;
-    gameList.filter(x => x.winnerId === id).forEach(game => {
-      gamesWon++;
-      if (fastestWinSeconds === 0) {
-        fastestWinSeconds = game.duration;
-      } else if (fastestWinSeconds > game.duration) {
-        fastestWinSeconds = game.duration;
-      }
-    });
+    let wonGames = gameList.filter(x => x.winnerId === id);
+    gamesWon = wonGames.length;
+    fastestWinSeconds = Math.min(...wonGames.map(x => x.duration).values());
     const secondsPlayed = gameList.filter(x => x.completedOn).map(x => x.duration).reduce((a, b) => a + b);
-    let lastPlayed = gameList.at(0)?.createdOn;
+    let lastPlayed = gameList.reverse().at(0)?.createdOn;
 
     // win streak calculation
     let currentStreak = 0;
@@ -57,6 +52,5 @@ export class StatisticsService {
     const changes = {histogram, lastPlayed, gamesPlayed, gamesWon, secondsPlayed, robberRolls, totalRolls, fastestWinSeconds, longestWinsStreak};
     await db.players.update(id, changes);
   }
-
 
 }

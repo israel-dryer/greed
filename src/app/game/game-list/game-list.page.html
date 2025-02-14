@@ -16,19 +16,27 @@
 
   <section class="sd-list-section" style="margin: 1rem;">
     <ion-list>
+      <ion-item>
+        <ion-label>
+          {{games.length | number}} games
+        </ion-label>
+      </ion-item>
       @for (game of games; track game.id) {
         <ion-item detail (click)="handleItemClicked(game)">
           <ion-label>
             <div style="display: flex; flex-direction: column; gap: 4px;">
-              <ion-text>{{ game.createdOn | date }}</ion-text>
+              <ion-text>{{ game.createdOn | date : 'short' }}</ion-text>
               <ion-note>{{ game.roster | concatRoster }}</ion-note>
+              <ion-note>{{ game.rollCount | number }} rolls</ion-note>
+              <ion-note>{{ (game.duration / 60).toFixed(1) }} mins</ion-note>
             </div>
           </ion-label>
-          <!-- TODO Avatar Color is Off -->
-          <ion-avatar slot="end" *ngIf="game.winnerName"
-                      style="align-items: center; display: flex; background-color: var(--ion-color-light-shade); justify-content: center;">
-            <ion-label>{{ game.winnerName[0] }}</ion-label>
-          </ion-avatar>
+          <ion-label slot="end" *ngIf="game.winnerName">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <img ngSrc="./assets/crown.png" alt="" style="width: 48px; height: 48px;" height="512" width="512">
+            <ion-text>{{game.winnerName}}</ion-text>
+            </div>
+          </ion-label>
         </ion-item>
       }
     </ion-list>

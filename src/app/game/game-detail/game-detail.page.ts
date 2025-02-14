@@ -2,6 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
+  AlertController,
   IonBackButton,
   IonButton, IonButtons,
   IonContent,
@@ -21,6 +22,7 @@ import {GameHistogramComponent} from "../components/game-histogram/game-histogra
 import {addIcons} from "ionicons";
 import {trash} from "ionicons/icons";
 import {liveQuery} from "dexie";
+import {StatisticsService} from "../../shared/statistics.service";
 
 @Component({
   selector: 'app-game-detail',
@@ -35,9 +37,11 @@ export class GameDetailPage implements ViewWillEnter, OnInit {
   rolls: Roll[] = [];
   showSummary = true;
 
+  readonly alertController = inject(AlertController);
   readonly activeRoute = inject(ActivatedRoute);
   readonly router = inject(Router);
   readonly gameService = inject(GameService);
+  readonly statisticService = inject(StatisticsService);
 
   constructor() {
     addIcons({trash});
@@ -64,8 +68,23 @@ export class GameDetailPage implements ViewWillEnter, OnInit {
 
   async deleteGame() {
     if (this.activeGame) {
-      this.gameService.deleteGame(this.activeGame.id!);
-      await this.router.navigate(['/game-list']);
+      const alert = await this.alertController.create({
+        header: 'Delete Game?',
+        message: 'Are you sure you want to delete this game?',
+        buttons: [{text: 'Cancel', role: 'cancel'}, {text: 'Delete', role: 'destructive'}]
+      });
+      alert.onDidDismiss().then(async (result) => {
+        if (result.role === 'destructive') {
+          this.gameService.deleteGame(this.activeGame!.id!);
+          const players = this.activeGame!.roster.map(x => x.id);
+          for (const playerId of players) {
+            await this.statisticService.updatePlayerStatsById(playerId);
+          }
+          await this.router.navigate(['/game-list']);
+        }
+      });
+      await alert.present();
+
     }
 
   }

@@ -2,8 +2,7 @@
   <div class="gh-container">
     <div class="gh-chips">
       @for (player of roster; track player) {
-        <ion-chip [ngClass]="!rosterFilter.includes(player) ? 'gh-chip-inactive' : ''"
-                  [color]="rosterFilter.includes(player) ? 'primary' : undefined"
+        <ion-chip [ngClass]="!rosterFilter.includes(player) ? 'gh-chip-inactive' : 'gh-chip-active'"
                   (click)="handleChipClicked(player)">{{ player }}
         </ion-chip>
       }

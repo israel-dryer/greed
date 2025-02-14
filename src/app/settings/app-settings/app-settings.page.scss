@@ -12,6 +12,11 @@ section {
   border: 1px solid var(--ion-color-light-shade);
 }
 
+.sd-section-header {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}
+
 
 @media (prefers-color-scheme: dark) {
   .s-section-header {

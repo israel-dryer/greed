@@ -10,9 +10,10 @@
 }
 
 
-//.md .s-section-header {
-//  --background: var(--ion-color-light);
-//}
+.sd-section-header {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}
 
 @media (prefers-color-scheme: dark) {
   .s-section-header {

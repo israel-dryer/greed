@@ -45,7 +45,7 @@ export class PlayerSummaryComponent implements OnInit {
         maximumFractionDigits: 1
       }));
       this.longestWinStreak = this.player.longestWinsStreak.toFixed(0);
-      this.fastestWin = (this.player.secondsPlayed / 60).toFixed(1) + ' minutes';
+      this.fastestWin = (this.player.fastestWinSeconds / 60).toFixed(1) + ' minutes';
       this.robberRate = (this.player.totalRolls === 0 ? '0%' : (this.player.robberRolls / this.player.totalRolls).toLocaleString(undefined, {
         style: 'percent',
         maximumFractionDigits: 1

@@ -50,7 +50,7 @@ export class SetupPage implements OnInit {
     this.useFairDice = settings!.fairDice === 1;
 
     liveQuery(() => this.playerService.getActivePlayers())
-      .subscribe(players => this.players = players);
+      .subscribe(players => this.players = players.sort((a, b) => a.lastPlayed > b.lastPlayed ? -1 : 1));
   }
 
   handleSelectedPlayer(id: number) {

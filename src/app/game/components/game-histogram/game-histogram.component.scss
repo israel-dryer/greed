@@ -5,8 +5,12 @@
 }
 
 .gh-chip-inactive {
-  --background: var(--ion-background-color-step-50);
-  --color: var(--ion-text-color-step-300);
+
+}
+
+.gh-chip-active {
+  --background: rgba(var(--ion-color-medium-rgb), 1);
+  --color: var(--ion-color-medium-contrast);
 }
 
 @keyframes grow {
@@ -93,5 +97,10 @@
 @media (prefers-color-scheme: dark) {
   .ph-inactive-bar {
     background: rgba(255, 255, 255, 0.12);
+  }
+
+  .gh-chip-active {
+    --background: rgba(var(--ion-color-primary-rgb), 0.5);
+    --color: var(--ion-color-text-color-step-100);
   }
 }

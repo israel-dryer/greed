@@ -18,6 +18,11 @@ export class GameService {
   }
 
   getActiveGame() {
+    if (!this._activeGame) {
+      const game = localStorage.getItem('activeGame');
+      if (!game) return;
+      this._activeGame = JSON.parse(game);
+    }
     return this._activeGame;
   }
 

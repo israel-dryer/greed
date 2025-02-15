@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, model, OnDestroy} from '@angular/core';
 import {Game, Histogram, Roll} from "../../../shared/types";
 import {IonChip, IonText} from "@ionic/angular/standalone";
 import {NgClass, NgIf, NgStyle} from "@angular/common";
 import {createHistogram} from "../../../shared/utilities";
+import {toObservable} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-game-histogram',
@@ -16,32 +17,31 @@ import {createHistogram} from "../../../shared/utilities";
     IonText
   ]
 })
-export class GameHistogramComponent implements OnInit {
+export class GameHistogramComponent implements OnDestroy {
 
-  @Input() rolls: Roll[] = [];
-  @Input() game!: Game;
+  rolls = model.required<Roll[]>();
+  game = model.required<Game>();
 
   rosterFilter: string[] = [];
-  baseHistogram!: Histogram;
   maxValue = 0;
   backgroundChart = true;
+  baseHistogram!: Histogram;
   filteredHistogram!: Histogram;
   baseRolls: number[] = [];
   filteredRolls: number[] = [];
   roster: string[] = [];
+  sub: any;
 
-  // TODO the histogram is not being updated when new rolls are created because the input is not response.
-  // TODO Try using a signal based input instead and then you can subscribe to it.
+  constructor() {
+    toObservable(this.rolls).subscribe(() => {
+      this.roster = this.game().roster.map(x => x.name);
+      this.buildBaseHistogram();
+      this.buildFilteredHistogram();
+    });
+  }
 
-  ngOnInit() {
-    this.roster = this.game.roster.map(x => x.name);
-    this.baseHistogram = this.game.histogram;
-    this.baseRolls = Object.values(this.baseHistogram);
-    this.maxValue = Math.max(...this.baseRolls);
-    console.log(this.filteredHistogram, this.filteredRolls);
-    this.buildFilteredHistogram();
-    console.log(this.filteredHistogram);
-    console.log(this.filteredRolls);
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
   }
 
   handleChipClicked(name: string) {
@@ -54,16 +54,28 @@ export class GameHistogramComponent implements OnInit {
     this.buildFilteredHistogram();
   }
 
+  buildBaseHistogram() {
+    const histogram = createHistogram();
+    for (const roll of this.rolls()) {
+      histogram[roll.total] += 1;
+    }
+    this.baseHistogram = histogram;
+    this.baseRolls = Object.values(histogram);
+    this.maxValue = Math.max(...this.baseRolls);
+  }
+
   buildFilteredHistogram() {
     const histogram = createHistogram();
+    let rolls: Roll[];
     if (this.rosterFilter.length === 0) {
       this.filteredHistogram = this.baseHistogram;
       this.filteredRolls = this.baseRolls;
       return;
+    } else {
+      rolls = this.rolls().filter(x => this.rosterFilter.includes(x.playerName));
     }
-    const data = this.rolls.filter(x => this.rosterFilter.includes(x.playerName));
-    for (const d of data) {
-      histogram[d.total] += 1;
+    for (const roll of rolls) {
+      histogram[roll.total] += 1;
     }
     this.filteredHistogram = histogram;
     this.filteredRolls = Object.values(histogram);

@@ -137,23 +137,6 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
     setTimeout(() => this.playService.isRolling.set(false), ROLL_DURATION);
   }
 
-  async showAlchemyDialog() {
-    const alert = await this.alertController.create({
-      header: 'Alchemist',
-      message: 'Choose the dice values you wish to roll',
-      inputs: [
-        {label: 'Dice 1', type: 'number', name: 'dice1'},
-        {label: 'Dice 2', type: 'number', name: 'dice2'},
-      ],
-      buttons: [
-        {text: 'Cancel', role: 'cancel'},
-        {text: 'Roll', role: 'submit'}
-      ]
-    });
-    alert.onDidDismiss().then((event) => this.handleAlchemyDialogDidDismiss(event));
-    await alert.present();
-  }
-
   async handleAlchemyDialogDidDismiss({detail}: any) {
     if (detail.role === 'confirm') {
       const dice1 = parseInt(detail.data.dice1);
@@ -238,7 +221,7 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
     }
     const totalSeconds = (Date.now() - game.createdOn) / 1000;
     this.elapsedHours = Math.floor(totalSeconds / 60 / 60);
-    this.elapsedMinutes = Math.floor(totalSeconds / 60);
+    this.elapsedMinutes = Math.floor(totalSeconds / 60) % 60;
     this.elapsedSeconds = totalSeconds % 60;
   }
 

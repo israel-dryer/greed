@@ -1,11 +1,11 @@
-import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
   AlertController, IonActionSheet,
   IonButton, IonButtons,
   IonContent, IonFooter,
-  IonHeader, IonIcon, IonLabel, IonModal, IonNote, IonText,
+  IonHeader, IonIcon, IonLabel, IonModal, IonText,
   IonTitle,
   IonToolbar, Platform, ViewWillLeave
 } from '@ionic/angular/standalone';
@@ -28,7 +28,7 @@ const ROLL_DURATION = 750;
   templateUrl: './playground.page.html',
   styleUrls: ['./playground.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonActionSheet, RouterLink, IonIcon, IonText, IonFooter, BarbarianTrackComponent, StandardDieComponent, ActionDieComponent, IonLabel, AlchemyPickerComponent, IonButtons, IonModal, IonNote],
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonActionSheet, RouterLink, IonIcon, IonText, IonFooter, BarbarianTrackComponent, StandardDieComponent, ActionDieComponent, IonLabel, AlchemyPickerComponent, IonButtons, IonModal],
   animations: [
     trigger('jiggleRed', [
       state('active', style({})),
@@ -90,7 +90,6 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
     this.actionSheetButtons = [
       {text: 'Undo Roll', data: {action: 'undo'}, icon: this.isIos ? undefined : 'undo'},
       {text: 'End Game', data: {action: 'end'}, icon: this.isIos ? undefined : 'medal'},
-      {text: 'Settings', data: {action: 'settings'}, icon: this.isIos ? undefined : 'settings'},
       {text: 'Cancel', role: 'cancel', data: {action: 'cancel'}, icon: this.isIos ? undefined : 'close'}
     ];
   }

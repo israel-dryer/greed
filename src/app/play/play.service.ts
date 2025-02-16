@@ -2,9 +2,10 @@ import {inject, Injectable, signal} from '@angular/core';
 import {GameService} from "../game/game.service";
 import {SettingsService} from '../settings/settings.service';
 import {StatisticsService} from "../shared/statistics.service";
-import {ActionDiceResult, Game, Roll, RosterPlayer} from "../shared/types";
+import {ActionDiceResult, Game, Roll, RosterPlayer, Settings} from "../shared/types";
 import {NativeAudio} from '@capgo/native-audio'
 import {TextToSpeech} from "@capacitor-community/text-to-speech";
+import {Haptics, ImpactStyle} from "@capacitor/haptics";
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,7 @@ export class PlayService {
   // general state
   barbarianCount = 0;
   isCitiesKnights = false;
+  settings!: Settings;
 
   useFairDice = false;
   barbariansAttack = false;
@@ -50,6 +52,10 @@ export class PlayService {
   isRolling = signal(false);
 
   constructor() {
+    this.settingsService.getSettings().then((settings) => {
+      this.settings = settings!;
+    });
+
     // set active game if screen is refreshed for some reason
     this.gameService.getActiveGame().then(async game => {
       if (game) {
@@ -280,6 +286,7 @@ export class PlayService {
   // -- Sound Effects --
 
   async playSoundRollingDice() {
+    if (!this.settings.rollingDice) return;
     try {
       await NativeAudio.play({assetId: 'rolling-dice'});
     } catch (e) {
@@ -288,6 +295,7 @@ export class PlayService {
   }
 
   async playSoundRobberLaugh() {
+    if (!this.settings.robberLaugh) return;
     try {
       await NativeAudio.play({assetId: 'robber-laugh'});
     } catch (e) {
@@ -297,6 +305,7 @@ export class PlayService {
 
 
   async playSoundGameOver() {
+    if (!this.settings.gameOver) return;
     try {
       await NativeAudio.play({assetId: 'game-over'});
     } catch (e) {
@@ -312,13 +321,6 @@ export class PlayService {
     return options[index] as ActionDiceResult;
   }
 
-  alchemyDiceRoll() {
-    const dice1 = this.alchemyDice1;
-    const dice2 = this.alchemyDice2;
-    const action = this.nextCitiesKnightsActionRoll();
-    return {dice1, dice2, action};
-  }
-
   async resetBarbarians() {
     console.log('Resetting barbarians');
     if (this.activeGame) {
@@ -329,6 +331,7 @@ export class PlayService {
   }
 
   async playSoundBarbarianAttack() {
+    if (!this.settings.barbarianAttack) return;
     try {
       await NativeAudio.play({assetId: 'barbarian-attack'});
     } catch (e) {
@@ -337,6 +340,7 @@ export class PlayService {
   }
 
   async playAlchemyBubbles() {
+    if (!this.settings.alchemyBubbles) return;
     try {
       await NativeAudio.play({assetId: 'bubbles'});
     } catch (e) {
@@ -345,7 +349,13 @@ export class PlayService {
   }
 
   async announceRollResult(value: string) {
+    if (!this.settings.rollAnnouncer) return;
     await TextToSpeech.speak({text: value});
+  }
+
+  async useRollHaptic() {
+    if (!this.settings.rollHaptics) return;
+    await Haptics.impact({style: ImpactStyle.Heavy});
   }
 
 }

@@ -124,6 +124,7 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
 
   async rollDice(alchemyDice?: any) {
     this.playService.isRolling.set(true);
+    await this.playService.useRollHaptic();
     await this.playService.playSoundRollingDice();
     await this.playService.rollDice(alchemyDice);
     if (this.playService.barbariansAttack) {
@@ -177,7 +178,7 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
   async showGameOverDialog(duration: number, winner?: string) {
     let message: string;
     if (winner) {
-      this.playService.playSoundGameOver();
+      await this.playService.playSoundGameOver();
       message = `${winner} has won in ${(duration / 60).toFixed(1)} minutes`
     } else {
       message = `Game was paused after ${(duration / 60).toFixed(1)} minutes. You may continue again later by selecting this game from the game list`;

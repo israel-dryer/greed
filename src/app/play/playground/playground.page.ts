@@ -124,7 +124,7 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
 
   async rollDice(alchemyDice?: any) {
     this.playService.isRolling.set(true);
-    this.playService.playSoundRollingDice();
+    await this.playService.playSoundRollingDice();
     await this.playService.rollDice(alchemyDice);
     if (this.playService.barbariansAttack) {
       this.playService.playSoundBarbarianAttack();

@@ -3,6 +3,7 @@ import {GameService} from "../game/game.service";
 import {SettingsService} from '../settings/settings.service';
 import {StatisticsService} from "../shared/statistics.service";
 import {ActionDiceResult, Game, Roll, RosterPlayer} from "../shared/types";
+import {NativeAudio} from '@capgo/native-audio'
 
 @Injectable({
   providedIn: 'root'
@@ -69,12 +70,12 @@ export class PlayService {
     }
     this.lastRoll = this.activeGameRolls.at(-1);
     if (this.lastRoll) {
-        this.prevPlayer = {id: this.lastRoll.playerId, name: this.lastRoll.playerName};
-        this.prevIndex = this.lastRoll.turnIndex;
-        this.diceTotal = this.lastRoll.total;
-        this.dice1Result = this.lastRoll.dice1;
-        this.dice2Result = this.lastRoll.dice2;
-        this.diceActionResult = this.lastRoll.diceAction;
+      this.prevPlayer = {id: this.lastRoll.playerId, name: this.lastRoll.playerName};
+      this.prevIndex = this.lastRoll.turnIndex;
+      this.diceTotal = this.lastRoll.total;
+      this.dice1Result = this.lastRoll.dice1;
+      this.dice2Result = this.lastRoll.dice2;
+      this.diceActionResult = this.lastRoll.diceAction;
     }
   }
 
@@ -145,7 +146,7 @@ export class PlayService {
     const player = this.nextPlayer!;
     const game = this.activeGame!;
 
-    let roll: { dice1: number, dice2: number, action?: ActionDiceResult};
+    let roll: { dice1: number, dice2: number, action?: ActionDiceResult };
 
     if (alchemyDice !== undefined) {
       roll = {dice1: alchemyDice.dice1, dice2: alchemyDice.dice2};
@@ -297,17 +298,29 @@ export class PlayService {
 
   // -- Sound Effects --
 
-  playSoundRollingDice() {
-    console.log('Playing rolling dice sound');
+  async playSoundRollingDice() {
+    try {
+      await NativeAudio.play({assetId: 'rolling-dice'});
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  playSoundRobberLaugh() {
-    console.log('Playing robber sound');
+  async playSoundRobberLaugh() {
+    try {
+      await NativeAudio.play({assetId: 'robber-laugh'});
+    } catch (e) {
+      console.log(e);
+    }
   }
 
 
-  playSoundGameOver() {
-    console.log('Playing game over sound');
+  async playSoundGameOver() {
+    try {
+      await NativeAudio.play({assetId: 'game-over'});
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   // --- Cities and Knights Expansion ---
@@ -334,8 +347,12 @@ export class PlayService {
     }
   }
 
-  playSoundBarbarianAttack() {
-    console.log('Playing barbarian attack sound');
+  async playSoundBarbarianAttack() {
+    try {
+      await NativeAudio.play({assetId: 'barbarian-attack'});
+    } catch (e) {
+      console.log(e);
+    }
   }
 
 

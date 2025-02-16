@@ -5,6 +5,8 @@ import {addIcons} from "ionicons";
 import {chevronBack, removeCircleOutline, trash} from "ionicons/icons";
 import {StatusBar} from "@capacitor/status-bar";
 import {Capacitor} from "@capacitor/core";
+import {NativeAudio} from "@capgo/native-audio";
+
 
 @Component({
   selector: 'app-root',
@@ -17,7 +19,6 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     await this.initialize();
-
     const color = getComputedStyle(document.documentElement).getPropertyValue('--ion-background-color');
     if (Capacitor.isNativePlatform()) {
       if (this.platform.is('android')) {
@@ -25,6 +26,34 @@ export class AppComponent implements OnInit {
       }
       await StatusBar.setBackgroundColor({color})
     }
+    await this.preloadSoundAssets();
+  }
+
+  async preloadSoundAssets() {
+    await NativeAudio.preload({
+      assetId: 'rolling-dice',
+      assetPath: 'assets/sounds/rolling-dice.mp4',
+      audioChannelNum: 1,
+      isUrl: false
+    });
+    await NativeAudio.preload({
+      assetId: 'barbarian-attack',
+      assetPath: 'assets/sounds/barbarian-attack.mp4',
+      audioChannelNum: 1,
+      isUrl: false
+    });
+    await NativeAudio.preload({
+      assetId: 'robber-laugh',
+      assetPath: 'assets/sounds/robber-laugh.mp4',
+      audioChannelNum: 1,
+      isUrl: false
+    });
+    await NativeAudio.preload({
+      assetId: 'game-over',
+      assetPath: 'assets/sounds/game-over.mp4',
+      audioChannelNum: 1,
+      isUrl: false
+    });
   }
 
   async initialize() {

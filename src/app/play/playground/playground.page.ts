@@ -104,7 +104,7 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
   }
 
   async ionViewWillEnter() {
-    const color = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-surface-container-highest');
+    const color = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-surface-container');
     if (Capacitor.isNativePlatform()) {
       if (this.platform.is('android')) {
         EdgeToEdge.setBackgroundColor({color}).then();

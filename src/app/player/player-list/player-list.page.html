@@ -3,12 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button icon="back"></ion-back-button>
     </ion-buttons>
-    <ion-title>Player</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="showCreatePlayerDialog()">
-        <ion-icon slot="icon-only" icon="add-user"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title>Players</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -19,19 +14,23 @@
     </ion-toolbar>
   </ion-header>
 
-  <section class="sd-list-section" style="margin: 1rem;">
+  <section class="sd-list-section">
     <ion-list>
       <ion-item *ngIf="players.length === 0" lines="none">
         <ion-text>Create some players to play</ion-text>
       </ion-item>
       @for (player of players; track player.id) {
         <ion-item detail (click)="setupPlayerDetail(player)">
-          <div style="display: flex; gap: .5rem">
-            <ion-text>{{ player.name }}</ion-text>
-            <ion-icon color="danger" *ngIf="player.isUser" aria-hidden="true" name="bookmark"></ion-icon>
-          </div>
+          <ion-icon size="large" [color]="player.isUser ? 'primary' : undefined" slot="start" [name]="player.isUser ? 'person-circle' : 'person-circle-outline'"></ion-icon>
+          <ion-text [color]="player.isUser ? 'primary' : undefined">{{ player.name }}</ion-text>
         </ion-item>
       }
     </ion-list>
   </section>
+
+  <ion-button style="position: fixed; bottom: 16px; right: 16px;" (click)="showCreatePlayerDialog()">
+    <ion-icon slot="start" name="add"></ion-icon>
+    <ion-label>Create player</ion-label>
+  </ion-button>
+
 </ion-content>

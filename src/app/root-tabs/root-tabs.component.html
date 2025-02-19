@@ -1,0 +1,21 @@
+<ion-router-outlet></ion-router-outlet>
+<ion-tabs>
+  <ion-tab-bar slot="bottom" style="--background: var(--ion-background-color)">
+    <ion-tab-button tab="home">
+      <ion-icon name="home"></ion-icon>
+      Home
+    </ion-tab-button>
+    <ion-tab-button tab="player-list">
+      <ion-icon name="friend-list"></ion-icon>
+      Players
+    </ion-tab-button>
+    <ion-tab-button tab="my-stats"  (click)="handleMyStatsClicked()">
+      <ion-icon name="chart"></ion-icon>
+      Stats
+    </ion-tab-button>
+    <ion-tab-button tab="app-settings">
+      <ion-icon name="settings"></ion-icon>
+      Settings
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

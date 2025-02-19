@@ -1,0 +1,29 @@
+.card-container {
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid var(--md-outlineVariant);
+  border-radius: .5rem;
+  padding: 1rem;
+  background-color: var(--md-secondaryContainer);
+  color: var(--md-colorOnSecondary);
+}
+
+.card-metric-detail {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.card-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-metric-total {
+  font-weight: bold;
+}
+
+.card-metric-label {
+  font-size: .9rem;
+}

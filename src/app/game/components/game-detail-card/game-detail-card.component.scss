@@ -1,0 +1,56 @@
+.card-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--md-outlineVariant);
+  border-radius: .5rem;
+  padding: 1rem;
+  background-color: var(--md-surfaceContainerLow);
+}
+
+.card-metrics {
+  display: flex;
+  gap: 1rem;
+  color: var(--ion-text-color-step-500);
+}
+
+.card-metric-item {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  font-size: .9rem;
+
+  ion-icon {
+    font-size: .9rem;
+  }
+
+}
+
+.card-roster {
+  display: flex;
+  gap: 1rem;
+  font-weight: 400;
+  overflow-x: auto;
+}
+
+.card-roster::-webkit-scrollbar {
+  display: none;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.card-roster-item {
+  display: flex;
+  gap: .25rem;
+  align-items: center;
+  font-size: .9rem;
+}
+

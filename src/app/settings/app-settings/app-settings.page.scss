@@ -1,20 +1,5 @@
 .s-content-container {
-  margin: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-
-
-.sd-section-header {
-  --background: var(--ion-color-primary);
-  --color: var(--ion-color-primary-contrast);
-}
-
-
-@media (prefers-color-scheme: dark) {
-  .s-section-header {
-    --background: var(--ion-background-color-step-100);
-  }
-}
-

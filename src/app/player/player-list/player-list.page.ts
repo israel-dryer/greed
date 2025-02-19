@@ -3,9 +3,9 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
   AlertController, IonBackButton, IonButton, IonButtons,
-  IonContent,
+  IonContent, IonFab, IonFabButton,
   IonHeader, IonIcon,
-  IonItem,
+  IonItem, IonLabel,
   IonList, IonText,
   IonTitle,
   IonToolbar
@@ -15,14 +15,14 @@ import {PlayerService} from "../player.service";
 import {Player} from "../../shared/types";
 import {Router} from "@angular/router";
 import {addIcons} from "ionicons";
-import {add, bookmark} from 'ionicons/icons'
+import {personCircle, personCircleOutline} from 'ionicons/icons'
 
 @Component({
   selector: 'app-player-list',
   templateUrl: './player-list.page.html',
   styleUrls: ['./player-list.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonButton, IonButtons, IonBackButton, IonIcon, IonText]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonButton, IonButtons, IonBackButton, IonIcon, IonText, IonFab, IonFabButton, IonLabel]
 })
 export class PlayerListPage implements OnInit {
 
@@ -32,7 +32,7 @@ export class PlayerListPage implements OnInit {
   players: Player[] = [];
 
   constructor() {
-    addIcons({add, bookmark})
+    addIcons({personCircle, personCircleOutline})
   }
 
   ngOnInit() {

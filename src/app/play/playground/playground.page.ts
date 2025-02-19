@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
   AlertController, IonActionSheet,
@@ -28,7 +28,7 @@ const ROLL_DURATION = 750;
   templateUrl: './playground.page.html',
   styleUrls: ['./playground.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonActionSheet, RouterLink, IonIcon, IonText, IonFooter, BarbarianTrackComponent, StandardDieComponent, ActionDieComponent, IonLabel, AlchemyPickerComponent, IonButtons, IonModal],
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonActionSheet, RouterLink, IonIcon, IonText, IonFooter, BarbarianTrackComponent, StandardDieComponent, ActionDieComponent, IonLabel, AlchemyPickerComponent, IonButtons, IonModal, NgOptimizedImage],
   animations: [
     trigger('jiggleRed', [
       state('active', style({})),
@@ -85,6 +85,11 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
   isIos: boolean;
   actionSheetButtons: ActionSheetButton[];
   isDarkTheme: boolean;
+  isRobberModalOpen = false;
+  isBarbarianModalOpen = false;
+  isGameOverModalOpen = false
+  isPauseGameModalOpen = false;
+  gameOverMessage = '';
 
   constructor() {
     this.timerIntervalCallback = setInterval(() => this.updateDurationDisplay(), 1000);
@@ -97,9 +102,9 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
     this.isDarkTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
     this.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-background-color');
     if (this.isDarkTheme) {
-      this.headerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-surface-container-high');
+      this.headerColor = getComputedStyle(document.documentElement).getPropertyValue('--md-surfaceContainerHigh');
     } else {
-      this.headerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-surface-container');
+      this.headerColor = getComputedStyle(document.documentElement).getPropertyValue('--md-surfaceContainer');
     }
   }
 
@@ -136,9 +141,10 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
     await this.playService.rollDice(alchemyDice);
     if (this.playService.barbariansAttack) {
       await this.playService.playSoundBarbarianAttack();
-      await this.showBarbarianAttackAlert();
+      this.isBarbarianModalOpen = true;
     } else if (this.playService.robberStealing) {
       await this.playService.playSoundRobberLaugh();
+      this.isRobberModalOpen = true;
       this.playService.resetRobberStealing();
     } else {
       setTimeout(async () => await this.playService.announceRollResult(this.playService.diceTotal.toString()), 500);
@@ -154,17 +160,6 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
       const alchemyDice = {dice1, dice2};
       await this.rollDice(alchemyDice);
     }
-  }
-
-  async showBarbarianAttackAlert() {
-    await this.playService.playSoundBarbarianAttack();
-    const alert = await this.alertController.create({
-      header: 'ATTACK!',
-      message: 'The barbarians are attacking!!!',
-      buttons: [{text: 'Ok', role: 'submit'}]
-    });
-    alert.onDidDismiss().then(async () => await this.playService.resetBarbarians());
-    await alert.present();
   }
 
   async handleActionSheetDidDismiss(event: any) {
@@ -183,20 +178,14 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
   }
 
   async showGameOverDialog(duration: number, winner?: string) {
-    let message: string;
     if (winner) {
       await this.playService.playSoundGameOver();
-      message = `${winner} has won in ${(duration / 60).toFixed(1)} minutes`
+      this.gameOverMessage = `${winner} is victorious!`
+      this.isGameOverModalOpen = true;
     } else {
-      message = `Game was paused after ${(duration / 60).toFixed(1)} minutes. You may continue again later by selecting this game from the game list`;
+      this.gameOverMessage = `Game paused`;
+      this.isPauseGameModalOpen = true;
     }
-    const alert = await this.alertController.create({
-      header: winner ? 'Game Over' : 'Game Paused',
-      message,
-      buttons: [{text: 'Ok'}]
-    });
-    alert.onDidDismiss().then(() => this.router.navigate(['/']));
-    await alert.present();
   }
 
   async showSelectWinnerAlert() {
@@ -233,6 +222,21 @@ export class PlaygroundPage implements OnInit, ViewWillEnter, ViewWillLeave, OnD
     this.elapsedHours = Math.floor(totalSeconds / 60 / 60);
     this.elapsedMinutes = Math.floor(totalSeconds / 60) % 60;
     this.elapsedSeconds = totalSeconds % 60;
+  }
+
+  async dismissBarbarianModal() {
+    this.isBarbarianModalOpen = false;
+    await this.playService.resetBarbarians();
+  }
+
+  dismissGameOverModal() {
+    this.isGameOverModalOpen = false;
+    this.isPauseGameModalOpen = false;
+    setTimeout(() => this.router.navigate(['/']));
+  }
+
+  dismissRobberModal() {
+    this.isRobberModalOpen = false;
   }
 
 }

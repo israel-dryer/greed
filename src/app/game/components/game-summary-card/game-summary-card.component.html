@@ -1,0 +1,23 @@
+<div class="card-container">
+    <div class="card-metric">
+      <div class="card-metric-detail">
+        <ion-icon color="primary" name="dice"></ion-icon>
+        <ion-text class="card-metric-total">{{totalRolls}}</ion-text>
+      </div>
+      <ion-label class="card-metric-label" color="primary">Total rolls</ion-label>
+    </div>
+  <div class="card-metric">
+    <div class="card-metric-detail">
+      <ion-icon color="primary" name="game-controller"></ion-icon>
+      <ion-text class="card-metric-total">{{totalGames}}</ion-text>
+    </div>
+    <ion-label class="card-metric-label" color="primary">Total games</ion-label>
+  </div>
+  <div class="card-metric">
+    <div class="card-metric-detail">
+      <ion-icon color="primary" name="calendar"></ion-icon>
+      <ion-text class="card-metric-total">{{player?.lastPlayed | date : 'MMM dd' }}</ion-text>
+    </div>
+    <ion-label class="card-metric-label" color="primary">Last played</ion-label>
+  </div>
+</div>

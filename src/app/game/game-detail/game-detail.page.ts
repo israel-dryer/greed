@@ -82,7 +82,7 @@ export class GameDetailPage implements ViewWillEnter, OnInit {
           for (const playerId of players) {
             await this.statisticService.updatePlayerStatsById(playerId);
           }
-          await this.router.navigate(['/game-list']);
+          await this.router.navigate(['/tabs/home']);
         }
       });
       await alert.present();

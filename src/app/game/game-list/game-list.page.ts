@@ -1,29 +1,18 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {
-  IonBackButton, IonButtons,
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonLabel,
-  IonList, IonNote,
-  IonText,
-  IonTitle,
-  IonToolbar
-} from '@ionic/angular/standalone';
 import {Game} from "../../shared/types";
 import {GameService} from "../game.service";
 import {liveQuery} from "dexie";
-import {ConcatRosterPipe} from "../../shared/concat-roster.pipe";
 import {Router} from "@angular/router";
+import {GameDetailCardComponent} from "../components/game-detail-card/game-detail-card.component";
 
 @Component({
   selector: 'app-game-list',
   templateUrl: './game-list.page.html',
   styleUrls: ['./game-list.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonLabel, IonText, IonNote, ConcatRosterPipe,IonButtons, IonBackButton, NgOptimizedImage]
+  imports: [CommonModule, FormsModule, GameDetailCardComponent]
 })
 export class GameListPage implements OnInit {
 
@@ -34,11 +23,6 @@ export class GameListPage implements OnInit {
   ngOnInit() {
     liveQuery(() => this.gameService.getGames())
       .subscribe(games => this.games = games.sort((a, b) => a.createdOn < b.createdOn ? 1 : -1));
-  }
-
-  async handleItemClicked(game: Game) {
-    this.gameService.setActiveGame(game);
-    await this.router.navigate(['game-detail'])
   }
 
 }

@@ -14,7 +14,8 @@
     <div class="prev-player ion-text-end ion-text-uppercase" style="grid-column: 3">
       <ion-text color="medium">Prev</ion-text>
       @if (playService.prevPlayer) {
-        <ion-text color="secondary" style="font-size: 1.2rem; font-weight: bold;">{{ playService.prevPlayer.name }}</ion-text>
+        <ion-text color="secondary" style="font-size: 1.2rem; font-weight: bold;">{{ playService.prevPlayer.name }}
+        </ion-text>
       }
     </div>
   </div>
@@ -107,13 +108,13 @@
       <span>roll</span><span *ngIf="playService.rollCount > 1 || playService.rollCount < 1">s</span>
     </ion-text>
 
-        @if (playService.activeGame) {
-          <ion-text style="font-size: 1.1rem;" *ngIf="playService.activeGame" color="secondary">
-            <span *ngIf="elapsedHours > 0">{{ elapsedHours | number: "1.0-0" }}:</span>
-            <span>{{ elapsedMinutes | number: "2.0-0" }}:</span>
-            <span>{{ elapsedSeconds | number: "2.0-0" }}</span>
-          </ion-text>
-        }
+    @if (playService.activeGame) {
+      <ion-text style="font-size: 1.1rem;" *ngIf="playService.activeGame" color="secondary">
+        <span *ngIf="elapsedHours > 0">{{ elapsedHours | number: "1.0-0" }}:</span>
+        <span>{{ elapsedMinutes | number: "2.0-0" }}:</span>
+        <span>{{ elapsedSeconds | number: "2.0-0" }}</span>
+      </ion-text>
+    }
 
     <!-- Game settings button & action sheet-->
     <ion-button fill="clear" color="secondary" id="present-settings" aria-label="App menu">
@@ -124,3 +125,96 @@
                       [buttons]="actionSheetButtons"/>
   </div>
 </ion-footer>
+
+<ion-modal [isOpen]="isRobberModalOpen"
+           (click)="dismissRobberModal()"
+           style="--height: auto; --width: auto; --background: transparent; --border-radius: 8px"
+           [backdropDismiss]="false">
+  <ng-template>
+    <div class="modal-content" style="position: relative;">
+      <img style="width: 100%; height: auto; transform: scale(1.5)" ngSrc="assets/images/sinister-robber.png"
+           alt="sinister robber" height="1024" width="1024">
+      <div
+        style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
+        <ion-text style="font-weight: bold; font-size: 1.2rem">
+          The robber has come!
+        </ion-text>
+      </div>
+      <div
+        style="background-color: var(--md-surface); position: absolute; bottom: 0; width: 100%; opacity: 0.8; text-align: center">
+        <ion-button expand="full" fill="text" color="primary" (click)="dismissRobberModal()">
+          <ion-text color="primary">Dismiss</ion-text>
+        </ion-button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>
+
+<ion-modal [isOpen]="isBarbarianModalOpen"
+           style="--height: auto; --width: auto; --background: transparent; --border-radius: 8px;"
+           (didDismiss)="playService.resetBarbarians()" [backdropDismiss]="false" (click)="dismissBarbarianModal()">
+  <ng-template>
+    <div class="modal-content" style="position: relative;">
+      <img style="width: 100%; height: auto; transform: scale(1.9)" ngSrc="assets/images/barbarians-attack.png"
+           alt="barbarians attack" height="1024" width="1024">
+      <div
+        style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
+        <ion-text style="font-weight: bold; font-size: 1.2rem">
+          The barbarians attack!
+        </ion-text>
+      </div>
+      <div
+        style="background-color: var(--md-surface); position: absolute; bottom: 0; width: 100%; opacity: 0.8; text-align: center;">
+        <ion-button expand="full" fill="text" color="primary" (click)="dismissBarbarianModal()">
+          <ion-text color="primary">Dismiss</ion-text>
+        </ion-button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>
+
+<ion-modal [isOpen]="isGameOverModalOpen"
+           style="--height: auto; --width: auto; --background: transparent; --border-radius: 8px;"
+           (didDismiss)="dismissGameOverModal()" [backdropDismiss]="false" (click)="dismissGameOverModal()">
+  <ng-template>
+    <div class="modal-content" style="position: relative;">
+      <img style="width: 100%; height: auto; transform: scale(1.25)" ngSrc="assets/images/game-over-2.png"
+           alt="game over" height="1024" width="1024">
+      <div
+        style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
+        <ion-text style="font-weight: bold; font-size: 1.2rem">
+          {{ gameOverMessage }}
+        </ion-text>
+      </div>
+      <div
+        style="background-color: var(--md-surface); position: absolute; bottom: 0; width: 100%; opacity: 0.8; text-align: center;">
+        <ion-button expand="full" fill="text" color="primary" (click)="dismissGameOverModal()">
+          <ion-text color="primary">Dismiss</ion-text>
+        </ion-button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>
+
+<ion-modal [isOpen]="isPauseGameModalOpen"
+           style="--height: auto; --width: auto; --background: transparent; --border-radius: 8px;"
+           (didDismiss)="dismissGameOverModal()" [backdropDismiss]="false" (click)="dismissGameOverModal()">
+  <ng-template>
+    <div class="modal-content" style="position: relative;">
+      <img style="width: 100%; height: auto; transform: scale(1.25)" ngSrc="assets/images/villagers-playing-catan-2.png"
+           alt="game over" height="1024" width="1024">
+      <div
+        style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
+        <ion-text style="font-weight: bold; font-size: 1.2rem">
+          {{ gameOverMessage }}
+        </ion-text>
+      </div>
+      <div
+        style="background-color: var(--md-surface); position: absolute; bottom: 0; width: 100%; opacity: 0.8; text-align: center;">
+        <ion-button expand="full" fill="text" color="primary" (click)="dismissGameOverModal()">
+          <ion-text color="primary">Dismiss</ion-text>
+        </ion-button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

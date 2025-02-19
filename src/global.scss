@@ -35,9 +35,17 @@
 @import "@ionic/angular/css/palettes/dark.system.css";
 @import '@ionic/angular/css/palettes/high-contrast-dark.system.css';
 
-.sd-list-section {
-  border-radius: .5rem;
-  overflow: hidden;
+.md .alert-wrapper {
+  border-radius: 8px;
+}
+
+.md ion-button {
+  --border-radius: 8px;
+}
+
+.ios ion-tab-bar {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
 }
 
 .md .sd-tabs-border {
@@ -50,6 +58,4 @@
   }
 }
 
-.md ion-button {
-  --border-radius: 8px;
-}
+

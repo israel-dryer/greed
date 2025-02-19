@@ -1,23 +1,29 @@
-import {Component, Input, model, OnDestroy} from '@angular/core';
+import {Component, model, OnDestroy} from '@angular/core';
 import {Game, Histogram, Roll} from "../../../shared/types";
-import {IonChip, IonText} from "@ionic/angular/standalone";
+import {
+  IonLabel,
+  IonText,
+  ViewWillLeave
+} from "@ionic/angular/standalone";
 import {NgClass, NgIf, NgStyle} from "@angular/common";
 import {createHistogram} from "../../../shared/utilities";
 import {toObservable} from "@angular/core/rxjs-interop";
+import {ViewWillEnter} from "@ionic/angular";
+
 
 @Component({
   selector: 'app-game-histogram',
   templateUrl: './game-histogram.component.html',
   styleUrls: ['./game-histogram.component.scss'],
   imports: [
-    IonChip,
     NgClass,
     NgStyle,
     NgIf,
-    IonText
+    IonText,
+    IonLabel,
   ]
 })
-export class GameHistogramComponent implements OnDestroy {
+export class GameHistogramComponent implements OnDestroy, ViewWillEnter, ViewWillLeave {
 
   rolls = model.required<Roll[]>();
   game = model.required<Game>();
@@ -42,6 +48,14 @@ export class GameHistogramComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.sub?.unsubscribe();
+  }
+
+  ionViewWillEnter() {
+    console.log('Entering histogram');
+  }
+
+  ionViewWillLeave() {
+    console.log('Leaving histogram')
   }
 
   handleChipClicked(name: string) {

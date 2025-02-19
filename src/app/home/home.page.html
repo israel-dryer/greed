@@ -1,12 +1,29 @@
-<ion-header [translucent]="true" class="ion-no-border"></ion-header>
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button icon="back"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Settlers Dice</ion-title>
+  </ion-toolbar>
+</ion-header>
+<!-- TODO center title with updated font and dice logo -->
+<ion-content >
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Settlers Dice</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div style="display: flex; gap: 1rem; justify-content: center; height: 100%; width: 100%;">
-    <div style="display: flex; gap: 1rem; margin-top: auto; width: 100%; padding: 3rem 1rem 3rem 2rem">
-      <ion-button style="flex-grow: 1;" size="large" [routerLink]="['/setup']">Start Game</ion-button>
-      <ion-button fill="text" [routerLink]="['/app-settings']">
-        <ion-icon style="width: 32px; height: 32px;" color="secondary" slot="icon-only" name="settings"></ion-icon>
-      </ion-button>
-    </div>
+  <div style="padding-inline: 1rem; padding-top: 1rem;">
+    <app-game-summary-card></app-game-summary-card>
   </div>
+  <div style="padding-bottom: 1rem;">
+    <app-game-list></app-game-list>
+  </div>
+
+  <ion-button style="position: fixed; bottom: 16px; right: 16px;" routerLink="/setup">
+    <ion-icon slot="start" name="add"></ion-icon>
+    <ion-label>Start new game</ion-label>
+  </ion-button>
+
 </ion-content>

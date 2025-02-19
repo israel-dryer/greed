@@ -3,19 +3,11 @@
     @for (col of rolls; track col.toString() + $index) {
       <div class="ph-bar-container">
         <div
-          class="ph-bar-label"
-          [ngStyle]="{
-            color: backgroundChart
-              ? 'var(--ion-color-medium)'
-              : 'var(--ion-color-dark)',
-          }">
+          class="ph-bar-label">
           {{ col === 0 ? "" : col }}
         </div>
         <div
-          [ngClass]="[
-            'ph-bar-line',
-            backgroundChart ? 'ph-inactive-bar' : 'ph-active-bar',
-          ]"
+          class="ph-active-bar"
           [ngStyle]="{
             height:
               maxValue === 0

@@ -1,50 +1,5 @@
-<ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button icon="back"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Games</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Games</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <section class="sd-list-section" style="margin: 1rem;">
-    <ion-item color="primary">
-      <ion-label>
-        {{games.length | number}} games
-      </ion-label>
-    </ion-item>
-    <ion-item *ngIf="games.length === 0" lines="none">
-      <ion-label>
-        No games have been played.
-      </ion-label>
-    </ion-item>
-    <ion-list>
-      @for (game of games; track game.id) {
-        <ion-item detail (click)="handleItemClicked(game)">
-          <ion-label>
-            <div style="display: flex; flex-direction: column; gap: 4px;">
-              <ion-text>{{ game.createdOn | date : 'short' }}</ion-text>
-              <ion-note>{{ game.roster | concatRoster }}</ion-note>
-              <ion-note>{{ game.rollCount | number }} rolls</ion-note>
-              <ion-note>{{ (game.duration / 60).toFixed(1) }} mins</ion-note>
-            </div>
-          </ion-label>
-          <ion-label slot="end" *ngIf="game.winnerName">
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-              <img ngSrc="../../../assets/images/crown.png" alt="" style="width: 48px; height: 48px;" height="512" width="512">
-            <ion-text>{{game.winnerName}}</ion-text>
-            </div>
-          </ion-label>
-        </ion-item>
-      }
-    </ion-list>
-  </section>
-
-</ion-content>
+<div style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem;">
+@for (game of games; track game.id) {
+  <app-game-detail-card [game]="game"></app-game-detail-card>
+}
+</div>

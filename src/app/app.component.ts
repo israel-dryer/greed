@@ -90,7 +90,7 @@ export class AppComponent implements OnInit {
       'visible': 'assets/svg/sd-eye.svg',
       'invisible': 'assets/svg/sd-invisible.svg',
       'facebook-logo': 'assets/svg/sd-facebook.svg',
-      'filter': 'assets/svg/sd-filter.svg',
+      'item-filter': 'assets/svg/sd-filter.svg',
       'google-logo': 'assets/svg/sd-google.svg',
       'house': 'assets/svg/sd-village.svg',
       'add': 'assets/svg/sd-plus.svg',

@@ -18,8 +18,9 @@ export class PlayerService {
 
   }
 
-  getPlayerCount() {
-    return db.players.count();
+  async getPlayerCount() {
+    const activePlayers = await this.getActivePlayers();
+    return activePlayers.length;
   }
 
   createPlayer(name: string) {

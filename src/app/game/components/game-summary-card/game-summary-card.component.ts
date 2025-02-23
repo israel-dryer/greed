@@ -4,7 +4,7 @@ import {Player} from "../../../shared/types";
 import {liveQuery} from "dexie";
 import {IonIcon, IonLabel, IonText} from "@ionic/angular/standalone";
 import {addIcons} from "ionicons";
-import {calendar, gameController, dice as ionDice} from "ionicons/icons";
+import {calendar, gameController, dice} from "ionicons/icons";
 import {DatePipe} from "@angular/common";
 
 @Component({
@@ -29,7 +29,7 @@ export class GameSummaryCardComponent {
 
 
   constructor() {
-    addIcons({calendar, gameController, ionDice})
+    addIcons({calendar, gameController, dice})
 
     liveQuery(() => this.playerService.getUserPlayer())
       .subscribe(player => {

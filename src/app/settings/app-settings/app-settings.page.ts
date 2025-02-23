@@ -7,11 +7,9 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader,
   IonNote,
   IonTitle,
   IonToggle,
@@ -22,15 +20,13 @@ import {SettingsService} from "../settings.service";
 import {liveQuery} from "dexie";
 import {Router} from "@angular/router";
 import {db} from "../../shared/database";
-import {Directory, Encoding, Filesystem} from "@capacitor/filesystem";
-import {Share} from "@capacitor/share";
 
 @Component({
   selector: 'app-app-settings',
   templateUrl: './app-settings.page.html',
   styleUrls: ['./app-settings.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonLabel, IonToggle, IonIcon, IonButtons, IonBackButton, IonNote, IonListHeader]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonLabel, IonToggle, IonButtons, IonBackButton, IonNote]
 })
 export class AppSettingsPage implements OnInit {
 
@@ -53,37 +49,6 @@ export class AppSettingsPage implements OnInit {
       changes[setting] = value;
       this.settingsService.updateSettings(changes);
     }
-  }
-
-  async shareAppData() {
-    // show loading screen
-
-    // fetch app data
-    const gameData: Record<string, any> = {};
-    gameData['games'] = await db.games.toArray();
-    gameData['players'] = await db.players.toArray();
-    gameData['rolls'] = await db.rolls.toArray();
-    gameData['settings'] = await db.settings.toArray();
-    const outData = JSON.stringify(gameData, null, 2);
-
-    // save to local file
-    const filename = `settlers_dice_${new Date().toDateString().replaceAll(' ', '_')}.json`;
-    const writeResult = await Filesystem.writeFile({
-      path: filename,
-      data: outData,
-      directory: Directory.Cache,
-      encoding: Encoding.UTF8
-    });
-
-    // open the share feature
-
-    const canShare = await Share.canShare();
-    if (canShare) {
-      await Share.share({files: [writeResult.uri]});
-    }
-
-    // remove file from cache
-    await Filesystem.deleteFile({path: filename, directory: Directory.Cache});
   }
 
   async confirmDeleteAppData() {

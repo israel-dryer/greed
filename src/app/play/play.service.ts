@@ -6,6 +6,7 @@ import {ActionDiceResult, Game, Roll, RosterPlayer, Settings} from "../shared/ty
 import {NativeAudio} from '@capgo/native-audio'
 import {TextToSpeech} from "@capacitor-community/text-to-speech";
 import {Haptics, ImpactStyle} from "@capacitor/haptics";
+import {db} from '../shared/database';
 
 @Injectable({
   providedIn: 'root'
@@ -119,6 +120,7 @@ export class PlayService {
       for (const id of playerIds) {
         await this.statisticService.updatePlayerStatsById(id);
       }
+      await db.backupData();
     }
   }
 

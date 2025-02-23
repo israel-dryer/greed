@@ -34,6 +34,9 @@ export class RootTabsComponent  implements OnInit {
   readonly router = inject(Router);
   readonly playerService = inject(PlayerService);
 
+  constructor() {
+  }
+
   ngOnInit() {
     liveQuery(() => this.playerService.getUserPlayer())
       .subscribe(player => this.userPlayer = player);

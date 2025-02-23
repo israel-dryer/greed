@@ -1,15 +1,13 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {IonApp, IonRouterOutlet, Platform} from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
-import {chevronBack, removeCircleOutline, trash} from "ionicons/icons";
+import {chevronBack, dice, removeCircleOutline, trash} from "ionicons/icons";
 import {StatusBar} from "@capacitor/status-bar";
 import {Capacitor} from "@capacitor/core";
 import {NativeAudio} from "@capgo/native-audio";
 import {KeepAwake} from "@capacitor-community/keep-awake";
-import { SplashScreen } from '@capacitor/splash-screen';
 import {EdgeToEdge} from "@capawesome/capacitor-android-edge-to-edge-support";
-
-
+import {db} from './shared/database';
 
 @Component({
   selector: 'app-root',
@@ -19,23 +17,20 @@ import {EdgeToEdge} from "@capawesome/capacitor-android-edge-to-edge-support";
 export class AppComponent implements OnInit {
 
   readonly platform = inject(Platform);
-  readonly DARK_BACKGROUND_COLOR = '#11140F';
-  readonly LIGHT_BACKGROUND_COLOR = '#F8FBF1';
+
   constructor() {
+
   }
 
   async ngOnInit() {
-    await this.initialize();
+    await db.restoreFromBackup();
+    await this.initializeIcons();
     //background & edge-to-edge
-
     if (Capacitor.isNativePlatform()) {
       const color = getComputedStyle(document.documentElement).getPropertyValue('--ion-background-color');
       await EdgeToEdge.setBackgroundColor({color});
       await StatusBar.setBackgroundColor({color});
     }
-
-
-
 
     // sound assets
     await this.preloadSoundAssets();
@@ -82,14 +77,13 @@ export class AppComponent implements OnInit {
     });
   }
 
-  async initialize() {
+  async initializeIcons() {
     addIcons({
       'chart': 'assets/svg/sd-chart.svg',
       'burning-house': 'assets/svg/sd-fire.svg',
       'play': 'assets/svg/sd-play.svg',
       'close': 'assets/svg/sd-close.svg',
       'database': 'assets/svg/sd-database-restore.svg',
-      'dice': 'assets/svg/sd-dice-cubes.svg',
       'diamond': 'assets/svg/sd-diamond.svg',
       'logout': 'assets/svg/sd-logout-rounded.svg',
       'edit': 'assets/svg/sd-edit.svg',
@@ -144,7 +138,10 @@ export class AppComponent implements OnInit {
       'blue-city': 'assets/images/cities-knights-blue.svg',
       'green-city': 'assets/images/cities-knights-green.svg',
       'gold-city': 'assets/images/cities-knights-gold.svg',
-      'barbarian': 'assets/images/cities-knights-barbarian.svg'
+      'barbarian': 'assets/images/cities-knights-barbarian.svg',
+      'user': 'assets/svg/sd-user.svg',
+      'farm': 'assets/svg/sd-farm.svg',
+      'circle-user': 'assets/svg/sd-circle-user.svg',
     });
   }
 

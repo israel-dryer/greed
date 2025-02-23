@@ -18,9 +18,6 @@
     @if (settings) {
       <section class="sd-list-section">
         <ion-list>
-          <ion-list-header>
-            <ion-label color="primary">Game Settings</ion-label>
-          </ion-list-header>
           <ion-item>
             <ion-toggle [checked]="settings.soundEffects" (ionChange)="handleSettingsChange('soundEffects', $event)">
               <ion-label>
@@ -52,35 +49,6 @@
                 <ion-note class="ion-text-wrap">Device shakes when dice is rolled</ion-note>
               </ion-label>
             </ion-toggle>
-          </ion-item>
-        </ion-list>
-      </section>
-      <section class="sd-list-section">
-        <ion-list>
-          <ion-list-header>
-            <ion-label color="primary">App Storage</ion-label>
-          </ion-list-header>
-          <ion-item button (click)="shareAppData()">
-            <ion-icon slot="start" icon="share"></ion-icon>
-            <ion-label>
-              <h2>Share game data</h2>
-              <ion-note>Game data is exported to JSON file</ion-note>
-            </ion-label>
-          </ion-item>
-          <!-- TODO this will be implemented in the future by posting anonymously to cloud storage -->
-          <ion-item button (click)="importAppData()" [disabled]="true">
-            <ion-icon slot="start" icon="restore"></ion-icon>
-            <ion-label>
-              <h2>Restore data</h2>
-              <ion-note>Restore data from cloud backup</ion-note>
-            </ion-label>
-          </ion-item>
-          <ion-item button (click)="confirmDeleteAppData()">
-            <ion-icon slot="start" icon="trash"></ion-icon>
-            <ion-label>
-              <h2>Delete all app data</h2>
-              <ion-note>Permanently delete all app data</ion-note>
-            </ion-label>
           </ion-item>
         </ion-list>
       </section>

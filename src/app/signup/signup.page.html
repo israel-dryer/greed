@@ -1,0 +1,43 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Sign Up</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Sign Up</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card
+    style="--background: var(--md-surfaceContainerHigh); color: var(--md-onSurface); margin-inline: 0; border-radius: 8px;">
+    <ion-card-header>
+      <ion-card-title>User Account</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div style="display: flex; flex-direction: column;">
+        <p>
+          <strong>Safely secure your game data in the cloud.</strong>
+        </p>
+        <ul>
+          <li>Store game data for free</li>
+          <li>Restore data from backup</li>
+          <li>Get notified of new features</li>
+          <li>Participate in community benefits</li>
+        </ul>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+
+  <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 24px;">
+    <ion-input mode="md" labelPlacement="stacked" fill="outline" label="Email" type="email"></ion-input>
+    <ion-input mode="md" labelPlacement="stacked" fill="outline" label="Password" type="password"></ion-input>
+    <ion-button>
+      <ion-label>Create Account</ion-label>
+    </ion-button>
+  </div>
+
+</ion-content>

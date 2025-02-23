@@ -2,7 +2,7 @@ import {Component, inject, Input, OnInit} from '@angular/core';
 import {Game} from "../../../shared/types";
 import {IonIcon, IonRippleEffect, IonText} from "@ionic/angular/standalone";
 import {addIcons} from "ionicons";
-import {calendarClear, dice, ellipse, ellipseOutline, personCircle, timer} from "ionicons/icons";
+import {calendarClear, ellipse, dice, ellipseOutline, personCircle, timer} from "ionicons/icons";
 import {DatePipe} from "@angular/common";
 import {Router} from "@angular/router";
 import {GameService} from "../../game.service";
@@ -30,7 +30,7 @@ export class GameDetailCardComponent implements OnInit {
   readonly router = inject(Router);
 
   constructor() {
-    addIcons({ellipse, ellipseOutline, dice, calendarClear, timer, personCircle})
+    addIcons({ellipse, dice, ellipseOutline, calendarClear, timer, personCircle})
   }
 
   ngOnInit() {

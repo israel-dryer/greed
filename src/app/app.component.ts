@@ -1,7 +1,7 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {IonApp, IonRouterOutlet, Platform} from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
-import {chevronBack, dice, removeCircleOutline, trash} from "ionicons/icons";
+import {removeCircleOutline, trash} from "ionicons/icons";
 import {StatusBar} from "@capacitor/status-bar";
 import {Capacitor} from "@capacitor/core";
 import {NativeAudio} from "@capgo/native-audio";

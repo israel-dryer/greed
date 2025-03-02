@@ -29,7 +29,7 @@ import Swiper from "swiper";
   styleUrls: ['./game-detail.page.scss'],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonSegmentView, IonSegmentContent, GameSummaryComponent, GameRollsComponent, GameHistogramComponent, IonIcon]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, GameSummaryComponent, GameRollsComponent, GameHistogramComponent, IonIcon]
 })
 export class GameDetailPage implements ViewWillEnter, OnInit, AfterViewInit {
 

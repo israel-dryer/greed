@@ -29,42 +29,6 @@
       <ion-button id="present-alchemy-modal" class="sd-alchemist-button" size="large" shape="round">
         <ion-icon slot="icon-only" name="flask"></ion-icon>
       </ion-button>
-
-      <ion-modal
-        #alchemyModal
-        (didPresent)="playService.playAlchemyBubbles()"
-        (didDismiss)="handleAlchemyDialogDidDismiss($event)"
-        style="--height: auto; --width: auto; --border-radius: 8px"
-        trigger="present-alchemy-modal">
-        <ng-template>
-          <div class="modal-content">
-            <ion-header class="ion-no-border">
-              <ion-toolbar>
-                <ion-title>Alchemist</ion-title>
-                <ion-buttons slot="end">
-                  <ion-button (click)="alchemyModal.dismiss(null, 'cancel')">
-                    <ion-icon name="close"></ion-icon>
-                  </ion-button>
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-            <ion-content class="ion-padding" style="box-sizing: border-box">
-              <div class="picker-container">
-                <app-alchemy-picker color="danger" #red></app-alchemy-picker>
-                <app-alchemy-picker color="warning" #gold></app-alchemy-picker>
-                <ion-button
-                  class="ion-margin picker-confirm"
-                  color="primary"
-                  role="button"
-                  size="large"
-                  (click)="alchemyModal.dismiss({ dice1: red.value, dice2: gold.value }, 'confirm')">
-                  <ion-label>Roll Action</ion-label>
-                </ion-button>
-              </div>
-            </ion-content>
-          </div>
-        </ng-template>
-      </ion-modal>
     }
 
     <div class="sd-dice-container" (click)="rollDice()">
@@ -136,6 +100,7 @@
   <ng-template>
     <div class="modal-content" style="position: relative;">
       <img rel="preload" style="width: 100%; height: auto; transform: scale(1.5)"
+           loading="eager"
            ngSrc="assets/images/sinister-robber-small.png"
            alt="sinister robber" height="480" width="480">
       <div
@@ -161,6 +126,7 @@
     <div class="modal-content" style="position: relative;">
       <img rel="preload" style="width: 100%; height: auto; transform: scale(1.9)"
            ngSrc="assets/images/barbarians-attack-small.png"
+           loading="eager"
            alt="barbarians attack" height="480" width="480">
       <div
         style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
@@ -183,7 +149,7 @@
            (didDismiss)="dismissGameOverModal()" [backdropDismiss]="false" (click)="dismissGameOverModal()">
   <ng-template>
     <div class="modal-content" style="position: relative;">
-      <img rel="preload" style="width: 100%; height: auto; transform: scale(1.25)" ngSrc="assets/images/game-over-small.png"
+      <img rel="preload" style="width: 100%; height: auto; transform: scale(1.25)" ngSrc="assets/images/game-over-small.png" loading="eager"
            alt="game over" height="480" width="480">
       <div
         style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
@@ -208,6 +174,7 @@
     <div class="modal-content" style="position: relative;">
       <img rel="preload" style="width: 100%; height: auto; transform: scale(1.25)"
            ngSrc="assets/images/villagers-playing-catan-small.png"
+           loading="eager"
            alt="game over" height="480" width="480">
       <div
         style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
@@ -221,6 +188,34 @@
           <ion-text color="primary">Dismiss</ion-text>
         </ion-button>
       </div>
+    </div>
+  </ng-template>
+</ion-modal>
+
+<ion-modal
+  #alchemyModal
+  (didPresent)="playService.playAlchemyBubbles()"
+  (didDismiss)="handleAlchemyDialogDidDismiss($event)"
+  style="--height: auto; --width: auto; --border-radius: 8px"
+  trigger="present-alchemy-modal">
+  <ng-template>
+    <div class="modal-content">
+      <ion-content class="ion-padding" style="box-sizing: border-box">
+        <ion-text style="font-weight: bold; font-size: 1.5rem; margin-bottom: 2rem; display: block; text-align: center; font-family: 'Crimson Pro', serif;">
+          The Alchemist
+        </ion-text>
+        <div class="picker-container">
+          <app-alchemy-picker color="danger" #red></app-alchemy-picker>
+          <app-alchemy-picker color="warning" #gold></app-alchemy-picker>
+          <ion-button
+            class="ion-margin picker-confirm"
+            color="primary"
+            role="button"
+            (click)="alchemyModal.dismiss({ dice1: red.value, dice2: gold.value }, 'confirm')">
+            <ion-label>Roll Dice</ion-label>
+          </ion-button>
+        </div>
+      </ion-content>
     </div>
   </ng-template>
 </ion-modal>

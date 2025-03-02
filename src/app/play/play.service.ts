@@ -8,6 +8,7 @@ import {TextToSpeech} from "@capacitor-community/text-to-speech";
 import {Haptics, ImpactStyle} from "@capacitor/haptics";
 import {db} from '../shared/database';
 import {liveQuery} from "dexie";
+import {AudioService} from "../shared/audio.service";
 
 interface GameState {
   rollCount: number;
@@ -39,6 +40,7 @@ export class PlayService {
   gameService = inject(GameService);
   settingsService = inject(SettingsService);
   statisticService = inject(StatisticsService);
+  audioService = inject(AudioService);
 
   // Game State
   activeGame: Game | undefined;
@@ -363,7 +365,7 @@ export class PlayService {
   async playSoundRollingDice() {
     if (!this.settings.soundEffects) return;
     try {
-      await NativeAudio.play({assetId: 'rolling-dice'});
+      await this.audioService.playSound('dice');
     } catch (e) {
       console.log(e);
     }
@@ -372,7 +374,7 @@ export class PlayService {
   async playSoundRobberLaugh() {
     if (!this.settings.soundEffects) return;
     try {
-      await NativeAudio.play({assetId: 'robber-laugh'});
+      await this.audioService.playSound('robber');
     } catch (e) {
       console.log(e);
     }
@@ -382,7 +384,7 @@ export class PlayService {
   async playSoundGameOver() {
     if (!this.settings.soundEffects) return;
     try {
-      await NativeAudio.play({assetId: 'game-over'});
+      await this.audioService.playSound('gameOver');
     } catch (e) {
       console.log(e);
     }
@@ -407,7 +409,7 @@ export class PlayService {
   async playSoundBarbarianAttack() {
     if (!this.settings.soundEffects) return;
     try {
-      await NativeAudio.play({assetId: 'barbarian-attack'});
+      await this.audioService.playSound('barbarians');
     } catch (e) {
       console.log(e);
     }
@@ -416,7 +418,7 @@ export class PlayService {
   async playAlchemyBubbles() {
     if (!this.settings.soundEffects) return;
     try {
-      await NativeAudio.play({assetId: 'bubbles', time: 1.25});
+      await this.audioService.playSound('alchemy');
     } catch (e) {
       console.log(e);
     }

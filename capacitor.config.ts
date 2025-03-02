@@ -4,7 +4,6 @@ const config: CapacitorConfig = {
   appId: 'net.appforia.settlersdice',
   appName: 'Settlers Dice',
   webDir: 'www',
-  backgroundColor: '#782b2f',
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,

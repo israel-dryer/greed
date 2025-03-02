@@ -11,9 +11,6 @@ project(':capacitor-community-text-to-speech').projectDir = new File('../node_mo
 include ':capacitor-app'
 project(':capacitor-app').projectDir = new File('../node_modules/@capacitor/app/android')
 
-include ':capacitor-filesystem'
-project(':capacitor-filesystem').projectDir = new File('../node_modules/@capacitor/filesystem/android')
-
 include ':capacitor-haptics'
 project(':capacitor-haptics').projectDir = new File('../node_modules/@capacitor/haptics/android')
 
@@ -22,9 +19,6 @@ project(':capacitor-keyboard').projectDir = new File('../node_modules/@capacitor
 
 include ':capacitor-preferences'
 project(':capacitor-preferences').projectDir = new File('../node_modules/@capacitor/preferences/android')
-
-include ':capacitor-share'
-project(':capacitor-share').projectDir = new File('../node_modules/@capacitor/share/android')
 
 include ':capacitor-splash-screen'
 project(':capacitor-splash-screen').projectDir = new File('../node_modules/@capacitor/splash-screen/android')
@@ -37,6 +31,3 @@ project(':capawesome-capacitor-android-dark-mode-support').projectDir = new File
 
 include ':capawesome-capacitor-android-edge-to-edge-support'
 project(':capawesome-capacitor-android-edge-to-edge-support').projectDir = new File('../node_modules/@capawesome/capacitor-android-edge-to-edge-support/android')
-
-include ':capgo-native-audio'
-project(':capgo-native-audio').projectDir = new File('../node_modules/@capgo/native-audio/android')

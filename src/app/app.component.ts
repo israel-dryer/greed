@@ -1,10 +1,9 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {IonApp, IonRouterOutlet, Platform} from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
-import {chevronBack, dice, removeCircleOutline, trash} from "ionicons/icons";
+import {removeCircleOutline, trash} from "ionicons/icons";
 import {StatusBar} from "@capacitor/status-bar";
 import {Capacitor} from "@capacitor/core";
-import {NativeAudio} from "@capgo/native-audio";
 import {KeepAwake} from "@capacitor-community/keep-awake";
 import {EdgeToEdge} from "@capawesome/capacitor-android-edge-to-edge-support";
 import {db} from './shared/database';
@@ -32,11 +31,8 @@ export class AppComponent implements OnInit {
     if (Capacitor.isNativePlatform()) {
       const color = getComputedStyle(document.documentElement).getPropertyValue('--ion-background-color');
       await EdgeToEdge.setBackgroundColor({color});
-      await StatusBar.setBackgroundColor({color});
+      await StatusBar.setBackgroundColor({color: '#00ff00'});
     }
-
-    // sound assets
-    await this.preloadSoundAssets();
 
     // keep away
     const keepAwakeSupported = await KeepAwake.isSupported();
@@ -45,39 +41,6 @@ export class AppComponent implements OnInit {
     } else {
       console.log('Keep Awake not supported');
     }
-  }
-
-  async preloadSoundAssets() {
-    await NativeAudio.preload({
-      assetId: 'rolling-dice',
-      assetPath: 'assets/sounds/rolling-dice.mp4',
-      audioChannelNum: 1,
-      isUrl: false
-    });
-    await NativeAudio.preload({
-      assetId: 'barbarian-attack',
-      assetPath: 'assets/sounds/barbarian-attack.mp4',
-      audioChannelNum: 1,
-      isUrl: false
-    });
-    await NativeAudio.preload({
-      assetId: 'robber-laugh',
-      assetPath: 'assets/sounds/robber-laugh.mp4',
-      audioChannelNum: 1,
-      isUrl: false
-    });
-    await NativeAudio.preload({
-      assetId: 'game-over',
-      assetPath: 'assets/sounds/game-over.mp4',
-      audioChannelNum: 1,
-      isUrl: false
-    });
-    await NativeAudio.preload({
-      assetId: 'bubbles',
-      assetPath: 'assets/sounds/bubbles.mp4',
-      audioChannelNum: 1,
-      isUrl: false
-    });
   }
 
   async initializeIcons() {

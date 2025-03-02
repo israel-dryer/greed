@@ -22,7 +22,7 @@
 
 <ion-content fullscreen>
 
-  <swiper-container #swiperContainer>
+  <swiper-container style="height: 100%; padding-bottom: var(--ion-safe-area-bottom)" #swiperContainer>
     <swiper-slide class="sd-swiper-slide">
       <app-game-rolls *ngIf="activeGame" [rolls]="rolls" [isCitiesKnights]="activeGame.isCitiesKnights === 1"></app-game-rolls>
     </swiper-slide>

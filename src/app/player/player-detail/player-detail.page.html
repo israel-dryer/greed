@@ -29,7 +29,7 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <swiper-container #swiperContainer>
+  <swiper-container style="height: 100%; padding-bottom: var(--ion-safe-area-bottom)" #swiperContainer>
     <swiper-slide class="sd-swiper-slide">
       <app-player-summary *ngIf="player" [player]="player"></app-player-summary>
     </swiper-slide>

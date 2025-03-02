@@ -35,7 +35,7 @@ import Swiper from "swiper";
   styleUrls: ['./user-detail.page.scss'],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonIcon, IonButtons, IonBackButton, PlayerSummaryComponent, IonSegment, IonSegmentButton, IonLabel, IonSegmentView, IonSegmentContent, PlayerHistogramComponent, PlayerSummaryComponent, PlayerHistogramComponent]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonIcon, IonButtons, IonBackButton, PlayerSummaryComponent, IonSegment, IonSegmentButton, IonLabel, PlayerHistogramComponent, PlayerSummaryComponent, PlayerHistogramComponent]
 })
 export class UserDetailPage implements OnInit, OnDestroy, AfterViewInit {
 

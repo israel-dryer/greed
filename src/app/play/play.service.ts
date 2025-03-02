@@ -3,7 +3,6 @@ import {GameService} from "../game/game.service";
 import {SettingsService} from '../settings/settings.service';
 import {StatisticsService} from "../shared/statistics.service";
 import {ActionDiceResult, Game, Roll, RosterPlayer, Settings} from "../shared/types";
-import {NativeAudio} from '@capgo/native-audio'
 import {TextToSpeech} from "@capacitor-community/text-to-speech";
 import {Haptics, ImpactStyle} from "@capacitor/haptics";
 import {db} from '../shared/database';

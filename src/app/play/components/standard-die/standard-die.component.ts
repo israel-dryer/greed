@@ -1,18 +1,20 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NgStyle} from "@angular/common";
+import {NgIf, NgStyle} from "@angular/common";
 
 @Component({
   selector: 'app-standard-die',
   templateUrl: './standard-die.component.html',
   styleUrls: ['./standard-die.component.scss'],
   imports: [
-    NgStyle
+    NgStyle,
+    NgIf
   ]
 })
 export class StandardDieComponent  implements OnInit {
 
   @Input({ required: true }) number?: number;
   @Input({ required: true }) color?: 'red' | 'gold';
+  @Input() showTapAlert = false;
   red: string = '';
   gold: string = '';
   dieColor = '';

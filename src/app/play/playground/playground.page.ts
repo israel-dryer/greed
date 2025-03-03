@@ -100,12 +100,8 @@ export class PlaygroundPage implements ViewWillEnter, ViewWillLeave, OnDestroy {
       {text: 'Cancel', role: 'cancel', data: {action: 'cancel'}, icon: this.isIos ? undefined : 'close'}
     ];
     this.isDarkTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    this.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-background-color');
-    if (this.isDarkTheme) {
-      this.headerColor = getComputedStyle(document.documentElement).getPropertyValue('--md-surfaceContainerHigh');
-    } else {
-      this.headerColor = getComputedStyle(document.documentElement).getPropertyValue('--md-surfaceBright');
-    }
+    this.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--md-surfaceContainer');
+    this.headerColor = getComputedStyle(document.documentElement).getPropertyValue('--md-surfaceContainer');
   }
 
   ngOnDestroy() {
@@ -143,7 +139,7 @@ export class PlaygroundPage implements ViewWillEnter, ViewWillLeave, OnDestroy {
       this.isRobberModalOpen = true;
       this.playService.resetRobberStealing();
     } else {
-      setTimeout(async () => await this.playService.announceRollResult(this.playService.diceTotal().toString()), 500);
+      setTimeout(async () => await this.playService.announceRollResult((this.playService.diceTotal() ?? 0).toString()), 500);
 
     }
     setTimeout(() => this.playService.isRolling.set(false), ROLL_DURATION);

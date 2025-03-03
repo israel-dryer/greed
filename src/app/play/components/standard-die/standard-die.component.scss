@@ -30,3 +30,30 @@
     box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 15px inset;
   }
 }
+
+@keyframes blinker {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(2px, 2px);
+  }
+  60% {
+    transform: translate(-1px, 1px);
+  }
+  80% {
+    transform: translate(1px, 2px);
+  }
+}
+
+
+.sd-tap-alert {
+  color: #FFFFFF;
+  animation: blinker 1.25s ease-in-out infinite alternate;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+}

@@ -26,9 +26,8 @@ export class PlayService {
   settings = signal<Settings | undefined>(undefined);
   state = signal<GameState | undefined>(undefined);
 
-
   // Other
-  diceTotal = signal(0);
+  diceTotal = signal<number|undefined>(undefined);
   barbariansAttack = signal(false);
   diceActionResult = signal<ActionDiceResult | undefined>(undefined);
   robberStealing = signal(false);

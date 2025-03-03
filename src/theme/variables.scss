@@ -57,10 +57,6 @@
     --ion-item-border-color: var(--md-outlineVariant);
     --ion-toolbar-color: --md-surfaceBright;
 
-    //ion-toolbar {
-    //  --background: var(--ion-toolbar-color);
-    //}
-
     .md {
       --ion-item-border-color: var(--ion-background-color-step-100);
       --ion-backdrop-opacity: 0.6;
@@ -308,12 +304,9 @@
     --ion-color-dark-tint: #e4e7de;
 
 
-    // other
-    --ion-toolbar-color: --md-surfaceDim;
-
-    //ion-toolbar {
-    //  --background: var(--ion-toolbar-color);
-    //}
+    ion-toolbar {
+      --background: var(--md-background);
+    }
 
     .md {
       --ion-item-background: var(--md-surface-dim);

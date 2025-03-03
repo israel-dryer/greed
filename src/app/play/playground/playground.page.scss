@@ -4,45 +4,16 @@
   height: 100%;
 }
 
+ion-toolbar {
+  --background: var(--md-surfaceContainer);
+}
+
+
 .sd-dice-total {
   font-family: "Roboto", sans-serif;
   font-size: 2.25rem;
   text-align: center;
   font-weight: bold;
-}
-
-@keyframes blinker {
-  0%, 100% {
-    transform: translate(-50%, -50%);
-  }
-  20% {
-    transform: translate(-48%, -52%);
-  }
-  40% {
-    transform: translate(-52%, -52%);
-  }
-  60% {
-    transform: translate(-49%, -51%);
-  }
-  80% {
-    transform: translate(-51%, -48%);
-  }
-}
-
-.sd-tap-alert-indicators {
-  animation: blinker 0.25s ease-in-out infinite alternate;
-}
-
-.sd-tap-alert {
-  text-align: center;
-  position: absolute;
-  top: calc(50% + 1rem);
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--md-onSurface);
-  animation: blinker 1.25s ease-in-out infinite alternate;
 }
 
 .next-player {
@@ -169,6 +140,7 @@ app-standard-die {
     ion-icon {
       color: var(--md-onSurfaceVariant);
     }
+
   }
 
   .sd-alchemist-icon {

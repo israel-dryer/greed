@@ -67,8 +67,6 @@ export interface GameState {
   dice1Result: number;
   dice2Result: number;
   barbarianCount: number;
-  barbariansAttack: boolean;
-  robberStealing: boolean;
   canShowRobber: boolean;
   fairDiceCollection: number[][];
 }
@@ -86,10 +84,6 @@ export interface Game {
   isCitiesKnights: Bool;
   roster: RosterPlayer[];
   state: GameState;
-  // turnIndex: number;
-  // rollCount: number;
-  // barbarianCount: number;
-  // lastRoll?: Roll;
 }
 
 export interface Settings {

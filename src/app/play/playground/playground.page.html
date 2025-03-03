@@ -22,9 +22,6 @@
     </ion-header>
 
     <ion-content style="position: relative;" fullscreen>
-      <div class="sd-tap-alert" *ngIf="state.rollCount === 0">
-        <span>Tap to roll the dice</span>
-      </div>
       <div *ngIf="game" class="sd-play-container">
         @if (game.isCitiesKnights) {
           <!-- Alchemy Button & Modal -->
@@ -44,6 +41,7 @@
           <!-- Standard dice-->
           <app-standard-die
             [number]="state.dice1Result"
+            [showTapAlert]="true"
             color="red"
             [@jiggleRed]="playService.isRolling() ? 'active' : ''"
             [classList]="[game.isCitiesKnights ? 'barbarian-dice' : '']"></app-standard-die>

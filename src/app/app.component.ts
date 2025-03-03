@@ -26,12 +26,18 @@ export class AppComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     await this.initializeIcons();
     await db.restoreFromBackup();
-    //background & edge-to-edge
     if (Capacitor.isNativePlatform()) {
       const color = getComputedStyle(document.documentElement).getPropertyValue('--ion-background-color');
       await EdgeToEdge.setBackgroundColor({color});
+
+      const isDarkTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
       await StatusBar.setBackgroundColor({color: color});
-      await StatusBar.setStyle({style: Style.Default});
+      if (isDarkTheme) {
+        await StatusBar.setStyle({style: Style.Light});
+      } else {
+        await StatusBar.setStyle({style: Style.Dark});
+      }
+
     }
 
     // keep away

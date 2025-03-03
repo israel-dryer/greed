@@ -64,7 +64,7 @@ export class PlayService {
     const game = this.activeGame();
     const state = this.state();
     if (game && state) {
-      await this.gameService.updateGame(game!.id!, state);
+      await this.gameService.updateGame(game!.id!, {state});
     }
   }
 
@@ -245,7 +245,17 @@ export class PlayService {
 
     await this.gameService.deleteRoll(state.lastRoll.id!);
     const newLastRoll = await this.gameService.getLastRollByGameId(game.id!);
+    // reset roll state
+    state.lastRoll = undefined;
+    state.prevIndex = null;
+    state.prevPlayer = undefined;
+    state.dice1Result = 0;
+    state.dice2Result = 0;
+    this.diceActionResult.set(undefined);
+    this.diceTotal.set(undefined);
+
     if (newLastRoll) {
+      state.lastRoll = newLastRoll;
       state.prevIndex = newLastRoll.turnIndex;
       state.prevPlayer = {id: newLastRoll.playerId, name: newLastRoll.playerName};
       const changes = {

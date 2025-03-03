@@ -32,12 +32,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
       const isDarkTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
       await StatusBar.setBackgroundColor({color: color});
-      if (isDarkTheme) {
-        await StatusBar.setStyle({style: Style.Light});
-      } else {
-        await StatusBar.setStyle({style: Style.Dark});
-      }
-
+      setTimeout(() => {
+        if (isDarkTheme) {
+          StatusBar.setStyle({style: Style.Dark});
+        } else {
+          StatusBar.setStyle({style: Style.Light});
+        }
+      }, 1000);
     }
 
     // keep away

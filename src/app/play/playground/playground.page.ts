@@ -5,7 +5,7 @@ import {
   AlertController, IonActionSheet,
   IonButton,
   IonContent, IonFooter,
-  IonHeader, IonIcon, IonLabel, IonModal, IonText,
+  IonHeader, IonIcon, IonModal, IonText,
   IonTitle,
   IonToolbar, Platform, ViewWillLeave
 } from '@ionic/angular/standalone';
@@ -28,7 +28,7 @@ const ROLL_DURATION = 750;
   templateUrl: './playground.page.html',
   styleUrls: ['./playground.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonActionSheet, RouterLink, IonIcon, IonText, IonFooter, BarbarianTrackComponent, StandardDieComponent, ActionDieComponent, IonLabel, AlchemyPickerComponent, IonModal, NgOptimizedImage],
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonActionSheet, RouterLink, IonIcon, IonText, IonFooter, BarbarianTrackComponent, StandardDieComponent, ActionDieComponent, AlchemyPickerComponent, IonModal, NgOptimizedImage],
   animations: [
     trigger('jiggleRed', [
       state('active', style({})),

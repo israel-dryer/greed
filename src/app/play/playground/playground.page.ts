@@ -100,7 +100,7 @@ export class PlaygroundPage implements ViewWillEnter, ViewWillLeave, OnDestroy {
       {text: 'Cancel', role: 'cancel', data: {action: 'cancel'}, icon: this.isIos ? undefined : 'close'}
     ];
     this.isDarkTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    this.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--md-surfaceContainer');
+    this.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-background-color');
     this.headerColor = getComputedStyle(document.documentElement).getPropertyValue('--md-surfaceContainer');
   }
 

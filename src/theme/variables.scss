@@ -51,23 +51,6 @@
     --md-surfaceContainerHigh: #E6E9E0;
     --md-surfaceContainerHighest: #E1E4D;
 
-    // other
-    --ion-item-background: var(--md-surface);
-    --ion-border-color: var(--md-outlineVariant);
-    --ion-item-border-color: var(--md-outlineVariant);
-    --ion-toolbar-color: --md-surfaceBright;
-
-    .md {
-      --ion-item-border-color: var(--ion-background-color-step-100);
-      --ion-backdrop-opacity: 0.6;
-    }
-
-    .ios {
-      --ion-toolbar-segment-color-checked: var(--md-onSecondary);
-      --ion-toolbar-segment-indicator-color: var(--md-secondary);
-      --ion-backdrop-opacity: 0.6;
-    }
-
     // main color theme
 
     --ion-color-primary: #3f6836;
@@ -180,6 +163,28 @@
     --ion-background-color-step-850: #3a3e38;
     --ion-background-color-step-900: #2f332d;
     --ion-background-color-step-950: #242822;
+
+
+    // other
+    --ion-item-background: var(--md-surface);
+    --ion-border-color: var(--md-outlineVariant);
+    --ion-item-border-color: var(--md-outlineVariant);
+
+    ion-toolbar {
+      --background: var(--ion-background-color);
+    }
+
+    .md {
+      --ion-item-border-color: var(--ion-background-color-step-100);
+      --ion-backdrop-opacity: 0.6;
+    }
+
+    .ios {
+      --ion-toolbar-segment-color-checked: var(--md-onSecondary);
+      --ion-toolbar-segment-indicator-color: var(--md-secondary);
+      --ion-backdrop-opacity: 0.6;
+    }
+
   }
 
 }
@@ -305,7 +310,7 @@
 
 
     ion-toolbar {
-      --background: var(--md-background);
+      --background: var(--ion-background-color);
     }
 
     .md {

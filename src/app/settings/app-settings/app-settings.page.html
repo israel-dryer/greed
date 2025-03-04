@@ -50,12 +50,20 @@
             <ion-toggle [checked]="settings.rollHaptics" (ionChange)="handleSettingsChange('rollHaptics', $event)">
               <ion-label>
                 <h2>Roll Haptics</h2>
-                <ion-note class="ion-text-wrap">Device shakes when dice is rolled</ion-note>
+                <ion-note class="ion-text-wrap">
+                  Device shakes when dice is rolled
+                </ion-note>
               </ion-label>
             </ion-toggle>
           </ion-item>
         </ion-list>
       </section>
+      <div style="display: grid; place-content: center; height: 50px; width: 100%; font-size: 14px;">
+        <div style="display: flex; align-items: center; gap: .5rem;">
+        <ion-icon name="git-commit"></ion-icon>
+        <ion-text color="primary">1.0.3.4_dev</ion-text>
+        </div>
+      </div>
     }
   </div>
 </ion-content>

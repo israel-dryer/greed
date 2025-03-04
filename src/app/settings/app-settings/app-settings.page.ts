@@ -10,7 +10,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonNote,
+  IonNote, IonText,
   IonTitle,
   IonToggle,
   IonToolbar
@@ -20,13 +20,15 @@ import {SettingsService} from "../settings.service";
 import {liveQuery} from "dexie";
 import {Router} from "@angular/router";
 import {db} from "../../shared/database";
+import {addIcons} from "ionicons";
+import {gitCommit} from "ionicons/icons";
 
 @Component({
   selector: 'app-app-settings',
   templateUrl: './app-settings.page.html',
   styleUrls: ['./app-settings.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonLabel, IonToggle, IonButtons, IonBackButton, IonNote, IonIcon]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonLabel, IonToggle, IonButtons, IonBackButton, IonNote, IonIcon, IonText]
 })
 export class AppSettingsPage implements OnInit {
 
@@ -38,6 +40,7 @@ export class AppSettingsPage implements OnInit {
 
 
   ngOnInit() {
+    addIcons({gitCommit})
     liveQuery(() => this.settingsService.getSettings())
       .subscribe(settings => this.settings = settings);
   }

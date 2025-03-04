@@ -360,7 +360,7 @@ export class PlayService {
   async playSoundBarbarianAttack() {
     if (!this.settings()!.soundEffects) return;
     try {
-      await this.audioService.playSound('barbarians');
+      await this.audioService.playSound('barbarian');
     } catch (e) {
       console.log(e);
     }

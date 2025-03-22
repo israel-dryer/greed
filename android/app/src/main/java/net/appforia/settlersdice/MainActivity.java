@@ -1,4 +1,4 @@
-package net.appforia.settlersdice;
+package net.appforia.settlersdepot.dice;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "net.appforia.settlersdice"
+    namespace "net.appforia.settlersdepot.dice"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "net.appforia.settlersdice"
+        applicationId "net.appforia.settlersdepot.dice"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "1.0.3.5_dev"
+        versionCode 1
+        versionName "0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

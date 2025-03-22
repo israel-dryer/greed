@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'net.appforia.settlersdice',
+  appId: 'net.appforia.settlersdepot.dice',
   appName: 'Settlers Dice',
   webDir: 'www',
   plugins: {

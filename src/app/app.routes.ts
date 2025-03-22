@@ -23,7 +23,8 @@ export const routes: Routes = [
         loadComponent: () => import('./settings/app-settings/app-settings.page').then(m => m.AppSettingsPage)
       },
       {
-        path: 'players', loadComponent: () => import('./player/player-list/player-list.page').then(m => m.PlayerListPage)
+        path: 'players',
+        loadComponent: () => import('./player/player-list/player-list.page').then(m => m.PlayerListPage)
       },
       {
         path: 'my-stats',
@@ -50,14 +51,5 @@ export const routes: Routes = [
   {
     path: 'player-detail',
     loadComponent: () => import('./player/player-detail/player-detail.page').then(m => m.PlayerDetailPage)
-  },
-  {
-    path: 'signup',
-    loadComponent: () => import('./signup/signup.page').then(m => m.SignupPage)
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
-  },
-
+  }
 ];

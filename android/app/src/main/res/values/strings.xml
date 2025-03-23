@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Settlers Dice</string>
     <string name="title_activity_main">Settlers Dice</string>
-    <string name="package_name">net.appforia.settlersdice</string>
-    <string name="custom_url_scheme">net.appforia.settlersdice</string>
+    <string name="package_name">net.appforia.settlersdepot.dice</string>
+    <string name="custom_url_scheme">net.appforia.settlersdepot.dice</string>
+  <string name="admob_app_id">[APP_ID]</string>
 </resources>

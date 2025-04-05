@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Settlers Dice</string>
+    <string name="title_activity_main">Settlers Dice</string>
+    <string name="package_name">net.appforia.settlersdepot.dice</string>
+    <string name="custom_url_scheme">net.appforia.settlersdepot.dice</string>
+    <string name="admob_app_id">google.com, pub-8770270739057022, DIRECT, f08c47fec0942fa0</string>
+</resources>

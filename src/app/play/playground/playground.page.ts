@@ -20,6 +20,7 @@ import {animate, keyframes, state, style, transition, trigger} from '@angular/an
 import {EdgeToEdge} from "@capawesome/capacitor-android-edge-to-edge-support";
 import {StatusBar} from "@capacitor/status-bar";
 import {Capacitor} from "@capacitor/core";
+import {AdService} from "../../shared/ad.service";
 
 const ROLL_DURATION = 750;
 
@@ -74,6 +75,7 @@ export class PlaygroundPage implements ViewWillEnter, ViewWillLeave, OnDestroy {
   readonly playService = inject(PlayService);
   readonly router = inject(Router);
   readonly platform = inject(Platform);
+  readonly adService = inject(AdService);
 
   // time duration state
   private readonly timerIntervalCallback?: any;
@@ -143,6 +145,10 @@ export class PlaygroundPage implements ViewWillEnter, ViewWillLeave, OnDestroy {
 
     }
     setTimeout(() => this.playService.isRolling.set(false), ROLL_DURATION);
+    const rollCount = this.playService.state()?.rollCount ?? 0;
+    if (rollCount % 15 === 0) {
+      await this.adService.showInterstitial();
+    }
   }
 
   async handleAlchemyDialogDidDismiss({detail}: any) {

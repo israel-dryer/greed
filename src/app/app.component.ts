@@ -8,6 +8,7 @@ import {KeepAwake} from "@capacitor-community/keep-awake";
 import {EdgeToEdge} from "@capawesome/capacitor-android-edge-to-edge-support";
 import {db} from './shared/database';
 import {register} from 'swiper/element/bundle';
+import {AdService} from "./shared/ad.service";
 
 
 @Component({
@@ -19,7 +20,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   readonly platform = inject(Platform);
 
-  constructor() {
+  constructor(adService: AdService) {
+    adService.initialize();
     register();
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "catan-dice",
-  "version": "0.0.11",
+  "version": "0.0.13",
   "author": "Israel Dryer",
   "homepage": "https://tallypad.net/catandice",
   "scripts": {
@@ -64,5 +64,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.6.3"
   },
-  "description": "An Appforia project"
+  "description": "A dice rolling and stats tracking app for Catan."
 }

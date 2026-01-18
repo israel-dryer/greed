@@ -6,6 +6,7 @@ import {
   IonButton,
   IonContent,
   IonHeader,
+  IonIcon,
   IonInput,
   IonItem,
   IonList,
@@ -17,6 +18,8 @@ import {
 } from '@ionic/angular/standalone';
 import {AuthService} from '../../shared/auth.service';
 import {SyncService} from '../../shared/sync.service';
+import {addIcons} from 'ionicons';
+import {logoGoogle} from 'ionicons/icons';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +39,8 @@ import {SyncService} from '../../shared/sync.service';
     IonButton,
     IonText,
     IonNote,
-    IonSpinner
+    IonSpinner,
+    IonIcon
   ]
 })
 export class LoginPage implements OnInit {
@@ -45,37 +49,29 @@ export class LoginPage implements OnInit {
   private readonly router = inject(Router);
 
   email = '';
+  password = '';
   loading = false;
-  emailSent = false;
   error = '';
+  isSignUp = false;
+
+  constructor() {
+    addIcons({logoGoogle});
+  }
 
   async ngOnInit() {
-    // Check if this is a sign-in link
-    const url = window.location.href;
-    if (this.authService.isSignInLink(url)) {
-      this.loading = true;
-      try {
-        const user = await this.authService.completeSignIn(url);
-        if (user) {
-          await this.syncService.onUserLogin();
-          await this.router.navigate(['/tabs/home'], {replaceUrl: true});
-        }
-      } catch (err: any) {
-        this.error = err.message || 'Failed to sign in';
-      } finally {
-        this.loading = false;
-      }
-    }
-
     // If already authenticated, redirect to home
     if (this.authService.isAuthenticated()) {
       await this.router.navigate(['/tabs/home'], {replaceUrl: true});
     }
   }
 
-  async sendSignInLink() {
+  async signInWithEmail() {
     if (!this.email || !this.isValidEmail(this.email)) {
       this.error = 'Please enter a valid email address';
+      return;
+    }
+    if (!this.password || this.password.length < 6) {
+      this.error = 'Password must be at least 6 characters';
       return;
     }
 
@@ -83,21 +79,64 @@ export class LoginPage implements OnInit {
     this.error = '';
 
     try {
-      console.log('Sending sign-in link to:', this.email);
-      await this.authService.sendSignInLink(this.email);
-      console.log('Sign-in link sent successfully');
-      this.emailSent = true;
+      if (this.isSignUp) {
+        await this.authService.signUpWithEmail(this.email, this.password);
+      } else {
+        await this.authService.signInWithEmail(this.email, this.password);
+      }
+      await this.syncService.onUserLogin();
+      await this.router.navigate(['/tabs/home'], {replaceUrl: true});
     } catch (err: any) {
-      console.error('Error sending sign-in link:', err);
-      this.error = err.message || 'Failed to send sign-in link';
+      this.error = this.getErrorMessage(err.code);
     } finally {
       this.loading = false;
     }
   }
 
+  async signInWithGoogle() {
+    this.loading = true;
+    this.error = '';
+
+    try {
+      await this.authService.signInWithGoogle();
+      await this.syncService.onUserLogin();
+      await this.router.navigate(['/tabs/home'], {replaceUrl: true});
+    } catch (err: any) {
+      this.error = this.getErrorMessage(err.code);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  toggleSignUp() {
+    this.isSignUp = !this.isSignUp;
+    this.error = '';
+  }
+
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  }
+
+  private getErrorMessage(code: string): string {
+    switch (code) {
+      case 'auth/user-not-found':
+        return 'No account found with this email';
+      case 'auth/wrong-password':
+        return 'Incorrect password';
+      case 'auth/invalid-credential':
+        return 'Invalid email or password';
+      case 'auth/email-already-in-use':
+        return 'An account already exists with this email';
+      case 'auth/weak-password':
+        return 'Password must be at least 6 characters';
+      case 'auth/popup-closed-by-user':
+        return 'Sign-in was cancelled';
+      case 'auth/cancelled-popup-request':
+        return 'Sign-in was cancelled';
+      default:
+        return 'An error occurred. Please try again.';
+    }
   }
 
   continueWithoutAccount() {

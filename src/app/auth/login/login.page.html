@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Sign In</ion-title>
+    <ion-title>{{ isSignUp ? 'Create Account' : 'Sign In' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,7 +8,7 @@
   <div class="login-container">
     <div class="login-header">
       <h1>Catan Dice</h1>
-      <p>Sign in to sync your data across devices</p>
+      <p>{{ isSignUp ? 'Create an account to sync your data' : 'Sign in to sync your data across devices' }}</p>
     </div>
 
     @if (loading) {
@@ -18,17 +18,6 @@
           <p>Please wait...</p>
         </ion-text>
       </div>
-    } @else if (emailSent) {
-      <div class="email-sent-container">
-        <ion-text color="success">
-          <h2>Check your email!</h2>
-        </ion-text>
-        <p>We sent a sign-in link to <strong>{{ email }}</strong></p>
-        <p>Click the link in the email to sign in.</p>
-        <ion-button fill="clear" (click)="emailSent = false">
-          Use a different email
-        </ion-button>
-      </div>
     } @else {
       <ion-list>
         <ion-item>
@@ -37,8 +26,17 @@
             [(ngModel)]="email"
             placeholder="Enter your email"
             label="Email"
+            labelPlacement="stacked">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            type="password"
+            [(ngModel)]="password"
+            placeholder="Enter your password"
+            label="Password"
             labelPlacement="stacked"
-            (keyup.enter)="sendSignInLink()">
+            (keyup.enter)="signInWithEmail()">
           </ion-input>
         </ion-item>
       </ion-list>
@@ -49,13 +47,27 @@
         </ion-text>
       }
 
-      <ion-button expand="block" (click)="sendSignInLink()" [disabled]="!email">
-        Send Sign-In Link
+      <ion-button expand="block" (click)="signInWithEmail()">
+        {{ isSignUp ? 'Create Account' : 'Sign In' }}
       </ion-button>
 
-      <ion-note class="ion-text-center">
-        <p>No password needed! We'll send you a magic link.</p>
-      </ion-note>
+      <div class="toggle-mode">
+        <ion-text color="medium">
+          {{ isSignUp ? 'Already have an account?' : "Don't have an account?" }}
+        </ion-text>
+        <ion-button fill="clear" size="small" (click)="toggleSignUp()">
+          {{ isSignUp ? 'Sign In' : 'Sign Up' }}
+        </ion-button>
+      </div>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <ion-button expand="block" fill="outline" (click)="signInWithGoogle()">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        Continue with Google
+      </ion-button>
     }
 
     <div class="skip-container">

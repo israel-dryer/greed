@@ -20,19 +20,40 @@
   }
 }
 
-.loading-container,
-.email-sent-container {
+.loading-container {
   text-align: center;
   padding: 2rem;
 }
 
-.email-sent-container {
-  h2 {
-    margin-bottom: 1rem;
+.toggle-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: 1rem;
+
+  ion-text {
+    font-size: 0.875rem;
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--ion-color-light);
   }
 
-  p {
-    margin-bottom: 0.5rem;
+  span {
+    padding: 0 1rem;
+    color: var(--ion-color-medium);
+    font-size: 0.875rem;
   }
 }
 

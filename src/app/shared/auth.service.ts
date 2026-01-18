@@ -1,15 +1,14 @@
 import {Injectable, signal} from '@angular/core';
 import {
   User,
-  isSignInWithEmailLink,
   onAuthStateChanged,
-  sendSignInLinkToEmail,
-  signInWithEmailLink,
-  signOut
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import {auth} from './firebase';
-
-const EMAIL_STORAGE_KEY = 'CatanDice.emailForSignIn';
 
 @Injectable({
   providedIn: 'root'
@@ -26,41 +25,20 @@ export class AuthService {
     });
   }
 
-  async sendSignInLink(email: string): Promise<void> {
-    // Get base href to support subdirectory deployment
-    const baseHref = document.querySelector('base')?.getAttribute('href') || '/';
-    const actionCodeSettings = {
-      url: window.location.origin + baseHref + 'login',
-      handleCodeInApp: true
-    };
-
-    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-    // Save the email locally to complete sign-in when user returns
-    localStorage.setItem(EMAIL_STORAGE_KEY, email);
-  }
-
-  async completeSignIn(url: string): Promise<User | null> {
-    if (!isSignInWithEmailLink(auth, url)) {
-      return null;
-    }
-
-    let email = localStorage.getItem(EMAIL_STORAGE_KEY);
-    if (!email) {
-      // User opened link on different device - prompt for email
-      email = window.prompt('Please provide your email for confirmation');
-    }
-
-    if (!email) {
-      throw new Error('Email is required to complete sign-in');
-    }
-
-    const result = await signInWithEmailLink(auth, email, url);
-    localStorage.removeItem(EMAIL_STORAGE_KEY);
+  async signInWithEmail(email: string, password: string): Promise<User> {
+    const result = await signInWithEmailAndPassword(auth, email, password);
     return result.user;
   }
 
-  isSignInLink(url: string): boolean {
-    return isSignInWithEmailLink(auth, url);
+  async signUpWithEmail(email: string, password: string): Promise<User> {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    return result.user;
+  }
+
+  async signInWithGoogle(): Promise<User> {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    return result.user;
   }
 
   async signOut(): Promise<void> {

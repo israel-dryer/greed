@@ -1,8 +1,8 @@
 {
   "name": "catan-dice",
   "version": "0.0.1",
-  "author": "Appforia",
-  "homepage": "https://ionicframework.com/",
+  "author": "Israel Dryer",
+  "homepage": "www.tallypad.com/catandice",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

@@ -1,13 +1,13 @@
 {
   "name": "Catan Dice",
   "short_name": "Catan Dice",
-  "version": "0.1.0",
-  "id": "/catandice/",
-  "scope": "/catandice/",
+  "version": "0.4.0",
+  "id": "/",
+  "scope": "/",
   "background_color": "#732D31",
   "theme_color": "#732D31",
   "display": "standalone",
-  "start_url": "/catandice/",
+  "start_url": "/",
   "icons": [
     {
       "src": "assets/icons/icon-48x48.png",

@@ -1,21 +1,21 @@
 {
   "name": "catan-dice",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "author": "Israel Dryer",
-  "homepage": "https://tallypad.net/catandice",
+  "homepage": "https://catandice.tallypad.net",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href /catandice/",
+    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
     "version:patch": "node scripts/bump-version.js patch",
     "version:minor": "node scripts/bump-version.js minor",
     "version:major": "node scripts/bump-version.js major",
-    "deploy": "node scripts/bump-version.js patch && ng build --base-href /catandice/",
-    "deploy:minor": "node scripts/bump-version.js minor && ng build --base-href /catandice/",
-    "deploy:major": "node scripts/bump-version.js major && ng build --base-href /catandice/"
+    "deploy": "node scripts/bump-version.js patch && ng build && firebase deploy",
+    "deploy:minor": "node scripts/bump-version.js minor && ng build && firebase deploy",
+    "deploy:major": "node scripts/bump-version.js major && ng build && firebase deploy"
   },
   "private": true,
   "dependencies": {

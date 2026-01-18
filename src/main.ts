@@ -11,7 +11,7 @@ export const APP_VERSION = new InjectionToken<string>('APP_VERSION');
 
 bootstrapApplication(AppComponent, {
   providers: [
-    {provide: APP_VERSION, useValue: '0.1.0'},
+    {provide: APP_VERSION, useValue: '0.4.0'},
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     provideIonicAngular(),
     provideAnimationsAsync(),
@@ -20,7 +20,7 @@ bootstrapApplication(AppComponent, {
 }).then(() => {
   // Register service worker for PWA
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/catandice/sw.js')
+    navigator.serviceWorker.register('/sw.js')
       .then(registration => {
         console.log('Service worker registered');
 

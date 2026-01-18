@@ -8,17 +8,13 @@
     ],
     "rewrites": [
       {
-        "source": "/catandice",
-        "destination": "/catandice/index.html"
-      },
-      {
-        "source": "/catandice/**",
-        "destination": "/catandice/index.html"
+        "source": "**",
+        "destination": "/index.html"
       }
     ],
     "headers": [
       {
-        "source": "/catandice/**",
+        "source": "/**",
         "headers": [
           {
             "key": "Cache-Control",
@@ -27,7 +23,7 @@
         ]
       },
       {
-        "source": "/catandice/**/*.@(js|css|webp|png|jpg|svg|ico|woff2)",
+        "source": "/**/*.@(js|css|webp|png|jpg|svg|ico|woff2)",
         "headers": [
           {
             "key": "Cache-Control",

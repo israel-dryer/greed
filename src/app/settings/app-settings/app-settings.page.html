@@ -18,6 +18,10 @@
     @if (settings) {
       <section class="sd-list-section">
         <ion-list lines>
+          <ion-list-header>
+            <ion-label>Game Play</ion-label>
+          </ion-list-header>
+
           <ion-item>
             <ion-icon slot="start" name="sound"></ion-icon>
             <ion-toggle [checked]="settings.soundEffects" (ionChange)="soundEffectsChanged($event)">
@@ -36,43 +40,47 @@
               </ion-label>
             </ion-toggle>
           </ion-item>
-          <ion-item lines="none">
-            <ion-label style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
-              <div>
-                <ion-text color="medium">Version {{ version }}</ion-text>
-              </div>
-              <div><a href="https://dice.settlersdepot.com/privacy">Privacy Policy</a></div>
-              <div><a href="https://dice.settlersdepot.com/terms">Terms of Use</a></div>
-            </ion-label>
-          </ion-item>
+          <ion-list-header>
+            <ion-label>Account</ion-label>
+          </ion-list-header>
 
-          <!-- Not implemented -->
-          <ng-container *ngIf="false">
-            <ion-list-header>
-              <ion-label>Account</ion-label>
-            </ion-list-header>
-            <ion-item>
-              <ion-icon slot="start" name="server"></ion-icon>
+          @if (isLoggedIn()) {
+            <ion-item button (click)="syncData()">
+              <ion-icon slot="start" name="cloud-upload"></ion-icon>
               <ion-label>
-                <h2>Restore data</h2>
-                <ion-note class="ion-text-wrap">Load data from cloud backup</ion-note>
+                <h2>Sync Data</h2>
+                <ion-note class="ion-text-wrap">Backup your data to the cloud</ion-note>
               </ion-label>
             </ion-item>
             <ion-item button (click)="deleteAccount()">
               <ion-icon slot="start" name="trash"></ion-icon>
               <ion-label>
-                <h2>Remove account</h2>
-                <ion-note class="ion-text-wrap">Delete user account and all data</ion-note>
+                <h2>Delete All Data</h2>
+                <ion-note class="ion-text-wrap">Remove all local and cloud data</ion-note>
               </ion-label>
             </ion-item>
             <ion-item button (click)="logout()">
               <ion-icon slot="start" name="exit"></ion-icon>
               <ion-label>
-                <h2>Logout</h2>
-                <ion-note class="ion-text-wrap">israel.dryer&commat;gmail.com</ion-note>
+                <h2>Sign Out</h2>
+                <ion-note class="ion-text-wrap">{{ userEmail() }}</ion-note>
               </ion-label>
             </ion-item>
-          </ng-container>
+          } @else {
+            <ion-item button (click)="login()">
+              <ion-icon slot="start" name="log-in"></ion-icon>
+              <ion-label>
+                <h2>Sign In</h2>
+                <ion-note class="ion-text-wrap">Sign in to sync data across devices</ion-note>
+              </ion-label>
+            </ion-item>
+          }
+
+          <ion-item lines="none" class="ion-text-center ion-margin-top">
+            <ion-label>
+              <ion-text color="medium">Version {{ version }}</ion-text>
+            </ion-label>
+          </ion-item>
         </ion-list>
       </section>
     }

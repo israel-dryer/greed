@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {IonApp, IonRouterOutlet} from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
 import {trash} from "ionicons/icons";
 import {register} from 'swiper/element/bundle';
+import {AuthService} from './shared/auth.service';
+import {SyncService} from './shared/sync.service';
 
 
 @Component({
@@ -10,7 +12,10 @@ import {register} from 'swiper/element/bundle';
   templateUrl: 'app.component.html',
   imports: [IonApp, IonRouterOutlet],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  private readonly authService = inject(AuthService);
+  private readonly syncService = inject(SyncService);
+  private readonly onVisibilityChange = this.handleVisibilityChange.bind(this);
 
   constructor() {
     register();
@@ -18,6 +23,19 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     await this.initializeIcons();
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('visibilitychange', this.onVisibilityChange);
+  }
+
+  private handleVisibilityChange() {
+    if (document.visibilityState === 'hidden' && this.authService.isAuthenticated()) {
+      this.syncService.syncToCloud().catch(err => {
+        console.error('Failed to sync on app close:', err);
+      });
+    }
   }
 
   async initializeIcons() {

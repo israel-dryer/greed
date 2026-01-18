@@ -1,9 +1,10 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, computed, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
   AlertController,
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader, IonIcon,
@@ -19,15 +20,18 @@ import {Settings} from "../../shared/types";
 import {SettingsService} from "../settings.service";
 import {Router} from "@angular/router";
 import {addIcons} from "ionicons";
-import {exit, gitCommit, lockClosed, newspaper, server} from "ionicons/icons";
+import {cloudUpload, exit, gitCommit, lockClosed, logIn, newspaper, server, trash} from "ionicons/icons";
 import {APP_VERSION} from "../../../main";
+import {AuthService} from "../../shared/auth.service";
+import {SyncService} from "../../shared/sync.service";
+import {db} from "../../shared/database";
 
 @Component({
   selector: 'app-app-settings',
   templateUrl: './app-settings.page.html',
   styleUrls: ['./app-settings.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonLabel, IonToggle, IonButtons, IonBackButton, IonNote, IonIcon, IonText, IonListHeader]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList, IonItem, IonLabel, IonToggle, IonButtons, IonBackButton, IonNote, IonIcon, IonText, IonListHeader, IonButton]
 })
 export class AppSettingsPage implements OnInit {
 
@@ -36,9 +40,14 @@ export class AppSettingsPage implements OnInit {
   readonly router = inject(Router);
   readonly settingsService = inject(SettingsService);
   readonly alertController = inject(AlertController);
+  readonly authService = inject(AuthService);
+  readonly syncService = inject(SyncService);
+
+  readonly isLoggedIn = computed(() => this.authService.isAuthenticated());
+  readonly userEmail = computed(() => this.authService.getUserEmail());
 
   async ngOnInit() {
-    addIcons({gitCommit, exit, newspaper, lockClosed, server})
+    addIcons({gitCommit, exit, newspaper, lockClosed, server, logIn, cloudUpload, trash})
     this.settings = await this.settingsService.getSettings();
   }
 
@@ -61,26 +70,58 @@ export class AppSettingsPage implements OnInit {
   async deleteAccount() {
     const alert = await this.alertController.create({
       header: 'Delete Account',
-      message: 'Are you sure? This action cannot be undone?',
-      buttons: [{text: 'Cancel', role: 'cancel'}, {text: 'Confirm', role: 'submit'}]
+      message: 'Are you sure? This will delete all your data. This action cannot be undone.',
+      buttons: [{text: 'Cancel', role: 'cancel'}, {text: 'Delete', role: 'destructive'}]
     });
     alert.onDidDismiss().then(async event => {
-      if (event.role === 'cancel') {
+      if (event.role !== 'destructive') {
         return;
-      } else {
-        // TODO delete application data on device
-        // TODO delete application data in firebase
-        // TODO remove account
-        console.log('Deleting application data');
-        await this.router.navigate(['/login'])
       }
-    })
+      // Delete cloud data
+      if (this.authService.isAuthenticated()) {
+        await this.syncService.deleteCloudData();
+      }
+      // Delete local data
+      await db.games.clear();
+      await db.players.clear();
+      await db.rolls.clear();
+      await db.settings.clear();
+      // Clear localStorage
+      localStorage.clear();
+      // Sign out
+      await this.authService.signOut();
+      await this.router.navigate(['/login'], {replaceUrl: true});
+    });
     await alert.present();
   }
 
   async logout() {
-    // TODO logout using auth
+    this.syncService.onUserLogout();
+    await this.authService.signOut();
+    await this.router.navigate(['/login'], {replaceUrl: true});
+  }
+
+  async login() {
     await this.router.navigate(['/login']);
+  }
+
+  async syncData() {
+    const alert = await this.alertController.create({
+      header: 'Sync Data',
+      message: 'Syncing your data to the cloud...',
+      backdropDismiss: false
+    });
+    await alert.present();
+
+    try {
+      await this.syncService.syncToCloud();
+      alert.message = 'Data synced successfully!';
+      alert.buttons = [{text: 'OK', role: 'cancel'}];
+    } catch (error: any) {
+      alert.header = 'Sync Failed';
+      alert.message = error.message || 'Failed to sync data';
+      alert.buttons = [{text: 'OK', role: 'cancel'}];
+    }
   }
 
 }

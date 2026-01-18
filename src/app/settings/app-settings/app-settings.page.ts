@@ -85,8 +85,9 @@ export class AppSettingsPage implements OnInit {
       await db.players.clear();
       await db.rolls.clear();
       await db.settings.clear();
-      // Clear localStorage
-      localStorage.clear();
+      // Clear app-specific localStorage (only items with CatanDice prefix)
+      const keysToRemove = Object.keys(localStorage).filter(key => key.startsWith('CatanDice.'));
+      keysToRemove.forEach(key => localStorage.removeItem(key));
       // Sign out
       await this.authService.signOut();
       await this.router.navigate(['/login'], {replaceUrl: true});

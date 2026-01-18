@@ -6,15 +6,12 @@ A Progressive Web App (PWA) dice roller for Catan board game, built with Angular
 
 ![App Overview](screenshots/hero-images.webp)
 
-### Standard Dice Rolling
-![Standard Dice](screenshots/playground-dice-standard.webp)
-
-### Cities & Knights Expansion
-![Cities & Knights Dice](screenshots/playground-dice-cities-knights.webp)
-![Cities & Knights Rolls](screenshots/playground-rolls-cities-knights.webp)
-
-### Robber Alert
-![Robber](screenshots/playground-robber.webp)
+<p>
+  <img src="screenshots/playground-dice-standard.webp" alt="Standard Dice" height="300">
+  <img src="screenshots/playground-dice-cities-knights.webp" alt="Cities & Knights Dice" height="300">
+  <img src="screenshots/playground-rolls-cities-knights.webp" alt="Cities & Knights Rolls" height="300">
+  <img src="screenshots/playground-robber.webp" alt="Robber" height="300">
+</p>
 
 ## Features
 

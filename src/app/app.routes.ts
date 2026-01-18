@@ -7,6 +7,10 @@ export const routes: Routes = [
     redirectTo: 'tabs/home',
   },
   {
+    path: 'login',
+    loadComponent: () => import('./auth/login/login.page').then(m => m.LoginPage)
+  },
+  {
     path: 'game-detail',
     loadComponent: () => import('./game/game-detail/game-detail.page').then(m => m.GameDetailPage)
   },

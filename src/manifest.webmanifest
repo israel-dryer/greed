@@ -1,6 +1,7 @@
 {
   "name": "Catan Dice",
   "short_name": "Catan Dice",
+  "version": "0.0.7",
   "background_color": "#B54A4E",
   "theme_color": "#B54A4E",
   "display": "standalone",

@@ -1,68 +1,37 @@
-import {Component, inject, OnDestroy} from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
-  AlertController, IonActionSheet,
+  AlertController,
+  IonActionSheet,
   IonButton,
-  IonContent, IonFooter,
-  IonHeader, IonIcon, IonModal, IonText,
+  IonChip,
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonModal,
+  IonText,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import {PlayService} from '../play.service';
-import {ActionSheetButton, AlertInput} from "@ionic/angular";
-import {Router, RouterLink} from "@angular/router";
-import {BarbarianTrackComponent} from "../components/barbarian-track/barbarian-track.component";
-import {StandardDieComponent} from "../components/standard-die/standard-die.component";
-import {ActionDieComponent} from "../components/action-die/action-die.component";
-import {AlchemyPickerComponent} from "../components/alchemy-picker/alchemy-picker.component";
-import {animate, keyframes, state, style, transition, trigger} from '@angular/animations';
-
-const ROLL_DURATION = 750;
+import { PlayService, BankPreview } from '../play.service';
+import { ActionSheetButton, AlertInput } from "@ionic/angular";
+import { Router, RouterLink } from "@angular/router";
+import { addIcons } from "ionicons";
+import { menu, statsChart, trash, add, checkmark, close, arrowUndo, documentText, flag } from "ionicons/icons";
 
 @Component({
   selector: 'app-playground',
   templateUrl: './playground.page.html',
   styleUrls: ['./playground.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonActionSheet, RouterLink, IonIcon, IonText, IonFooter, BarbarianTrackComponent, StandardDieComponent, ActionDieComponent, AlchemyPickerComponent, IonModal, NgOptimizedImage],
-  animations: [
-    trigger('jiggleRed', [
-      state('active', style({})),
-      transition('* => active', [
-        animate(
-          `${ROLL_DURATION}ms`,
-          keyframes([
-            style({transform: 'translate3d(0, 0, 0) rotate(0deg)'}),
-            style({transform: 'translate3d(-1px, 0, 0) rotate(-5deg)'}),
-            style({transform: 'translate3d(2px, 0, 0) rotate(0deg)'}),
-            style({transform: 'translate3d(-4px, 0, 0)'}),
-            style({transform: 'translate3d(4px, 0, 0) rotate(5deg)'}),
-            style({transform: 'translate3d(1px, 0, 0) rotate(5deg)'}),
-            style({transform: 'translate3d(-2px, 0, 0) rotate(0deg)'}),
-            style({transform: 'translate3d(0, 0, 0)'}),
-          ]),
-        ),
-      ]),
-    ]),
-    trigger('jiggleGold', [
-      state('active', style({})),
-      transition('* => active', [
-        animate(
-          `${ROLL_DURATION}ms`,
-          keyframes([
-            style({transform: 'translate3d(0, 0, 0) rotate(0deg)'}),
-            style({transform: 'translate3d(1px, 0, 0) rotate(5deg)'}),
-            style({transform: 'translate3d(-2px, 0, 0) rotate(0deg)'}),
-            style({transform: 'translate3d(4px, 0, 0)'}),
-            style({transform: 'translate3d(-4px, 0, 0) rotate(-5deg)'}),
-            style({transform: 'translate3d(1px, 0, 0) rotate(5deg)'}),
-            style({transform: 'translate3d(-2px, 0, 0) rotate(0deg)'}),
-            style({transform: 'translate3d(0, 0, 0)'}),
-          ]),
-        ),
-      ]),
-    ]),
+  imports: [
+    IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,
+    IonButton, IonActionSheet, RouterLink, IonIcon, IonText, IonFooter,
+    IonModal, IonChip, IonInput, IonItem
   ]
 })
 export class PlaygroundPage implements OnDestroy {
@@ -71,24 +40,26 @@ export class PlaygroundPage implements OnDestroy {
   readonly playService = inject(PlayService);
   readonly router = inject(Router);
 
-  // time duration state
   private readonly timerIntervalCallback?: any;
   elapsedHours = 0;
   elapsedMinutes = 0;
   elapsedSeconds = 0;
+
   actionSheetButtons: ActionSheetButton[];
-  isRobberModalOpen = false;
-  isBarbarianModalOpen = false;
-  isGameOverModalOpen = false
-  isPauseGameModalOpen = false;
-  gameOverMessage = '';
+  isPenaltyPreviewModalOpen = false;
+  isCustomEntryModalOpen = false;
+
+  customEntryValue = signal<number | null>(null);
+  bankPreview = signal<BankPreview | null>(null);
 
   constructor() {
+    addIcons({ menu, statsChart, trash, add, checkmark, close, arrowUndo, documentText, flag });
     this.timerIntervalCallback = setInterval(() => this.updateDurationDisplay(), 1000);
     this.actionSheetButtons = [
-      {text: 'Undo Roll', data: {action: 'undo'}, icon: 'undo'},
-      {text: 'End Game', data: {action: 'end'}, icon: 'medal'},
-      {text: 'Cancel', role: 'cancel', data: {action: 'cancel'}, icon: 'close'}
+      { text: 'Undo Last Turn', data: { action: 'undo' }, icon: 'arrow-undo' },
+      { text: 'Game Rules', data: { action: 'rules' }, icon: 'document-text' },
+      { text: 'End Game', data: { action: 'end' }, icon: 'flag' },
+      { text: 'Cancel', role: 'cancel', data: { action: 'cancel' }, icon: 'close' }
     ];
   }
 
@@ -96,106 +67,163 @@ export class PlaygroundPage implements OnDestroy {
     clearInterval(this.timerIntervalCallback);
   }
 
-  async rollDice(alchemyDice?: any) {
-    this.playService.isRolling.set(true);
-    await this.playService.playSoundRollingDice();
-    await this.playService.rollDice(alchemyDice);
-    if (this.playService.barbariansAttack()) {
-      await this.playService.playSoundBarbarianAttack();
-      this.isBarbarianModalOpen = true;
-    } else if (this.playService.robberStealing()) {
-      await this.playService.playSoundRobberLaugh();
-      this.isRobberModalOpen = true;
-      this.playService.resetRobberStealing();
-    }
-    setTimeout(() => this.playService.isRolling.set(false), ROLL_DURATION);
+  // Score entry methods
+  addPreset(points: number) {
+    this.playService.addPreset(points);
   }
 
-  async handleAlchemyDialogDidDismiss({detail}: any) {
-    if (detail.role === 'confirm') {
-      const dice1 = parseInt(detail.data.dice1);
-      const dice2 = parseInt(detail.data.dice2);
-      const alchemyDice = {dice1, dice2};
-      await this.rollDice(alchemyDice);
-    }
+  addCarryOver() {
+    this.playService.addCarryOver();
   }
 
+  removeLastSegment() {
+    this.playService.removeLastSegment();
+  }
+
+  clearDraft() {
+    this.playService.clearDraft();
+  }
+
+  openCustomEntry() {
+    this.customEntryValue.set(null);
+    this.isCustomEntryModalOpen = true;
+  }
+
+  submitCustomEntry() {
+    const value = this.customEntryValue();
+    if (value && value > 0) {
+      this.playService.addCustom(value);
+    }
+    this.isCustomEntryModalOpen = false;
+    this.customEntryValue.set(null);
+  }
+
+  // Bank action
+  async attemptBank() {
+    const preview = this.playService.getBankPreview();
+    this.bankPreview.set(preview);
+
+    if (!preview.canBank) {
+      return;
+    }
+
+    // Show penalty preview if overshooting with lose_full_bank
+    if (preview.wouldOvershoot && preview.outcome === 'PENALTY') {
+      this.isPenaltyPreviewModalOpen = true;
+      return;
+    }
+
+    await this.confirmBank();
+  }
+
+  async confirmBank() {
+    this.isPenaltyPreviewModalOpen = false;
+    await this.playService.bank();
+  }
+
+  cancelPenaltyPreview() {
+    this.isPenaltyPreviewModalOpen = false;
+  }
+
+  // Bust action
+  async bust() {
+    await this.playService.bust();
+  }
+
+  // Action sheet handlers
   async handleActionSheetDidDismiss(event: any) {
-    const {data, role} = event.detail;
+    const { data, role } = event.detail;
     if (role === 'backdrop' || role === 'cancel') {
       return;
-    } else if (data.action === 'end') {
-      await this.showSelectWinnerAlert();
+    }
+
+    if (data.action === 'end') {
+      await this.endGame();
     } else if (data.action === 'undo') {
-      if (this.playService.state()?.lastRoll) {
-        await this.playService.undoLastRoll();
-      }
-    } else if (data.action === 'settings') {
-      await this.router.navigate(['/app-settings']);
+      await this.playService.undoLastTurn();
+    } else if (data.action === 'rules') {
+      await this.showRulesAlert();
     }
   }
 
-  async showGameOverDialog(duration: number, winner?: string) {
-    if (winner) {
-      await this.playService.playSoundGameOver();
-      this.gameOverMessage = `${winner} is victorious!`
-      this.isGameOverModalOpen = true;
-    } else {
-      this.gameOverMessage = `Game paused`;
-      this.isPauseGameModalOpen = true;
-    }
-  }
-
-  async showSelectWinnerAlert() {
+  async showRulesAlert() {
     const game = this.playService.activeGame();
     if (!game) return;
-    const alertInputs: AlertInput[] = game.roster.map(player => ({
-      label: player.name,
-      type: 'radio',
-      value: {id: player.id, name: player.name},
-    }));
+
+    const rules = game.rules;
+    const overshootLabel = {
+      'lose_full_bank': 'Lose Full Turn',
+      'lose_overshoot_only': 'Lose Overshoot Only',
+      'cap_at_target': 'Cap at Target'
+    }[rules.overshootPenaltyType];
+
     const alert = await this.alertController.create({
-      header: 'Game Over',
-      message: 'Choose a winner to complete the game. Otherwise, the game can be continued from the game details screen.',
+      header: 'Game Rules',
+      message:
+        `Target Score: ${rules.targetScore.toLocaleString()}\n` +
+        `On-Board Threshold: ${rules.onBoardThreshold.toLocaleString()}\n` +
+        `Hit Goal Exactly: ${rules.mustHitExactly ? 'Yes' : 'No'}\n` +
+        `Overshoot: ${overshootLabel}\n` +
+        `Carry-Over: ${rules.allowCarryOverBank ? 'Allowed' : 'Not Allowed'}`,
+      cssClass: 'rules-alert',
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+  async endGame() {
+    const game = this.playService.activeGame();
+    if (!game) return;
+
+    const alertInputs: AlertInput[] = [
+      { label: 'No Winner (Abandon)', type: 'radio', value: null },
+      ...game.roster.map(player => ({
+        label: `${player.name} (${game.totals[player.id]?.toLocaleString() || 0})`,
+        type: 'radio' as const,
+        value: player.id,
+      }))
+    ];
+
+    const alert = await this.alertController.create({
+      header: 'End Game',
+      message: 'Select a winner or abandon the game.',
       inputs: alertInputs,
-      buttons: [{text: 'Cancel', role: 'cancel'}, {text: 'Ok', role: 'submit'}]
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        { text: 'End Game', role: 'submit' }
+      ]
     });
-    alert.onDidDismiss().then(async ({data, role}) => {
+
+    alert.onDidDismiss().then(async ({ data, role }) => {
       if (role !== 'submit') return;
-      const game = Object.assign({}, this.playService.activeGame());
-      await this.playService.endGame(data.values);
-      if (game.winnerId) {
-        await this.playService.endGame(data.values);
-      }
-      await this.showGameOverDialog(game.duration, data.values?.name);
+
+      const winnerId = data.values;
+      const status = winnerId === null ? 'abandoned' : 'finished';
+
+      await this.playService.endGame(winnerId, status);
+      await this.router.navigate(['/'], { replaceUrl: true });
     });
+
     await alert.present();
   }
 
   updateDurationDisplay() {
     const game = this.playService.activeGame();
-    if (!game) {
-      return;
-    }
-    const totalSeconds = (Date.now() - game.createdOn) / 1000;
+    if (!game) return;
+
+    const totalSeconds = (Date.now() - game.startedOn) / 1000;
     this.elapsedHours = Math.floor(totalSeconds / 60 / 60);
     this.elapsedMinutes = Math.floor(totalSeconds / 60) % 60;
-    this.elapsedSeconds = totalSeconds % 60;
+    this.elapsedSeconds = Math.floor(totalSeconds % 60);
   }
 
-  async dismissBarbarianModal() {
-    this.isBarbarianModalOpen = false;
-    await this.playService.resetBarbarians();
+  formatNumber(value: number): string {
+    return value.toLocaleString();
   }
 
-  dismissGameOverModal() {
-    this.isGameOverModalOpen = false;
-    this.isPauseGameModalOpen = false;
-    setTimeout(() => this.router.navigate(['/']));
+  getRoundNumber(): number {
+    const game = this.playService.activeGame();
+    if (!game) return 1;
+    return Math.floor((game.turnNumber - 1) / game.playerIds.length) + 1;
   }
-
-  dismissRobberModal() {
-    this.isRobberModalOpen = false;
-  }
-
 }

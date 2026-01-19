@@ -140,7 +140,7 @@ export class LoginPage implements OnInit {
   }
 
   continueWithoutAccount() {
-    localStorage.setItem('CatanDice.authSkipped', 'true');
+    localStorage.setItem('Greed.authSkipped', 'true');
     this.router.navigate(['/tabs/home'], {replaceUrl: true});
   }
 }

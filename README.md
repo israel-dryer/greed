@@ -1,39 +1,22 @@
-# Catan Dice
+# Greed Scorekeeper
 
-A Progressive Web App (PWA) dice roller for Catan board game, built with Angular and Ionic.
-
-## Screenshots
-
-![App Overview](screenshots/hero-images.webp)
-
-<p align="center">
-  <img src="screenshots/playground-dice-standard.webp" alt="Standard Dice" width="24%">
-  <img src="screenshots/playground-dice-cities-knights.webp" alt="Cities & Knights Dice" width="24%">
-  <img src="screenshots/playground-rolls-cities-knights.webp" alt="Cities & Knights Rolls" width="24%">
-  <img src="screenshots/playground-robber.webp" alt="Robber" width="24%">
-</p>
+A Progressive Web App (PWA) score tracker for the Greed dice game (also known as Farkle), built with Angular and Ionic.
 
 ## Features
 
-- **Dice Rolling** - Roll dice for Catan with animated results and sound effects
-- **Fair Dice Mode** - Guarantees a statistically normal distribution over 36 rolls, eliminating unlucky streaks
-- **Game Expansions** - Supports Seafarers and Cities & Knights expansions (including the red event die)
+- **Score Tracking** - Track scores for multiple players with preset point values
+- **Custom Rules** - Configure target score, on-board threshold, overshoot penalties, and carry-over rules
 - **Player Management** - Track multiple players across games
-- **Game History** - View past games and roll statistics
-- **Player Statistics** - Track individual player stats including:
-  - Games played and won
-  - Roll histograms
-  - Robber roll counts
-  - Win streaks
-  - Fastest wins
-- **Cloud Sync** - Sign in with email to sync your data across devices
+- **Game History** - View past games and turn logs
+- **Player Statistics** - Track individual player stats including games played, wins, and more
+- **Cloud Sync** - Sign in with Google to sync your data across devices
 - **Dark Mode** - Automatic dark/light theme based on system preference
 
 ## Tech Stack
 
 - **Angular 19** - Frontend framework
 - **Ionic 8** - UI components and mobile-first design
-- **Firebase** - Authentication (email link) and Firestore for cloud sync
+- **Firebase** - Authentication (Google) and Firestore for cloud sync
 - **Dexie.js** - IndexedDB wrapper for local data persistence
 - **Swiper** - Touch-friendly carousels
 
@@ -62,7 +45,7 @@ The app will be available at `http://localhost:4200`
 npm run build
 ```
 
-Output will be in `www/catandice/`
+Output will be in `www/`
 
 ### Deploy to Firebase Hosting
 
@@ -82,7 +65,7 @@ src/
 │   ├── auth/           # Login page and authentication
 │   ├── game/           # Game management and history
 │   ├── home/           # Home page
-│   ├── play/           # Dice rolling playground
+│   ├── play/           # Score tracking playground
 │   ├── player/         # Player management and stats
 │   ├── settings/       # App settings
 │   └── shared/         # Shared services, types, and utilities
@@ -92,9 +75,7 @@ src/
 │       ├── sync.service.ts    # Cloud sync logic
 │       └── types.ts           # TypeScript interfaces
 ├── assets/
-│   ├── fonts/          # Custom fonts
-│   ├── images/         # Game images
-│   ├── sounds/         # Sound effects
+│   ├── icons/          # App icons
 │   └── svg/            # Icon SVGs
 ├── environments/       # Environment configurations
 └── theme/              # Ionic theme variables
@@ -105,7 +86,7 @@ src/
 ### Firebase Setup
 
 1. Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
-2. Enable **Authentication** with Email Link (passwordless) sign-in
+2. Enable **Authentication** with Google sign-in
 3. Enable **Firestore Database**
 4. Add your Firebase config to `src/environments/environment.ts` and `environment.prod.ts`
 5. Set up Firestore security rules:
@@ -120,10 +101,6 @@ service cloud.firestore {
   }
 }
 ```
-
-### Firebase Hosting
-
-The app is configured to deploy to a `/catandice` subdirectory. See `firebase.json` for hosting configuration.
 
 ## Scripts
 

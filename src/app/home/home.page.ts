@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   IonHeader,
   IonContent,
@@ -13,24 +13,32 @@ import {
   AlertController,
   IonCard,
   IonCardTitle,
-  IonCardHeader, IonCardContent, IonList, IonItem
+  IonCardHeader,
+  IonCardContent,
+  IonList,
+  IonItem
 } from '@ionic/angular/standalone';
-import {RouterLink} from "@angular/router";
-import {GameListPage} from "../game/game-list/game-list.page";
-import {GameSummaryCardComponent} from "../game/components/game-summary-card/game-summary-card.component";
-import {liveQuery} from "dexie";
-import {GameService} from "../game/game.service";
-import {PlayerService} from "../player/player.service";
-import {addIcons} from "ionicons";
-import {checkbox, squareOutline} from "ionicons/icons";
-import {NgIf} from "@angular/common";
-import {Player} from "../shared/types";
+import { RouterLink } from "@angular/router";
+import { GameListPage } from "../game/game-list/game-list.page";
+import { GameSummaryCardComponent } from "../game/components/game-summary-card/game-summary-card.component";
+import { liveQuery } from "dexie";
+import { GameService } from "../game/game.service";
+import { PlayerService } from "../player/player.service";
+import { addIcons } from "ionicons";
+import { checkbox, squareOutline, add, checkmark } from "ionicons/icons";
+import { NgIf, CommonModule } from "@angular/common";
+import { Player } from "../shared/types";
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonHeader, IonContent, IonButton, IonRouterLink, RouterLink, IonIcon, IonLabel, IonToolbar, IonTitle, IonBackButton, IonButtons, GameListPage, GameSummaryCardComponent, IonCard, IonCardTitle, IonCardHeader, IonCardContent, NgIf, IonList, IonItem],
+  imports: [
+    IonHeader, IonContent, IonButton, IonRouterLink, RouterLink, IonIcon,
+    IonLabel, IonToolbar, IonTitle, IonBackButton, IonButtons, GameListPage,
+    GameSummaryCardComponent, IonCard, IonCardTitle, IonCardHeader,
+    IonCardContent, NgIf, IonList, IonItem, CommonModule
+  ],
 })
 export class HomePage implements OnInit {
 
@@ -41,39 +49,40 @@ export class HomePage implements OnInit {
   constructor(
     gameService: GameService,
     private playerService: PlayerService,
-    private alertController: AlertController) {
-    addIcons({checkbox, squareOutline});
+    private alertController: AlertController
+  ) {
+    addIcons({ checkbox, squareOutline, add, checkmark });
 
-    const _playerCount = localStorage.getItem('CatanDice.playerCount');
+    const _playerCount = localStorage.getItem('Greed.playerCount');
     if (_playerCount) {
       this.playerCount = parseInt(_playerCount);
     }
-    const _gameCount = localStorage.getItem('CatanDice.gameCount');
+    const _gameCount = localStorage.getItem('Greed.gameCount');
     if (_gameCount) {
       this.gameCount = parseInt(_gameCount);
     }
-    const _userPlayer = localStorage.getItem('CatanDice.userPlayer');
+    const _userPlayer = localStorage.getItem('Greed.userPlayer');
     if (_userPlayer) {
       this.userPlayer = JSON.parse(_userPlayer);
     }
-    // subscribe to changes in game and player counts; this will trigger the welcome message on the home page
+
     liveQuery(() => gameService.getGameCount())
       .subscribe(gameCount => {
         this.gameCount = gameCount;
-        localStorage.setItem('CatanDice.gameCount', `${gameCount}`);
+        localStorage.setItem('Greed.gameCount', `${gameCount}`);
       });
     liveQuery(() => playerService.getPlayerCount())
       .subscribe(playerCount => {
         this.playerCount = playerCount;
-        localStorage.setItem('CatanDice.playerCount', `${playerCount}`);
+        localStorage.setItem('Greed.playerCount', `${playerCount}`);
       });
     liveQuery(() => this.playerService.getUserPlayer())
       .subscribe(player => {
         this.userPlayer = player;
         if (this.userPlayer) {
-          localStorage.setItem('CatanDice.userPlayer', JSON.stringify(this.userPlayer));
+          localStorage.setItem('Greed.userPlayer', JSON.stringify(this.userPlayer));
         }
-      })
+      });
   }
 
   async ngOnInit() {
@@ -81,11 +90,10 @@ export class HomePage implements OnInit {
   }
 
   async showCreateUserPlayerAlert() {
-    // Check database directly (not localStorage) to ensure we have latest synced data
     const userPlayerFromDb = await this.playerService.getUserPlayer();
     if (userPlayerFromDb) {
       this.userPlayer = userPlayerFromDb;
-      localStorage.setItem('CatanDice.userPlayer', JSON.stringify(userPlayerFromDb));
+      localStorage.setItem('Greed.userPlayer', JSON.stringify(userPlayerFromDb));
       return;
     }
 
@@ -94,7 +102,7 @@ export class HomePage implements OnInit {
       cssClass: 'sd-alert-message',
       backdropDismiss: false,
       message: '* required',
-      inputs: [{placeholder: 'Name', type: 'text', name: 'playerName', attributes: {maxLength: 10}}],
+      inputs: [{ placeholder: 'Name', type: 'text', name: 'playerName', attributes: { maxLength: 10 } }],
     });
 
     const handler = async (data: any) => {
@@ -105,8 +113,8 @@ export class HomePage implements OnInit {
         return true;
       }
       return false;
-    }
-    createUserAlert.buttons = [{text: 'Submit', handler, role: 'submit'}];
+    };
+    createUserAlert.buttons = [{ text: 'Submit', handler, role: 'submit' }];
     createUserAlert.onDidDismiss().then(async () => {
       if (!this.userPlayer) {
         await createUserAlert.present();
@@ -124,7 +132,7 @@ export class HomePage implements OnInit {
     const alert = await this.alertController.create({
       header: 'Create players',
       message: 'Two or more players are required. Click the "Players" tab below and create a few more players.',
-      buttons: [{text: 'Ok', role: 'submit'}]
+      buttons: [{ text: 'Ok', role: 'submit' }]
     });
     await alert.present();
   }
@@ -133,7 +141,7 @@ export class HomePage implements OnInit {
     const alert = await this.alertController.create({
       header: 'Time to play',
       message: 'Click the "+ Start new game" button below to create a new game.',
-      buttons: [{text: 'Ok', role: 'submit'}]
+      buttons: [{ text: 'Ok', role: 'submit' }]
     });
     await alert.present();
   }

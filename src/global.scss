@@ -5,12 +5,6 @@
  * This file contains app-specific global styles only.
  */
 
-@font-face {
-  font-family: 'Crimson Pro';
-  src: url('assets/fonts/CrimsonPro-Regular.ttf');
-}
-
-
 .md .alert-wrapper {
   border-radius: 8px;
 }
@@ -34,18 +28,6 @@
   font-style: italic;
 }
 
-ion-title {
-  font-family: 'Crimson Pro', sans-serif;
-}
-
-.md .title-default {
-  font-size: 2.25rem;
-}
-
-.ios .title-default {
-  font-size: 1.5rem;
-}
-
 .md .sd-swiper-slide {
   height: calc(100vh - 120px);
 }
@@ -54,6 +36,11 @@ ion-title {
   height: calc(100vh - 100px);
 }
 
+
+.rules-alert .alert-message {
+  white-space: pre-line;
+  line-height: 1.8;
+}
 
 @media (prefers-color-scheme: dark) {
   .md .sd-tabs-border {

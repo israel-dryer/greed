@@ -1,229 +1,210 @@
-@if (playService.state(); as state) {
-  @if (playService.activeGame(); as game) {
-    <ion-header [translucent]="false">
-      <ion-toolbar>
-        <div slot="start" class="next-player ion-text-uppercase">
-          <ion-text color="medium">Next</ion-text>
-          <ion-text style="font-size: 1.2rem; font-weight: bold;" color="primary">
-            {{ state.nextPlayer?.name }}
-          </ion-text>
-        </div>
-        <ion-title class="sd-dice-total">
-          {{ this.playService.diceTotal() }}
-        </ion-title>
-        <div slot="end" class="prev-player ion-text-end ion-text-uppercase" style="grid-column: 3">
-          <ion-text color="medium">Prev</ion-text>
-          @if (state.prevPlayer) {
-            <ion-text color="secondary" style="font-size: 1.2rem; font-weight: bold;">{{ state.prevPlayer.name }}
-            </ion-text>
-          }
-        </div>
-      </ion-toolbar>
-    </ion-header>
+@if (playService.activeGame(); as game) {
+  <ion-header [translucent]="false">
+    <ion-toolbar >
+      <ion-title>Round {{ getRoundNumber() }}</ion-title>
+      <ion-text slot="end" color="medium" style="padding-right: 1rem;">
+        <span *ngIf="elapsedHours > 0">{{ elapsedHours | number: "1.0-0" }}:</span>
+        <span>{{ elapsedMinutes | number: "2.0-0" }}:</span>
+        <span>{{ elapsedSeconds | number: "2.0-0" }}</span>
+      </ion-text>
+    </ion-toolbar>
+  </ion-header>
 
-    <ion-content style="position: relative;" fullscreen>
-      <div *ngIf="game" class="sd-play-container">
-        @if (game.isCitiesKnights) {
-          <!-- Alchemy Button & Modal -->
-          <ion-button id="present-alchemy-modal" class="sd-alchemist-button" size="large" shape="round">
-            <ion-icon slot="icon-only" name="flask"></ion-icon>
-          </ion-button>
-        }
-
-        <div class="sd-dice-container" (click)="rollDice()">
-          <!-- Action die for Cities and Knights-->
-          <app-action-die
-            *ngIf="game.isCitiesKnights"
-            [action]="playService.diceActionResult()"
-            [@jiggleGold]="playService.isRolling() ? 'active' : ''"
-            [classList]="[game.isCitiesKnights ? 'barbarian-dice' : '']"></app-action-die>
-
-          <!-- Standard dice-->
-          <app-standard-die
-            [number]="state.dice1Result"
-            [showTapAlert]="true"
-            color="red"
-            [@jiggleRed]="playService.isRolling() ? 'active' : ''"
-            [classList]="[game.isCitiesKnights ? 'barbarian-dice' : '']"></app-standard-die>
-          <app-standard-die
-            [number]="state.dice2Result"
-            color="gold"
-            [@jiggleGold]="playService.isRolling() ? 'active' : ''"
-            [classList]="[game.isCitiesKnights ? 'barbarian-dice' : '']"></app-standard-die>
+  <ion-content [fullscreen]="true">
+    <div class="play-container">
+      <!-- Current Player Section -->
+      <div class="player-section">
+        <div class="player-header">
+          <span class="player-name">{{ playService.currentPlayer()?.name }}</span>
+          <ion-chip [color]="playService.currentPlayerOnBoard() ? 'success' : 'medium'" size="small">
+            {{ playService.currentPlayerOnBoard() ? 'ON BOARD' : 'OFF BOARD' }}
+          </ion-chip>
         </div>
 
-        <!-- Barbarian Indicator for Cities and Knights-->
-        <app-barbarian-track
-          [barbarianAttack]="playService.barbariansAttack()"
-          *ngIf="game.isCitiesKnights"
-          class="sd-barbarian-track"
-          [barbarianCount]="state.barbarianCount"></app-barbarian-track>
-      </div>
-    </ion-content>
-
-    <ion-footer>
-      <ion-toolbar>
-        <!-- Reports button-->
-        <ion-button style="--border-radius: 0;" slot="start" fill="clear" color="secondary" [routerLink]="['detail']"
-                    aria-label="Show reports">
-          <ion-icon size="large" slot="icon-only" name="chart" style="padding-left: .5rem"></ion-icon>
-        </ion-button>
-        <!-- Game statistics-->
-        <div class="sd-footer-stats">
-          <ion-text color="secondary">{{ state.rollCount | number }}
-            <span>roll</span><span *ngIf="state.rollCount > 1 || state.rollCount < 1">s</span>
-          </ion-text>
-
-          <ion-text *ngIf="game" color="secondary">
-            <span *ngIf="elapsedHours > 0">{{ elapsedHours | number: "1.0-0" }}:</span>
-            <span>{{ elapsedMinutes | number: "2.0-0" }}:</span>
-            <span>{{ elapsedSeconds | number: "2.0-0" }}</span>
-          </ion-text>
-        </div>
-
-        <!-- Game settings button & action sheet-->
-        <ion-button style="--border-radius: 0;" slot="end" fill="clear" color="secondary" id="present-settings"
-                    aria-label="App menu">
-          <ion-icon size="large" slot="icon-only" name="menu" style="padding-right: .5rem;"></ion-icon>
-        </ion-button>
-        <ion-action-sheet trigger="present-settings"
-                          (ionActionSheetDidDismiss)="handleActionSheetDidDismiss($event)"
-                          [buttons]="actionSheetButtons"/>
-      </ion-toolbar>
-    </ion-footer>
-
-    <ion-modal [isOpen]="isRobberModalOpen"
-               (click)="dismissRobberModal()"
-               style="--height: auto; --width: auto; --background: transparent; --border-radius: 8px"
-               [backdropDismiss]="false">
-      <ng-template>
-        <div class="modal-content" style="position: relative;">
-          <img rel="preload" style="width: 100%; height: auto; transform: scale(1.5)"
-               loading="eager"
-               ngSrc="assets/images/sinister-robber-small.png"
-               alt="sinister robber" height="480" width="480">
-          <div
-            style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
-            <ion-text style="font-weight: bold; font-size: 1.2rem">
-              The robber strikes!
-            </ion-text>
+        <div class="score-display">
+          <div class="total-score">
+            <span class="score-label">Total</span>
+            <span class="score-value">{{ formatNumber(playService.currentPlayerTotal()) }}</span>
           </div>
-          <div
-            style="background-color: var(--md-surface); position: absolute; bottom: 0; width: 100%; opacity: 0.8; text-align: center">
-            <ion-button expand="full" fill="text" color="primary" (click)="dismissRobberModal()">
-              <ion-text color="primary">Dismiss</ion-text>
-            </ion-button>
+          <div class="turn-score" [class.has-points]="playService.draftTurnPoints() > 0">
+            <span class="score-label">This Turn</span>
+            <span class="score-value">+{{ formatNumber(playService.draftTurnPoints()) }}</span>
           </div>
         </div>
-      </ng-template>
-    </ion-modal>
 
-    <ion-modal [isOpen]="isBarbarianModalOpen"
-               style="--height: auto; --width: auto; --background: transparent; --border-radius: 8px;"
-               (didDismiss)="playService.resetBarbarians()" [backdropDismiss]="false" (click)="dismissBarbarianModal()">
-      <ng-template>
-        <div class="modal-content" style="position: relative;">
-          <img rel="preload" style="width: 100%; height: auto; transform: scale(1.9)"
-               ngSrc="assets/images/barbarians-attack-small.png"
-               loading="eager"
-               alt="barbarians attack" height="480" width="480">
-          <div
-            style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
-            <ion-text style="font-weight: bold; font-size: 1.2rem">
-              The barbarians attack!
-            </ion-text>
-          </div>
-          <div
-            style="background-color: var(--md-surface); position: absolute; bottom: 0; width: 100%; opacity: 0.8; text-align: center;">
-            <ion-button expand="full" fill="text" color="primary" (click)="dismissBarbarianModal()">
-              <ion-text color="primary">Dismiss</ion-text>
-            </ion-button>
-          </div>
-        </div>
-      </ng-template>
-    </ion-modal>
-
-    <ion-modal [isOpen]="isGameOverModalOpen"
-               style="--height: auto; --width: auto; --background: transparent; --border-radius: 8px;"
-               (didDismiss)="dismissGameOverModal()" [backdropDismiss]="false" (click)="dismissGameOverModal()">
-      <ng-template>
-        <div class="modal-content" style="position: relative;">
-          <img rel="preload" style="width: 100%; height: auto; transform: scale(1.25)"
-               ngSrc="assets/images/game-over-small.png" loading="eager"
-               alt="game over" height="480" width="480">
-          <div
-            style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
-            <ion-text style="font-weight: bold; font-size: 1.2rem">
-              {{ gameOverMessage }}
-            </ion-text>
-          </div>
-          <div
-            style="background-color: var(--md-surface); position: absolute; bottom: 0; width: 100%; opacity: 0.8; text-align: center;">
-            <ion-button expand="full" fill="text" color="primary" (click)="dismissGameOverModal()">
-              <ion-text color="primary">Dismiss</ion-text>
-            </ion-button>
-          </div>
-        </div>
-      </ng-template>
-    </ion-modal>
-
-    <ion-modal [isOpen]="isPauseGameModalOpen"
-               style="--height: auto; --width: auto; --background: transparent; --border-radius: 8px;"
-               (didDismiss)="dismissGameOverModal()" [backdropDismiss]="false" (click)="dismissGameOverModal()">
-      <ng-template>
-        <div class="modal-content" style="position: relative;">
-          <img rel="preload" style="width: 100%; height: auto; transform: scale(1.25)"
-               ngSrc="assets/images/villagers-playing-catan-small.png"
-               loading="eager"
-               alt="game over" height="480" width="480">
-          <div
-            style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
-            <ion-text style="font-weight: bold; font-size: 1.2rem">
-              {{ gameOverMessage }}
-            </ion-text>
-          </div>
-          <div
-            style="background-color: var(--md-surface); position: absolute; bottom: 0; width: 100%; opacity: 0.8; text-align: center;">
-            <ion-button expand="full" fill="text" color="primary" (click)="dismissGameOverModal()">
-              <ion-text color="primary">Dismiss</ion-text>
-            </ion-button>
-          </div>
-        </div>
-      </ng-template>
-    </ion-modal>
-
-    <ion-modal
-      *ngIf="game.isCitiesKnights === 1"
-      #alchemyModal
-      (didPresent)="playService.playAlchemyBubbles()"
-      (didDismiss)="handleAlchemyDialogDidDismiss($event)"
-      style="--height: auto; --width: auto; --border-radius: 8px; overflow: hidden;"
-      trigger="present-alchemy-modal">
-      <ng-template>
-        <div class="modal-content" style="position: relative;">
-
-          <div
-            style="background-color: var(--md-surface); position: absolute; top: 0; width: 100%; opacity: 0.95; text-align: center; padding: 1rem">
-            <ion-text style="font-weight: bold; font-size: 1.5rem; font-family: 'Crimson Pro', serif">
-              The Alchemist
-            </ion-text>
-          </div>
-          <div
-            style="display: grid; place-content: center; height: 100%; width: 100%; background-color: var(--md-secondaryContainer)">
-            <div class="picker-container">
-              <app-alchemy-picker color="danger" #red></app-alchemy-picker>
-              <app-alchemy-picker color="warning" #gold></app-alchemy-picker>
+        <!-- Target Progress -->
+        <div class="target-progress">
+          <div class="progress-bar">
+            <div class="progress-fill"
+                 [style.width.%]="(playService.currentPlayerTotal() / game.rules.targetScore) * 100">
             </div>
           </div>
-          <div
-            style="background-color: var(--md-surface); position: absolute; bottom: 0; width: 100%; opacity: 0.8; text-align: center;">
-            <ion-button expand="full" fill="text" color="primary"
-                        (click)="alchemyModal.dismiss({ dice1: red.value, dice2: gold.value }, 'confirm')">
-              <ion-text color="primary">Roll Dice</ion-text>
+          <span class="target-label">{{ formatNumber(game.rules.targetScore) }}</span>
+        </div>
+      </div>
+
+      <!-- Draft Segments -->
+      @if (playService.draftSegments().length > 0) {
+        <div class="draft-section">
+          <div class="draft-header">
+            <span>Turn Points</span>
+            <ion-button fill="clear" size="small" color="danger" (click)="clearDraft()">
+              Clear All
+            </ion-button>
+          </div>
+          <div class="draft-chips">
+            @for (segment of playService.draftSegments(); track segment.at; let i = $index) {
+              <ion-chip [color]="segment.source === 'carry_over' ? 'tertiary' : 'primary'">
+                +{{ formatNumber(segment.points) }}
+                @if (segment.source === 'carry_over') {
+                  <ion-icon name="arrow-forward"></ion-icon>
+                }
+              </ion-chip>
+            }
+            <ion-button fill="clear" size="small" (click)="removeLastSegment()">
+              <ion-icon slot="icon-only" name="backspace"></ion-icon>
             </ion-button>
           </div>
         </div>
-      </ng-template>
-    </ion-modal>
-  }
+      }
+
+      <!-- Carry-Over Option -->
+      @if (playService.carryOverAvailable()) {
+        <div class="carry-over-section">
+          <ion-button expand="block" fill="outline" color="tertiary" (click)="addCarryOver()">
+            <ion-icon slot="start" name="arrow-forward"></ion-icon>
+            Carry Over +{{ formatNumber(playService.carryOverAmount()) }}
+            <span class="carry-over-from">(from {{ playService.lastBankPlayer()?.name }})</span>
+          </ion-button>
+        </div>
+      }
+
+      <!-- Score Presets -->
+      <div class="presets-section">
+        <div class="presets-grid">
+          @for (preset of playService.settings()?.scorePresets || []; track preset) {
+            <ion-button fill="outline" (click)="addPreset(preset)">
+              +{{ formatNumber(preset) }}
+            </ion-button>
+          }
+          <ion-button fill="outline" color="secondary" (click)="openCustomEntry()">
+            Custom
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Bank Preview Warning -->
+      @if (playService.draftTurnPoints() > 0) {
+        @let preview = playService.getBankPreview();
+        @if (!preview.canBank && preview.cantBankReason) {
+          <div class="bank-warning">
+            <ion-icon name="warning"></ion-icon>
+            {{ preview.cantBankReason }}
+          </div>
+        }
+        @if (preview.wouldOvershoot && preview.outcome === 'PENALTY') {
+          <div class="bank-warning penalty">
+            <ion-icon name="alert-circle"></ion-icon>
+            Overshoots by {{ formatNumber(preview.exceededBy) }} - Will lose this turn!
+          </div>
+        }
+      }
+    </div>
+  </ion-content>
+
+  <ion-footer>
+    <ion-toolbar>
+      <!-- Details button -->
+      <ion-button slot="start" fill="clear" color="secondary" [routerLink]="['detail']">
+        <ion-icon slot="icon-only" name="stats-chart"></ion-icon>
+      </ion-button>
+
+      <!-- Bank & Bust buttons -->
+      <div class="action-buttons">
+        <ion-button
+          color="danger"
+          fill="solid"
+          (click)="bust()">
+          BUST
+        </ion-button>
+        <ion-button
+          color="success"
+          fill="solid"
+          [disabled]="playService.draftTurnPoints() === 0 || !playService.getBankPreview().canBank"
+          (click)="attemptBank()">
+          BANK
+        </ion-button>
+      </div>
+
+      <!-- Menu button -->
+      <ion-button slot="end" fill="clear" color="secondary" id="present-menu">
+        <ion-icon slot="icon-only" name="menu"></ion-icon>
+      </ion-button>
+      <ion-action-sheet
+        trigger="present-menu"
+        (ionActionSheetDidDismiss)="handleActionSheetDidDismiss($event)"
+        [buttons]="actionSheetButtons"/>
+    </ion-toolbar>
+  </ion-footer>
+
+  <!-- Custom Entry Modal -->
+  <ion-modal [isOpen]="isCustomEntryModalOpen"
+             (didDismiss)="isCustomEntryModalOpen = false"
+             style="--height: auto; --width: 90%; --max-width: 400px;">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Custom Score</ion-title>
+          <ion-button slot="end" fill="clear" (click)="isCustomEntryModalOpen = false">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+        </ion-toolbar>
+      </ion-header>
+      <div class="ion-padding">
+        <ion-item>
+          <ion-input
+            type="number"
+            label="Points"
+            labelPlacement="floating"
+            [value]="customEntryValue()"
+            (ionInput)="customEntryValue.set($any($event.target).value)">
+          </ion-input>
+        </ion-item>
+        <ion-button expand="block" class="ion-margin-top" (click)="submitCustomEntry()">
+          Add Points
+        </ion-button>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Penalty Preview Modal -->
+  <ion-modal [isOpen]="isPenaltyPreviewModalOpen"
+             [backdropDismiss]="false"
+             style="--height: auto; --width: 90%; --max-width: 400px;">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="danger">
+          <ion-title>Overshoot Penalty!</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <div class="ion-padding">
+        @if (bankPreview(); as preview) {
+          <div class="penalty-details">
+            <p>Banking {{ formatNumber(preview.turnPoints) }} would exceed the target by {{ formatNumber(preview.exceededBy) }}.</p>
+            <p><strong>You will lose all points from this turn.</strong></p>
+            <p>Your total will remain at {{ formatNumber(playService.currentPlayerTotal()) }}.</p>
+          </div>
+        }
+        <div class="penalty-actions">
+          <ion-button expand="block" color="medium" (click)="cancelPenaltyPreview()">
+            Go Back
+          </ion-button>
+          <ion-button expand="block" color="danger" (click)="confirmBank()">
+            Accept Penalty
+          </ion-button>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+
 }

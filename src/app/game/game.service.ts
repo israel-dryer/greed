@@ -1,14 +1,15 @@
-import {Injectable} from '@angular/core';
-import {ActionDiceResult, Bool, Game, Roll, RosterPlayer} from "../shared/types";
-import {createHistogram} from "../shared/utilities";
-import {db} from "../shared/database";
+import { Injectable } from '@angular/core';
+import { GreedGame, GameRules, RosterPlayer, Turn } from "../shared/types";
+import { db } from "../shared/database";
+
+const ACTIVE_GAME_KEY = 'Greed.activeGame';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
 
-  _activeGame?: Game;
+  _activeGame?: GreedGame;
 
   constructor() {
     this.getActiveGame().then();
@@ -18,107 +19,124 @@ export class GameService {
     return db.games.count();
   }
 
-  async getActiveGame() {
+  async getActiveGame(): Promise<GreedGame | undefined> {
     if (!this._activeGame) {
-      const jsonData = localStorage.getItem('CatanDice.activeGame');
-      if (!jsonData) return;
+      const jsonData = localStorage.getItem(ACTIVE_GAME_KEY);
+      if (!jsonData) return undefined;
       const game = JSON.parse(jsonData);
       this._activeGame = await this.getGame(game.id!);
     }
     return this._activeGame;
   }
 
-  setActiveGame(game: Game) {
-    this._activeGame = game;
-    localStorage.setItem('CatanDice.activeGame', JSON.stringify(game));
+  setActiveGame(game: GreedGame | null) {
+    if (game) {
+      this._activeGame = game;
+      localStorage.setItem(ACTIVE_GAME_KEY, JSON.stringify(game));
+    } else {
+      this._activeGame = undefined;
+      localStorage.removeItem(ACTIVE_GAME_KEY);
+    }
   }
 
-  async createGame(
-    useFairDice: Bool,
-    roster: RosterPlayer[],
-    turnIndex = 0,
-    isSeafarers: Bool = 0,
-    isCitiesKnights: Bool = 0
-  ) {
-    const _nextPlayer = roster[turnIndex];
-    const game: Game = {
-      useFairDice,
-      histogram: createHistogram(),
-      createdOn: new Date().valueOf(),
-      duration: 0,
-      isSeafarers,
-      isCitiesKnights,
+  async createGame(playerIds: number[], roster: RosterPlayer[], rules: GameRules): Promise<GreedGame> {
+    const now = Date.now();
+
+    // Initialize totals and onBoard for all players
+    const totals: Record<number, number> = {};
+    const onBoard: Record<number, boolean> = {};
+    for (const playerId of playerIds) {
+      totals[playerId] = 0;
+      onBoard[playerId] = false;
+    }
+
+    const game: GreedGame = {
+      createdOn: now,
+      startedOn: now,
+      status: 'in_progress',
+      rules: { ...rules },
+      playerIds,
       roster,
-      state: {
-        rollCount: 0,
-        nextIndex: turnIndex,
-        prevIndex: null,
-        dice1Result: 0,
-        dice2Result: 0,
-        canShowRobber: isCitiesKnights === 0,
-        fairDiceCollection: [],
-        nextPlayer: {id: _nextPlayer.id, name: _nextPlayer.name},
-        prevPlayer: undefined,
-        lastRoll: undefined,
-        barbarianCount: 0
-      }
+      currentPlayerIndex: 0,
+      turnNumber: 1,
+      totals,
+      onBoard,
+      lastBank: null,
     };
+
     game.id = await db.games.add(game);
     return game;
   }
 
-  async updateGame(id: number, changes: Record<string, any>) {
-    const result = db.games.update(id, changes);
-    return result;
+  async updateGame(id: number, changes: Partial<GreedGame>): Promise<number> {
+    return db.games.update(id, changes);
   }
 
-  async deleteGame(id: number) {
+  async deleteGame(id: number): Promise<void> {
+    // Delete associated turns first
+    const turns = await db.turns.where({ gameId: id }).toArray();
+    const turnIds = turns.map(t => t.id!);
+    await db.turns.bulkDelete(turnIds);
+    // Then delete the game
     await db.games.delete(id);
-    const rolls = await db.rolls.where({gameId: id}).toArray();
-    const rollIds = rolls.map(r => r.id!);
-    await db.rolls.bulkDelete(rollIds);
   }
 
-  getGame(id: number) {
+  getGame(id: number): Promise<GreedGame | undefined> {
     return db.games.get(id);
   }
 
-  getGames() {
+  getGames(): Promise<GreedGame[]> {
     return db.games.toArray();
   }
 
-  // Game Rolls
-
-  async createRoll(
-    gameId: number,
-    playerId: number,
-    playerName: string,
-    turnIndex: number,
-    dice1: number,
-    dice2: number,
-    diceAction?: ActionDiceResult,
-  ) {
-    const total = dice1 + dice2;
-    const isRobber = total === 7 ? 1 : 0;
-    const roll: Roll = {
-      gameId, playerId, playerName, turnIndex, dice1, dice2, total, diceAction, isRobber
-    }
-    roll.id = await db.rolls.add(roll);
-    return roll;
+  getGamesByStatus(status: GreedGame['status']): Promise<GreedGame[]> {
+    return db.games.where({ status }).toArray();
   }
 
-  async getRollsByGameId(gameId: number) {
-    return db.rolls.where({gameId}).toArray();
+  // ===== Turn Methods =====
+
+  async addTurn(turn: Turn): Promise<number> {
+    turn.id = await db.turns.add(turn);
+    return turn.id;
   }
 
-  async getLastRollByGameId(gameId: number) {
-    return db.rolls
-      .toCollection()
-      .filter(roll => roll.gameId === gameId)
-      .last();
+  async getTurnsByGameId(gameId: number): Promise<Turn[]> {
+    return db.turns.where({ gameId }).toArray();
   }
 
-  async deleteRoll(id: number) {
-    await db.rolls.delete(id);
+  async getActiveTurnsByGameId(gameId: number): Promise<Turn[]> {
+    const turns = await db.turns.where({ gameId }).toArray();
+    return turns.filter(t => !t.voided);
+  }
+
+  async getLastTurnByGameId(gameId: number): Promise<Turn | undefined> {
+    const turns = await this.getActiveTurnsByGameId(gameId);
+    if (turns.length === 0) return undefined;
+    // Sort by turnNumber descending and return the first
+    turns.sort((a, b) => b.turnNumber - a.turnNumber);
+    return turns[0];
+  }
+
+  async voidTurn(turnId: number): Promise<void> {
+    await db.turns.update(turnId, {
+      voided: { at: Date.now(), reason: 'undo' }
+    });
+  }
+
+  async deleteTurn(id: number): Promise<void> {
+    await db.turns.delete(id);
+  }
+
+  async getTurnCount(): Promise<number> {
+    return db.turns.count();
+  }
+
+  async getTurnsByPlayerId(playerId: number): Promise<Turn[]> {
+    return db.turns.where({ playerId }).toArray();
+  }
+
+  async getActiveTurnsByPlayerId(playerId: number): Promise<Turn[]> {
+    const turns = await db.turns.where({ playerId }).toArray();
+    return turns.filter(t => !t.voided);
   }
 }

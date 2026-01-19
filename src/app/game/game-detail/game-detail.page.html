@@ -1,6 +1,5 @@
 <ion-header [translucent]="true" class="ion-no-border sd-tabs-border">
-  <!-- Standard Toolbar -->
-  <ion-toolbar>
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -12,17 +11,13 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <!-- Segment Control -->
   <ion-toolbar>
     <ion-segment [(ngModel)]="selectedSegment" (ionChange)="handleSegmentChanged($event)" [swipeGesture]="true">
       <ion-segment-button [value]="0">
         <ion-label>Summary</ion-label>
       </ion-segment-button>
       <ion-segment-button [value]="1">
-        <ion-label>Rolls</ion-label>
-      </ion-segment-button>
-      <ion-segment-button [value]="2">
-        <ion-label>Histogram</ion-label>
+        <ion-label>Turn Log</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
@@ -30,14 +25,145 @@
 
 <ion-content fullscreen>
   <swiper-container style="height: 100%; padding-bottom: var(--ion-safe-area-bottom)" #swiperContainer>
+    <!-- Summary Tab -->
     <swiper-slide class="sd-swiper-slide">
-      <app-game-summary *ngIf="activeGame" [game]="activeGame"></app-game-summary>
+      @if (game) {
+        <div class="summary-container">
+          <ion-list>
+            <!-- Standings -->
+            <ion-item-divider>
+              <ion-label>Standings</ion-label>
+            </ion-item-divider>
+            @for (player of getSortedPlayers(); track player.id; let i = $index) {
+              <ion-item>
+                <ion-label>
+                  <div class="player-standing">
+                    <span class="rank">{{ i + 1 }}.</span>
+                    <span class="name">{{ player.name }}</span>
+                    @if (game.winnerPlayerId === player.id) {
+                      <ion-icon name="trophy" color="warning"></ion-icon>
+                    }
+                  </div>
+                </ion-label>
+                <ion-text slot="end" class="score">
+                  {{ formatNumber(game.totals[player.id] || 0) }}
+                </ion-text>
+              </ion-item>
+            }
+
+            <!-- Game Info -->
+            <ion-item-divider>
+              <ion-label>Game Info</ion-label>
+            </ion-item-divider>
+            <ion-item>
+              <ion-input readonly  [value]="getStatusLabel()">
+                <ion-label slot="label" color="medium">Status</ion-label>
+              </ion-input>
+            </ion-item>
+            @if (game.status === 'finished' && game.winnerPlayerId) {
+              <ion-item>
+                <ion-input readonly  [value]="getWinnerName()">
+                  <ion-label slot="label" color="medium">Winner</ion-label>
+                </ion-input>
+              </ion-item>
+            }
+            <ion-item>
+              <ion-input readonly  [value]="formatDate(game.createdOn)">
+                <ion-label slot="label" color="medium">Date</ion-label>
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input readonly  [value]="formatDuration()">
+                <ion-label slot="label" color="medium">Duration</ion-label>
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input readonly  [value]="roundGroups.length">
+                <ion-label slot="label" color="medium">Rounds</ion-label>
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input readonly  [value]="turns.length">
+                <ion-label slot="label" color="medium">Turns</ion-label>
+              </ion-input>
+            </ion-item>
+
+            <!-- Rules -->
+            <ion-item-divider>
+              <ion-label>Rules</ion-label>
+            </ion-item-divider>
+            <ion-item>
+              <ion-input readonly  [value]="formatNumber(game.rules.targetScore)">
+                <ion-label slot="label" color="medium">Target Score</ion-label>
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input readonly  [value]="formatNumber(game.rules.onBoardThreshold)">
+                <ion-label slot="label" color="medium">On-Board Threshold</ion-label>
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input readonly  [value]="game.rules.mustHitExactly ? 'Yes' : 'No'">
+                <ion-label slot="label" color="medium">Hit Goal Exactly</ion-label>
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input readonly  [value]="game.rules.allowCarryOverBank ? 'Allowed' : 'Not Allowed'">
+                <ion-label slot="label" color="medium">Carry-Over</ion-label>
+              </ion-input>
+            </ion-item>
+          </ion-list>
+        </div>
+      }
     </swiper-slide>
+
+    <!-- Turn Log Tab -->
     <swiper-slide class="sd-swiper-slide">
-      <app-game-rolls *ngIf="activeGame" [rolls]="rolls" [isCitiesKnights]="activeGame.isCitiesKnights === 1"></app-game-rolls>
-    </swiper-slide>
-    <swiper-slide class="sd-swiper-slide">
-      <app-game-histogram *ngIf="activeGame" [rolls]="rolls" [game]="activeGame"></app-game-histogram>
+      @if (game) {
+        <div class="turn-log-container">
+          <ion-list lines="none">
+            @for (group of roundGroups; track group.roundNumber) {
+              <ion-item-divider>
+                <ion-label>Round {{ group.roundNumber }}</ion-label>
+              </ion-item-divider>
+              @for (turn of group.turns; track turn.id) {
+                <ion-item>
+                  <ion-label>
+                    <div class="turn-entry">
+                      <span class="player-name">{{ getPlayerName(turn.playerId) }}</span>
+                      @if (turn.flags?.usedCarryOver) {
+                        <ion-icon name="arrow-forward" color="tertiary"></ion-icon>
+                      }
+                    </div>
+                    <p class="turn-details">
+                      {{ formatNumber(turn.totalBefore) }} → {{ formatNumber(turn.totalAfter) }}
+                    </p>
+                  </ion-label>
+                  <ion-chip slot="end" [color]="getOutcomeColor(turn.outcome)">
+                    {{ getOutcomeLabel(turn) }}
+                  </ion-chip>
+                </ion-item>
+              }
+            }
+          </ion-list>
+
+          @if (roundGroups.length === 0) {
+            <div class="empty-state">
+              <ion-text color="medium">No turns recorded</ion-text>
+            </div>
+          }
+        </div>
+      }
     </swiper-slide>
   </swiper-container>
 </ion-content>
+
+@if (game && (game.status === 'in_progress' || game.status === 'abandoned')) {
+  <ion-footer>
+    <ion-toolbar class="ion-padding">
+      <ion-button expand="block" (click)="continueGame()">
+        Continue Game
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+}

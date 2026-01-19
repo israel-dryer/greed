@@ -1,11 +1,11 @@
-import {Component, computed, inject, model} from '@angular/core';
-import {Game} from "../../../shared/types";
-import {IonIcon, IonRippleEffect, IonText} from "@ionic/angular/standalone";
-import {addIcons} from "ionicons";
-import {calendarClear, ellipse, dice, ellipseOutline, personCircle, timer} from "ionicons/icons";
-import {DatePipe} from "@angular/common";
-import {ActivatedRoute, Router} from "@angular/router";
-import {GameService} from "../../game.service";
+import { Component, computed, inject, model } from '@angular/core';
+import { GreedGame } from "../../../shared/types";
+import { IonIcon, IonRippleEffect, IonText } from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
+import { calendarClear, ellipse, ellipseOutline, timer } from "ionicons/icons";
+import { DatePipe } from "@angular/common";
+import { Router } from "@angular/router";
+import { GameService } from "../../game.service";
 
 @Component({
   selector: 'app-game-detail-card',
@@ -20,59 +20,41 @@ import {GameService} from "../../game.service";
 })
 export class GameDetailCardComponent {
 
-  game = model<Game>();
+  game = model<GreedGame>();
 
-  gameTitle = computed(() => this.formatGameTitle(this.game()));
-  gameRolls = computed(() => this.formatGameRolls(this.game()));
+  gameTurns = computed(() => this.formatGameTurns(this.game()));
   gameDuration = computed(() => this.formatGameDuration(this.game()));
 
   readonly gameService = inject(GameService);
   readonly router = inject(Router);
-  readonly route = inject(ActivatedRoute);
 
   constructor() {
-    addIcons({ellipse, dice, ellipseOutline, calendarClear, timer, personCircle})
+    addIcons({ ellipse, ellipseOutline, calendarClear, timer });
   }
 
-  formatGameTitle(game?: Game) {
+  formatGameTurns(game?: GreedGame) {
     if (!game) {
-      return 'Catan Classic';
+      return '0 turns';
     }
-    let title = 'Catan Classic';
-
-    if (game.isCitiesKnights) {
-      title = 'Cities & Knights';
-    }
-    if (game.isSeafarers) {
-      if (game.isCitiesKnights) {
-        title += ', Seafarers';
-      } else {
-        title = 'Seafarers';
-      }
-    }
-    return title;
+    const turns = game.turnNumber - 1;
+    return turns.toLocaleString() + (turns === 1 ? ' turn' : ' turns');
   }
 
-  formatGameRolls(game?: Game) {
-    if (!game) {
-      return '0 rolls';
-    }
-    return game.state.rollCount.toLocaleString() + ' rolls';
-  }
-
-  formatGameDuration(game?: Game) {
+  formatGameDuration(game?: GreedGame) {
     if (!game) {
       return '0 mins';
     }
-    return (game.duration / 60).toFixed(0) + ' mins';
+    const start = game.startedOn;
+    const end = game.endedOn || Date.now();
+    const minutes = Math.floor((end - start) / 1000 / 60);
+    return minutes + ' mins';
   }
 
   async handleItemClicked() {
     const game = this.game();
     if (game) {
-      this.gameService.setActiveGame(game);
+      await this.router.navigate(['game-detail'], { queryParams: { id: game.id } });
     }
-    await this.router.navigate(['game-detail']);
   }
 
 }

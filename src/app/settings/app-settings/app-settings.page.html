@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -9,41 +9,86 @@
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar>
+    <ion-toolbar >
       <ion-title size="large">Settings</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div class="s-content-container">
     @if (settings) {
-      <section class="sd-list-section">
-        <ion-list lines>
-          <ion-list-header>
-            <ion-label>Game Play</ion-label>
-          </ion-list-header>
+      <!-- Default Game Rules -->
+      <section class="sd-section-container">
+        <ion-item class="sd-section-header" lines="full">
+          <ion-label>Default Game Rules</ion-label>
+        </ion-item>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-input
+              type="number"
+              label="Target Score"
+              [value]="settings.defaultRules.targetScore"
+              (ionChange)="targetScoreChanged($event)">
+            </ion-input>
+          </ion-item>
 
           <ion-item>
-            <ion-icon slot="start" name="sound"></ion-icon>
-            <ion-toggle [checked]="settings.soundEffects" (ionChange)="soundEffectsChanged($event)">
+            <ion-input
+              type="number"
+              label="On-Board Threshold"
+              [value]="settings.defaultRules.onBoardThreshold"
+              (ionChange)="onBoardThresholdChanged($event)">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-toggle
+              [checked]="settings.defaultRules.mustHitExactly"
+              (ionChange)="mustHitExactlyChanged($event)">
               <ion-label>
-                <h2>Sound Effects</h2>
-                <ion-note class="ion-text-wrap">Toggle in game sound effects</ion-note>
+                <h2>Hit Goal Exactly</h2>
+                <ion-note class="ion-text-wrap">Can't exceed the target score</ion-note>
               </ion-label>
             </ion-toggle>
           </ion-item>
+
+          @if (settings.defaultRules.mustHitExactly) {
+            <ion-item>
+              <ion-select
+                label="Overshoot Penalty"
+                [value]="settings.defaultRules.overshootPenaltyType"
+                (ionChange)="overshootPenaltyChanged($event)">
+                <ion-select-option value="lose_full_bank">Lose Full Turn</ion-select-option>
+                <ion-select-option value="lose_overshoot_only">Lose Overshoot Only</ion-select-option>
+                <ion-select-option value="cap_at_target">Cap at Target</ion-select-option>
+              </ion-select>
+            </ion-item>
+          }
+
           <ion-item>
-            <ion-icon slot="start" name="distribution"></ion-icon>
-            <ion-toggle [checked]="settings.fairDice" (ionChange)="fairDiceChanged($event)">
+            <ion-toggle
+              [checked]="settings.defaultRules.allowCarryOverBank"
+              (ionChange)="allowCarryOverChanged($event)">
               <ion-label>
-                <h2>Use Fair Dice</h2>
-                <ion-note class="ion-text-wrap">Guaranteed normal distribution over 36 rolls</ion-note>
+                <h2>Allow Carry-Over</h2>
+                <ion-note class="ion-text-wrap">Can take previous player's banked points</ion-note>
               </ion-label>
             </ion-toggle>
           </ion-item>
-          <ion-list-header>
-            <ion-label>Account</ion-label>
-          </ion-list-header>
 
+        </ion-list>
+      </section>
+
+      <ion-button fill="clear" expand="block" color="secondary" class="reset-button" (click)="resetRulesToDefault()">
+        <ion-icon slot="start" name="refresh"></ion-icon>
+        Reset Rules to Default
+      </ion-button>
+
+      <!-- Account -->
+      <section class="sd-section-container">
+        <ion-item class="sd-section-header" lines="full">
+          <ion-label>Account</ion-label>
+        </ion-item>
+        <ion-list lines="none">
           @if (isLoggedIn()) {
             <ion-item button (click)="syncData()">
               <ion-icon slot="start" name="cloud-upload"></ion-icon>
@@ -75,14 +120,14 @@
               </ion-label>
             </ion-item>
           }
-
-          <ion-item lines="none" class="ion-text-center ion-margin-top">
-            <ion-label>
-              <ion-text color="medium">Version {{ version }}</ion-text>
-            </ion-label>
-          </ion-item>
         </ion-list>
       </section>
+
+      <ion-item lines="none" class="ion-text-center">
+        <ion-label>
+          <ion-text color="medium">Version {{ version }}</ion-text>
+        </ion-label>
+      </ion-item>
     }
   </div>
 </ion-content>

@@ -1,5 +1,5 @@
 // Service worker for PWA
-const CACHE_NAME = 'catan-dice-v0.4.0';
+const CACHE_NAME = 'greed-v1.0.0';
 
 self.addEventListener('install', (event) => {
   // Skip waiting to activate new service worker immediately
@@ -12,7 +12,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames
-          .filter(name => name.startsWith('catan-dice-') && name !== CACHE_NAME)
+          .filter(name => name.startsWith('greed-') && name !== CACHE_NAME)
           .map(name => caches.delete(name))
       );
     }).then(() => {

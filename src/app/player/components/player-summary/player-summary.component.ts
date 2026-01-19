@@ -16,55 +16,40 @@ import {Player} from "../../../shared/types";
 export class PlayerSummaryComponent {
 
   player = input.required<Player>();
+
   lastPlayed = computed(() => this.formatLastPlayed(this.player()));
-  hoursPlayed = computed(() => this.formatHoursPlayed(this.player()));
-  totalRolls = computed(() => this.formatTotalRolls(this.player()));
-  gamesPlayed = computed(() => this.formatGamesPlayed(this.player()));
-  gamesWon = computed(() => this.formatGamesWon(this.player()));
+  gamesPlayed = computed(() => this.player().gamesPlayed.toLocaleString());
+  gamesWon = computed(() => this.player().gamesWon.toLocaleString());
   winRate = computed(() => this.formatWinRate(this.player()));
-  longestWinStreak = computed(() => this.formatLongestWinStreak(this.player()));
-  fastestWin = computed(() => this.formatFastestWin(this.player()));
-  robberRate = computed(() => this.formatRobberRate(this.player()));
+  turnsTaken = computed(() => this.player().turnsTaken.toLocaleString());
+  totalBanked = computed(() => this.player().totalBanked.toLocaleString());
+  avgBank = computed(() => this.formatAvgBank(this.player()));
+  largestBank = computed(() => this.player().largestBank.toLocaleString());
+  busts = computed(() => this.player().busts.toLocaleString());
+  bustRate = computed(() => this.formatBustRate(this.player()));
 
-  formatLastPlayed(player: Player) {
-    return player.lastPlayed === 0 ? 'Never' : new Date(player.lastPlayed).toLocaleString()
+  formatLastPlayed(player: Player): string {
+    return player.lastPlayed === 0 ? 'Never' : new Date(player.lastPlayed).toLocaleString();
   }
 
-  formatHoursPlayed(player: Player) {
-    return ((player.secondsPlayed / 60) / 60).toFixed(1) + ' hours';
-  }
-
-  formatTotalRolls(player: Player) {
-    return player.totalRolls.toFixed(0);
-  }
-
-  formatGamesPlayed(player: Player) {
-    return player.gamesPlayed.toFixed(0);
-  }
-
-  formatGamesWon(player: Player) {
-    return player.gamesWon.toFixed(0);
-  }
-
-  formatWinRate(player: Player) {
-    return (player.gamesPlayed === 0 ? '0%' : (player.gamesWon / player.gamesPlayed).toLocaleString(undefined, {
+  formatWinRate(player: Player): string {
+    if (player.gamesPlayed === 0) return '0%';
+    return (player.gamesWon / player.gamesPlayed).toLocaleString(undefined, {
       style: 'percent',
       maximumFractionDigits: 1
-    }));
+    });
   }
 
-  formatLongestWinStreak(player: Player) {
-    return player.longestWinsStreak.toFixed(0);
+  formatAvgBank(player: Player): string {
+    if (player.turnsTaken === 0) return '0';
+    return Math.round(player.totalBanked / player.turnsTaken).toLocaleString();
   }
 
-  formatFastestWin(player: Player) {
-    return (player.fastestWinSeconds / 60).toFixed(1) + ' minutes';
-  }
-
-  formatRobberRate(player: Player) {
-    return (player.totalRolls === 0 ? '0%' : (player.robberRolls / player.totalRolls).toLocaleString(undefined, {
+  formatBustRate(player: Player): string {
+    if (player.turnsTaken === 0) return '0%';
+    return (player.busts / player.turnsTaken).toLocaleString(undefined, {
       style: 'percent',
       maximumFractionDigits: 1
-    }));
+    });
   }
 }

@@ -1,26 +1,32 @@
 export type Bool = 0 | 1;
 
-export enum ActionDiceImage {
-  BARBARIAN = 'assets/images/cities-knights-barbarian.svg',
-  BLUE = 'assets/images/cities-knights-blue.svg',
-  GOLD = 'assets/images/cities-knights-gold.svg',
-  GREEN = 'assets/images/cities-knights-green.svg',
+// ===== GAME RULES (immutable per game) =====
+
+export type OvershootPenaltyType = 'lose_full_bank' | 'lose_overshoot_only' | 'cap_at_target';
+
+export interface GameRules {
+  targetScore: number;              // default 10000
+  mustHitExactly: boolean;          // default true
+  overshootPenaltyType: OvershootPenaltyType; // default lose_full_bank
+  onBoardThreshold: number;         // default 500
+  allowCarryOverBank: boolean;      // default true
+  minBank?: number | null;          // optional, default null
 }
 
-export interface Histogram {
-  [index: number]: number;
+export const DEFAULT_GAME_RULES: GameRules = {
+  targetScore: 10000,
+  mustHitExactly: true,
+  overshootPenaltyType: 'lose_full_bank',
+  onBoardThreshold: 500,
+  allowCarryOverBank: true,
+  minBank: null,
+};
 
-  2: number;
-  3: number;
-  4: number;
-  5: number;
-  6: number;
-  7: number;
-  8: number;
-  9: number;
-  10: number;
-  11: number;
-  12: number;
+// ===== PLAYER =====
+
+export interface RosterPlayer {
+  id: number;
+  name: string;
 }
 
 export interface Player {
@@ -28,73 +34,129 @@ export interface Player {
   name: string;
   isUser: Bool;
   isActive: Bool;
-  histogram: Histogram;
+
+  // Greed stats
   lastPlayed: number;
   gamesPlayed: number;
   gamesWon: number;
-  secondsPlayed: number;
-  fastestWinSeconds: number;
-  longestWinsStreak: number;
-  robberRolls: number;
-  totalRolls: number;
+  turnsTaken: number;
+  totalBanked: number;
+  largestBank: number;
+  busts: number;
+  penalties: number;
+  totalPenalty: number;
 }
 
-export interface RosterPlayer {
-  id: number;
-  name: string;
+export const DEFAULT_PLAYER_STATS: Omit<Player, 'id' | 'name' | 'isUser' | 'isActive'> = {
+  lastPlayed: 0,
+  gamesPlayed: 0,
+  gamesWon: 0,
+  turnsTaken: 0,
+  totalBanked: 0,
+  largestBank: 0,
+  busts: 0,
+  penalties: 0,
+  totalPenalty: 0,
+};
+
+// ===== TURN =====
+
+export type TurnOutcomeType = 'BANK' | 'BUST' | 'PENALTY';
+
+export interface TurnScoreSegment {
+  points: number;
+  source: 'preset' | 'custom' | 'carry_over';
+  label?: string;
+  at: number;
 }
 
-export interface Roll {
+export interface Turn {
   id?: number;
   gameId: number;
+
+  turnNumber: number;             // global turn number (1-based)
+  roundNumber: number;            // floor((turnNumber-1)/playerCount)+1
+
   playerId: number;
-  playerName: string;
-  diceAction?: ActionDiceResult;
-  dice1: number;
-  dice2: number;
-  total: number;
-  isRobber: Bool;
-  turnIndex: number;
+  playerIndex: number;
+  endedAt: number;
+
+  segments: TurnScoreSegment[];
+  rollCount?: number | null;      // optional manual roll count
+
+  turnPoints: number;             // sum of segments
+  outcome: TurnOutcomeType;
+  deltaApplied: number;           // BANK:+turnPoints, BUST:0, PENALTY:-amount
+
+  totalBefore: number;
+  totalAfter: number;
+  onBoardBefore: boolean;
+  onBoardAfter: boolean;
+
+  flags?: {
+    usedCarryOver?: boolean;
+    triggeredOvershoot?: boolean;
+    exceededTargetBy?: number;
+  };
+
+  voided?: { at: number; reason: 'undo' };
 }
 
-export interface GameState {
-  rollCount: number;
-  nextIndex: number;
-  prevIndex: number | null;
-  nextPlayer: RosterPlayer | undefined;
-  prevPlayer: RosterPlayer | undefined;
-  lastRoll: Roll | undefined;
-  dice1Result: number;
-  dice2Result: number;
-  barbarianCount: number;
-  canShowRobber: boolean;
-  fairDiceCollection: number[][];
+// ===== GAME =====
+
+export type GameStatus = 'in_progress' | 'finished' | 'abandoned';
+
+export interface LastBankInfo {
+  playerId: number;
+  amount: number;               // positive bank applied
+  turnId: number;               // turns table id
+  at: number;
 }
 
-export interface Game {
+export interface GreedGame {
   id?: number;
-  useFairDice: Bool;
-  histogram: Histogram;
   createdOn: number;
-  completedOn?: number;
-  duration: number;
-  winnerId?: number;
-  winnerName?: string;
-  isSeafarers: Bool;
-  isCitiesKnights: Bool;
-  roster: RosterPlayer[];
-  state: GameState;
+  startedOn: number;
+  endedOn?: number;
+  status: GameStatus;
+
+  rules: GameRules;               // snapshot at game creation
+  playerIds: number[];            // roster order
+  roster: RosterPlayer[];         // player info for display
+  winnerPlayerId?: number | null;
+
+  // Live state pointers
+  currentPlayerIndex: number;     // whose turn (0-based)
+  turnNumber: number;             // 1-based global turn counter
+
+  // Current totals per player
+  totals: Record<number, number>; // playerId -> total score
+  onBoard: Record<number, boolean>; // playerId -> on board status
+
+  lastBank?: LastBankInfo | null;
 }
+
+// ===== SETTINGS =====
+
+export const DEFAULT_SCORE_PRESETS = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 750, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 10000];
 
 export interface Settings {
   id?: number;
-  fairDice: Bool;
-  soundEffects: Bool;
+
+  // New game default rules
+  defaultRules: GameRules;
+
+  // Score entry presets
+  scorePresets: number[];
+
+  // Display
+  theme?: 'system' | 'light' | 'dark';
+  numberFormat?: 'comma' | 'plain';
 }
 
-export enum ActionDiceResult {
-  BARBARIAN = "Bar",
-  BLUE = "Blu",
-  GREEN = "Grn",
-  GOLD = "Gld"
-}
+export const DEFAULT_SETTINGS: Omit<Settings, 'id'> = {
+  defaultRules: DEFAULT_GAME_RULES,
+  scorePresets: DEFAULT_SCORE_PRESETS,
+  theme: 'system',
+  numberFormat: 'comma',
+};

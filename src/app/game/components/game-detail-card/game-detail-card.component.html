@@ -1,32 +1,31 @@
 <div class="card-wrapper" (click)="handleItemClicked()">
   <ion-ripple-effect></ion-ripple-effect>
-    <div class="card-container">
-      <div class="card-title">{{ gameTitle() }}</div>
-      <div class="card-metrics">
-        <div class="card-metric-item">
-          <ion-icon name="dice"></ion-icon>
-          <ion-text>{{ gameRolls() }}</ion-text>
-        </div>
-        <div class="card-metric-item">
-          <ion-icon name="calendar-clear"></ion-icon>
-          <ion-text>{{ game()?.createdOn | date : 'MMM dd' }}</ion-text>
-        </div>
-        <div class="card-metric-item">
-          <ion-icon name="timer"></ion-icon>
-          <ion-text>{{ gameDuration() }}</ion-text>
-        </div>
+  <div class="card-container">
+    <div class="card-metrics">
+      <div class="card-metric-item">
+        <ion-icon name="timer"></ion-icon>
+        <ion-text>{{ gameTurns() }}</ion-text>
       </div>
-      <div class="card-roster">
-        @for (player of game()?.roster; track player.id) {
-          <div class="card-roster-item">
-            @if (player.id === game()?.winnerId) {
-              <ion-icon name="ellipse" color="primary"></ion-icon>
-            } @else {
-              <ion-icon name="ellipse-outline" color="primary"></ion-icon>
-            }
-            <ion-text>{{ player.name }}</ion-text>
-          </div>
-        }
+      <div class="card-metric-item">
+        <ion-icon name="calendar-clear"></ion-icon>
+        <ion-text>{{ game()?.createdOn | date : 'MMM dd' }}</ion-text>
+      </div>
+      <div class="card-metric-item">
+        <ion-icon name="timer"></ion-icon>
+        <ion-text>{{ gameDuration() }}</ion-text>
       </div>
     </div>
+    <div class="card-roster">
+      @for (player of game()?.roster; track player.id) {
+        <div class="card-roster-item">
+          @if (player.id === game()?.winnerPlayerId) {
+            <ion-icon name="ellipse" color="success"></ion-icon>
+          } @else {
+            <ion-icon name="ellipse-outline" color="medium"></ion-icon>
+          }
+          <ion-text>{{ player.name }}</ion-text>
+        </div>
+      }
+    </div>
+  </div>
 </div>

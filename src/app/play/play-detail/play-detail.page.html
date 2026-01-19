@@ -1,34 +1,102 @@
 <ion-header [translucent]="true" class="ion-no-border sd-tabs-border">
-  <!-- Standard Toolbar -->
-  <ion-toolbar>
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>Game Details</ion-title>
   </ion-toolbar>
 
-  <!-- Segment Control -->
   <ion-toolbar>
     <ion-segment [(ngModel)]="selectedSegment" (ionChange)="handleSegmentChanged($event)" [swipeGesture]="true">
       <ion-segment-button [value]="0">
-        <ion-label>Rolls</ion-label>
+        <ion-label>Standings</ion-label>
       </ion-segment-button>
       <ion-segment-button [value]="1">
-        <ion-label>Histogram</ion-label>
+        <ion-label>Turn Log</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
-
   <swiper-container style="height: 100%; padding-bottom: var(--ion-safe-area-bottom)" #swiperContainer>
+    <!-- Standings Tab -->
     <swiper-slide class="sd-swiper-slide">
-      <app-game-rolls *ngIf="activeGame" [rolls]="rolls" [isCitiesKnights]="activeGame.isCitiesKnights === 1"></app-game-rolls>
+      @if (activeGame) {
+        <div class="standings-container">
+          <!-- Target Info -->
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Target: {{ formatNumber(activeGame.rules.targetScore) }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="game-stats">
+                <span>Round {{ calculateRound(activeGame.turnNumber, activeGame.playerIds.length) }}</span>
+                <span>{{ turns.length }} turns</span>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Player Standings -->
+          <ion-list lines="none" class="standings-list">
+            @for (player of getSortedPlayers(); track player.id; let i = $index) {
+              <ion-item>
+                <ion-label>
+                  <div class="player-standing">
+                    <span class="rank">{{ i + 1 }}.</span>
+                    <span class="name">{{ player.name }}</span>
+                    <ion-chip *ngIf="activeGame.onBoard[player.id]" color="success" size="small">ON</ion-chip>
+                    <ion-chip *ngIf="!activeGame.onBoard[player.id]" color="medium" size="small">OFF</ion-chip>
+                  </div>
+                </ion-label>
+                <ion-text slot="end" class="score">
+                  {{ formatNumber(activeGame.totals[player.id] || 0) }}
+                </ion-text>
+              </ion-item>
+            }
+          </ion-list>
+        </div>
+      }
     </swiper-slide>
+
+    <!-- Turn Log Tab -->
     <swiper-slide class="sd-swiper-slide">
-      <app-game-histogram *ngIf="activeGame" [rolls]="rolls" [game]="activeGame"></app-game-histogram>
+      @if (activeGame) {
+        <div class="turn-log-container">
+          <ion-list lines="none">
+            @for (group of roundGroups; track group.roundNumber) {
+              <ion-item-divider>
+                <ion-label>Round {{ group.roundNumber }}</ion-label>
+              </ion-item-divider>
+              @for (turn of group.turns; track turn.id) {
+                <ion-item>
+                  <ion-label>
+                    <div class="turn-entry">
+                      <span class="player-name">{{ getPlayerName(turn.playerId) }}</span>
+                      @if (turn.flags?.usedCarryOver) {
+                        <ion-icon name="arrow-forward" color="tertiary"></ion-icon>
+                      }
+                    </div>
+                    <p class="turn-details">
+                      {{ formatNumber(turn.totalBefore) }} → {{ formatNumber(turn.totalAfter) }}
+                    </p>
+                  </ion-label>
+                  <ion-chip slot="end" [color]="getOutcomeColor(turn.outcome)">
+                    {{ getOutcomeLabel(turn) }}
+                  </ion-chip>
+                </ion-item>
+              }
+            }
+          </ion-list>
+
+          @if (roundGroups.length === 0) {
+            <div class="empty-state">
+              <ion-text color="medium">No turns recorded yet</ion-text>
+            </div>
+          }
+        </div>
+      }
     </swiper-slide>
   </swiper-container>
-
 </ion-content>
+

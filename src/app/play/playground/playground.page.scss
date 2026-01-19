@@ -1,153 +1,270 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
 ion-toolbar {
   --background: var(--md-surfaceContainer);
 }
 
-
-.sd-dice-total {
-  font-family: "Roboto", sans-serif;
-  font-size: 2.25rem;
-  text-align: center;
-  font-weight: bold;
-}
-
-.next-player {
+.play-container {
   display: flex;
   flex-direction: column;
-  padding-left: .5rem;
-  min-width: 8em;
-}
-
-.prev-player {
-  display: flex;
-  flex-direction: column;
-  padding-right: .5rem;
-  min-width: 8em;
-}
-
-.picker-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   gap: 1rem;
-}
-
-.modal-content {
-  width: 300px;
-  height: 335px;
-}
-
-.sd-footer-stats {
-  display: flex;
-  justify-content: space-around;
-  font-size: 1.15rem;
-}
-
-.sd-play-container {
-  display: flex;
-  height: 100%;
-  gap: 2rem;
-  box-sizing: border-box;
   padding: 1rem;
+  height: 100%;
+  box-sizing: border-box;
   background-color: var(--md-surfaceDim);
 }
 
-.sd-dice-container {
-  grid-row: 1 / 4;
-  grid-column: 2;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 3rem;
-  justify-content: center;
-  align-items: center;
-}
+// Player Section
+.player-section {
+  background: var(--md-surfaceContainer);
+  border-radius: 12px;
+  padding: 1rem;
 
-.sd-alchemist-button {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: flex-start;
-  --background: var(--md-secondary);
+  .player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
 
-  ion-icon {
-    font-size: 2rem;
-    color: var(--md-primaryContainer);
+    .player-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--md-primary);
+    }
   }
 
-}
+  .score-display {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1rem;
 
-.sd-barbarian-track {
-  grid-column: 3;
-  grid-row: 1/4;
-  height: 85%;
-  align-self: center;
-}
+    .total-score,
+    .turn-score {
+      text-align: center;
 
-app-action-die,
-app-standard-die {
-  height: 40%;
-  max-height: calc(100vw - 130px);
-  max-width: calc(100vw - 130px);
-  width: auto;
-  aspect-ratio: 1;
-}
+      .score-label {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--md-onSurfaceVariant);
+        margin-bottom: 0.25rem;
+      }
 
-.barbarian-dice {
-  height: 25%;
-  width: auto;
-}
-
-@media screen and (orientation: landscape) {
-  .sd-dice-container {
-    flex-direction: row;
-  }
-
-  app-action-die,
-  app-standard-die {
-    height: auto;
-    width: 30%;
-    max-height: calc(100vh - 130px);
-    max-width: calc(100vh - 130px);
-  }
-
-  .barbarian-dice {
-    height: auto;
-    width: 25%;
-  }
-
-  .center-roll-total {
-    font-size: 6vw;
-  }
-}
-
-.sd-alchemist-icon {
-  color: rgb(25, 174, 25);
-}
-
-@media (prefers-color-scheme: dark) {
-  .sd-alchemist-button {
-    --background: var(--md-surfaceContainer);
-
-    ion-icon {
-      color: var(--md-onSurfaceVariant);
+      .score-value {
+        font-size: 2rem;
+        font-weight: bold;
+      }
     }
 
+    .total-score .score-value {
+      color: var(--md-primary);
+    }
+
+    .turn-score .score-value {
+      color: var(--md-outline);
+    }
+
+    .turn-score.has-points .score-value {
+      color: var(--md-tertiary);
+    }
   }
 
-  .sd-alchemist-icon {
-    color: rgb(41, 227, 41);
-  }
-  .sd-play-container {
-    background-color: var(--md-surfaceDim);
+  .target-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--md-surfaceVariant);
+      border-radius: 4px;
+      overflow: hidden;
+
+      .progress-fill {
+        height: 100%;
+        background: var(--md-primary);
+        transition: width 0.3s ease;
+      }
+    }
+
+    .target-label {
+      font-size: 0.85rem;
+      color: var(--md-onSurfaceVariant);
+      min-width: 60px;
+      text-align: right;
+    }
   }
 }
 
+// Draft Section
+.draft-section {
+  background: var(--md-surfaceContainer);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+
+  .draft-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+
+    span {
+      font-weight: 500;
+      color: var(--md-onSurface);
+    }
+  }
+
+  .draft-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+}
+
+// Carry-Over Section
+.carry-over-section {
+  .carry-over-from {
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+    opacity: 0.8;
+  }
+}
+
+// Presets Section
+.presets-section {
+  flex: 1;
+  overflow-y: auto;
+
+  .presets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 0.5rem;
+
+    ion-button {
+      --padding-start: 0.25rem;
+      --padding-end: 0.25rem;
+      font-size: 0.85rem;
+      min-width: 0;
+    }
+  }
+}
+
+// Bank Warning
+.bank-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--md-errorContainer);
+  color: var(--md-onErrorContainer);
+  border-radius: 8px;
+  font-size: 0.9rem;
+
+  ion-icon {
+    font-size: 1.25rem;
+  }
+
+  &.penalty {
+    background: var(--md-error);
+    color: var(--md-onError);
+  }
+}
+
+// Footer
+ion-footer ion-toolbar {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+
+  ion-button[slot="start"],
+  ion-button[slot="end"] {
+    --padding-start: 0.5rem;
+    --padding-end: 0.5rem;
+    height: 44px;
+    margin: 0;
+
+    ion-icon {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex: 1;
+
+  ion-button {
+    min-width: 100px;
+    height: 44px;
+    font-weight: bold;
+    font-size: 1.1rem;
+
+    &[color="success"] {
+      --color: #fff;
+    }
+  }
+}
+
+// Modals
+.penalty-details {
+  margin-bottom: 1.5rem;
+
+  p {
+    margin: 0.5rem 0;
+    color: var(--md-onSurface);
+  }
+}
+
+.penalty-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .play-container {
+    background-color: var(--md-surfaceDim);
+  }
+
+  ion-modal {
+    --background: #000;
+
+    ion-header ion-toolbar {
+      --background: #000;
+    }
+
+    .ion-padding {
+      background: #000;
+    }
+  }
+}
+
+// iOS safe area
 .header-ios > ion-toolbar {
-  padding-top: calc(var(--ion-safe-area-top) + .25rem);
-  padding-bottom: .25rem;
+  padding-top: calc(var(--ion-safe-area-top) + 0.25rem);
+  padding-bottom: 0.25rem;
+}
+
+// Landscape adjustments
+@media screen and (orientation: landscape) {
+  .play-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .player-section {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .presets-section {
+    flex: 2;
+    min-width: 300px;
+
+    .presets-grid {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
 }

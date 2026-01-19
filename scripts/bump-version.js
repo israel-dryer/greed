@@ -54,7 +54,7 @@ const swPath = path.join(__dirname, '..', 'src', 'sw.js');
 let swContent = fs.readFileSync(swPath, 'utf8');
 swContent = swContent.replace(
   /const CACHE_NAME = '[^']+'/,
-  `const CACHE_NAME = 'catan-dice-v${newVersion}'`
+  `const CACHE_NAME = 'greed-v${newVersion}'`
 );
 fs.writeFileSync(swPath, swContent);
 console.log('Updated sw.js');

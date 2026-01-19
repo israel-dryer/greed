@@ -1,11 +1,11 @@
-import {Component, inject} from '@angular/core';
-import {PlayerService} from "../../../player/player.service";
-import {Player} from "../../../shared/types";
-import {liveQuery} from "dexie";
-import {IonIcon, IonLabel, IonText} from "@ionic/angular/standalone";
-import {addIcons} from "ionicons";
-import {calendar, gameController, dice} from "ionicons/icons";
-import {DatePipe} from "@angular/common";
+import { Component, inject } from '@angular/core';
+import { PlayerService } from "../../../player/player.service";
+import { Player } from "../../../shared/types";
+import { liveQuery } from "dexie";
+import { IonIcon, IonLabel, IonText } from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
+import { calendar, gameController, trophy } from "ionicons/icons";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: 'app-game-summary-card',
@@ -20,22 +20,21 @@ import {DatePipe} from "@angular/common";
 })
 export class GameSummaryCardComponent {
 
-  totalRolls = '0';
+  totalWins = '0';
   totalGames = '0';
   lastPlayed = 0;
 
   readonly playerService = inject(PlayerService);
-  player?: Player
-
+  player?: Player;
 
   constructor() {
-    addIcons({calendar, gameController, dice})
+    addIcons({ calendar, gameController, trophy });
 
     liveQuery(() => this.playerService.getUserPlayer())
       .subscribe(player => {
         this.player = player;
         if (player) {
-          this.totalRolls = player.totalRolls.toLocaleString();
+          this.totalWins = player.gamesWon.toLocaleString();
           this.totalGames = player.gamesPlayed.toLocaleString();
           this.lastPlayed = player.lastPlayed;
         }

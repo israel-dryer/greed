@@ -33,13 +33,9 @@
 
 .card-roster {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
   font-weight: 400;
-  overflow-x: auto;
-}
-
-.card-roster::-webkit-scrollbar {
-  display: none;
 }
 
 .card-title {
@@ -53,4 +49,3 @@
   align-items: center;
   font-size: .9rem;
 }
-

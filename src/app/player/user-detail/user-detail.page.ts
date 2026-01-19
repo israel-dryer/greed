@@ -1,12 +1,8 @@
 import {
-  AfterViewInit,
   Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ElementRef,
   inject,
   OnDestroy,
-  OnInit,
-  viewChild
+  OnInit
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -15,7 +11,7 @@ import {
   IonButton, IonButtons,
   IonContent,
   IonHeader,
-  IonIcon, IonLabel, IonSegment, IonSegmentButton,
+  IonIcon,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
@@ -25,25 +21,20 @@ import {bookmark, bookmarkOutline} from "ionicons/icons";
 import {Router} from "@angular/router";
 import {PlayerService} from "../player.service";
 import {PlayerSummaryComponent} from "../components/player-summary/player-summary.component";
-import {PlayerHistogramComponent} from "../components/player-histogram/player-histogram.component";
 import {liveQuery} from "dexie";
-import Swiper from "swiper";
 
 @Component({
   selector: 'app-player-detail',
   templateUrl: './user-detail.page.html',
   styleUrls: ['./user-detail.page.scss'],
   standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonIcon, IonButtons, IonBackButton, PlayerSummaryComponent, IonSegment, IonSegmentButton, IonLabel, PlayerHistogramComponent, PlayerSummaryComponent, PlayerHistogramComponent]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonIcon, IonButtons, IonBackButton, PlayerSummaryComponent]
 })
-export class UserDetailPage implements OnInit, OnDestroy, AfterViewInit {
+export class UserDetailPage implements OnInit, OnDestroy {
 
-  readonly swiperContainer = viewChild.required<ElementRef>('swiperContainer');
   readonly router = inject(Router);
   readonly alertController = inject(AlertController);
   readonly playerService = inject(PlayerService);
-  selectedSegment = 0;
   player?: Player
   private playerDataSub: any;
 
@@ -55,12 +46,6 @@ export class UserDetailPage implements OnInit, OnDestroy, AfterViewInit {
   async ngOnInit() {
     addIcons({bookmark, bookmarkOutline})
     this.player = await this.playerService.getUserPlayer();
-  }
-
-  ngAfterViewInit() {
-    this.swiperContainer().nativeElement.addEventListener('swiperslidechange', (e: any) => {
-      this.selectedSegment = e.detail[0].activeIndex;
-    });
   }
 
   ngOnDestroy() {
@@ -86,11 +71,6 @@ export class UserDetailPage implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     await alert.present();
-  }
-
-  handleSegmentChanged(event: any) {
-    this.selectedSegment = event.detail.value;
-    (this.swiperContainer().nativeElement.swiper as Swiper).slideTo(event.detail.value);
   }
 
 }

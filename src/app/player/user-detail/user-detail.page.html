@@ -1,37 +1,17 @@
 <ion-header [translucent]="true" class="ion-no-border sd-tabs-border">
-  <!-- Standard Toolbar -->
-  <ion-toolbar>
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>{{ player?.name }}</ion-title>
     <ion-buttons *ngIf="player" slot="end">
       <ion-button (click)="showEditPlayerNameDialog()">
-        <ion-icon slot="icon-only" name="edit"></ion-icon>
+        <ion-icon slot="icon-only" name="create"></ion-icon>
       </ion-button>
     </ion-buttons>
-  </ion-toolbar>
-
-  <!-- Segment Control -->
-  <ion-toolbar>
-    <ion-segment [(ngModel)]="selectedSegment" (ionChange)="handleSegmentChanged($event)" [swipeGesture]="true">
-      <ion-segment-button [value]="0">
-        <ion-label>Summary</ion-label>
-      </ion-segment-button>
-      <ion-segment-button [value]="1">
-        <ion-label>Histogram</ion-label>
-      </ion-segment-button>
-    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
-  <swiper-container style="height: 100%;" #swiperContainer>
-    <swiper-slide class="sd-swiper-slide">
-      <app-player-summary *ngIf="player" [player]="player"></app-player-summary>
-    </swiper-slide>
-    <swiper-slide class="sd-swiper-slide">
-      <app-player-histogram *ngIf="player" [player]="player"></app-player-histogram>
-    </swiper-slide>
-  </swiper-container>
+  <app-player-summary *ngIf="player" [player]="player"></app-player-summary>
 </ion-content>

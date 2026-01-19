@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   collection,
   doc,
@@ -8,12 +8,12 @@ import {
   query,
   Unsubscribe
 } from 'firebase/firestore';
-import {firestore} from './firebase';
-import {AuthService} from './auth.service';
-import {db} from './database';
-import {Game, Player, Roll, Settings} from './types';
+import { firestore } from './firebase';
+import { AuthService } from './auth.service';
+import { db } from './database';
+import { GreedGame, Player, Turn, Settings } from './types';
 
-const APP_PREFIX = 'catandice';
+const APP_PREFIX = 'greed';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,7 @@ export class SyncService {
   private getUserCollection(collectionName: string) {
     const uid = this.authService.getUserId();
     if (!uid) throw new Error('User not authenticated');
-    // Path: users/{uid}/{app}-{collection} e.g. users/abc123/catandice-players
+    // Path: users/{uid}/{app}-{collection} e.g. users/abc123/greed-players
     return collection(firestore, 'users', uid, `${APP_PREFIX}-${collectionName}`);
   }
 
@@ -69,11 +69,11 @@ export class SyncService {
       batch.set(docRef, this.cleanForFirestore(game));
     }
 
-    // Sync rolls
-    const rolls = await db.rolls.toArray();
-    for (const roll of rolls) {
-      const docRef = doc(this.getUserCollection('rolls'), String(roll.id));
-      batch.set(docRef, this.cleanForFirestore(roll));
+    // Sync turns
+    const turns = await db.turns.toArray();
+    for (const turn of turns) {
+      const docRef = doc(this.getUserCollection('turns'), String(turn.id));
+      batch.set(docRef, this.cleanForFirestore(turn));
     }
 
     // Sync settings
@@ -100,16 +100,16 @@ export class SyncService {
 
     // Fetch games
     const gamesSnapshot = await getDocs(query(this.getUserCollection('games')));
-    const cloudGames: Game[] = [];
+    const cloudGames: GreedGame[] = [];
     gamesSnapshot.forEach(doc => {
-      cloudGames.push(doc.data() as Game);
+      cloudGames.push(doc.data() as GreedGame);
     });
 
-    // Fetch rolls
-    const rollsSnapshot = await getDocs(query(this.getUserCollection('rolls')));
-    const cloudRolls: Roll[] = [];
-    rollsSnapshot.forEach(doc => {
-      cloudRolls.push(doc.data() as Roll);
+    // Fetch turns
+    const turnsSnapshot = await getDocs(query(this.getUserCollection('turns')));
+    const cloudTurns: Turn[] = [];
+    turnsSnapshot.forEach(doc => {
+      cloudTurns.push(doc.data() as Turn);
     });
 
     // Fetch settings
@@ -130,9 +130,9 @@ export class SyncService {
       await db.games.bulkPut(cloudGames);
     }
 
-    if (cloudRolls.length > 0) {
-      await db.rolls.clear();
-      await db.rolls.bulkPut(cloudRolls);
+    if (cloudTurns.length > 0) {
+      await db.turns.clear();
+      await db.turns.bulkPut(cloudTurns);
     }
 
     if (cloudSettings) {
@@ -147,7 +147,7 @@ export class SyncService {
     if (!uid) return;
 
     // Delete all user data from Firestore
-    const collections = ['players', 'games', 'rolls', 'settings'];
+    const collections = ['players', 'games', 'turns', 'settings'];
 
     for (const collectionName of collections) {
       const snapshot = await getDocs(this.getUserCollection(collectionName));

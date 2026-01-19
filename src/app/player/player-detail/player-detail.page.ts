@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, inject, OnInit, viewChild} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
@@ -6,7 +6,7 @@ import {
   IonButton, IonButtons,
   IonContent,
   IonHeader,
-  IonIcon, IonLabel, IonSegment, IonSegmentButton,
+  IonIcon,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
@@ -16,8 +16,6 @@ import {addIcons} from "ionicons";
 import {bookmark, bookmarkOutline} from "ionicons/icons";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PlayerSummaryComponent} from "../components/player-summary/player-summary.component";
-import {PlayerHistogramComponent} from "../components/player-histogram/player-histogram.component";
-import Swiper from "swiper";
 
 
 @Component({
@@ -25,17 +23,14 @@ import Swiper from "swiper";
   templateUrl: './player-detail.page.html',
   styleUrls: ['./player-detail.page.scss'],
   standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonIcon, IonButtons, IonBackButton, PlayerSummaryComponent, IonSegment, IonSegmentButton, IonLabel, PlayerHistogramComponent]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonIcon, IonButtons, IonBackButton, PlayerSummaryComponent]
 })
-export class PlayerDetailPage implements OnInit, AfterViewInit {
+export class PlayerDetailPage implements OnInit {
 
-  readonly swiperContainer = viewChild.required<ElementRef>('swiperContainer');
   readonly router = inject(Router);
   readonly route = inject(ActivatedRoute);
   readonly alertController = inject(AlertController);
   readonly playerService = inject(PlayerService);
-  selectedSegment = 0;
   player?: Player
 
   constructor() {
@@ -51,12 +46,6 @@ export class PlayerDetailPage implements OnInit, AfterViewInit {
   ngOnInit(): void {
     addIcons({bookmark, bookmarkOutline})
     this.player = this.playerService.getActivePlayer();
-  }
-
-  ngAfterViewInit() {
-    this.swiperContainer().nativeElement.addEventListener('swiperslidechange', (e: any) => {
-      this.selectedSegment = e.detail[0].activeIndex;
-    });
   }
 
   async showEditPlayerNameDialog() {
@@ -95,11 +84,6 @@ export class PlayerDetailPage implements OnInit, AfterViewInit {
       }
     });
     await alert.present();
-  }
-
-  handleSegmentChanged(event: any) {
-    this.selectedSegment = event.detail.value;
-    (this.swiperContainer().nativeElement.swiper as Swiper).slideTo(event.detail.value);
   }
 
 }

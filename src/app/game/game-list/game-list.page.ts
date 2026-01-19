@@ -1,11 +1,11 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {Game} from "../../shared/types";
-import {GameService} from "../game.service";
-import {liveQuery} from "dexie";
-import {Router} from "@angular/router";
-import {GameDetailCardComponent} from "../components/game-detail-card/game-detail-card.component";
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { GreedGame } from "../../shared/types";
+import { GameService } from "../game.service";
+import { liveQuery } from "dexie";
+import { Router } from "@angular/router";
+import { GameDetailCardComponent } from "../components/game-detail-card/game-detail-card.component";
 
 @Component({
   selector: 'app-game-list',
@@ -16,7 +16,7 @@ import {GameDetailCardComponent} from "../components/game-detail-card/game-detai
 })
 export class GameListPage implements OnInit {
 
-  games = signal<Game[]>([]);
+  games = signal<GreedGame[]>([]);
   readonly gameService = inject(GameService);
   readonly router = inject(Router);
 

@@ -1,3 +1,64 @@
 .sd-swiper-slide {
   height: 100%;
+  overflow-y: auto;
+}
+
+.summary-container,
+.turn-log-container {
+  padding: 0.5rem;
+  padding-bottom: 2rem;
+}
+
+.player-standing {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .rank {
+    font-weight: bold;
+    min-width: 1.5rem;
+  }
+
+  .name {
+    flex: 1;
+  }
+}
+
+.score {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--md-primary);
+}
+
+.turn-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .player-name {
+    font-weight: 500;
+  }
+}
+
+.turn-details {
+  font-size: 0.85rem;
+  color: var(--md-onSurfaceVariant);
+  margin-top: 0.25rem;
+}
+
+ion-item-divider {
+  font-weight: 600;
+  --color: var(--ion-color-tertiary);
+}
+
+ion-item:has(+ ion-item-divider) {
+  margin-bottom: 1rem;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.1rem;
 }

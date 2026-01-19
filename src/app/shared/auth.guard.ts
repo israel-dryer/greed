@@ -2,7 +2,7 @@ import {inject} from '@angular/core';
 import {CanActivateFn, Router} from '@angular/router';
 import {AuthService} from './auth.service';
 
-const AUTH_SKIPPED_KEY = 'CatanDice.authSkipped';
+const AUTH_SKIPPED_KEY = 'Greed.authSkipped';
 
 export const authGuard: CanActivateFn = async () => {
   const authService = inject(AuthService);

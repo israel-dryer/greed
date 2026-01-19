@@ -11,7 +11,7 @@ export const APP_VERSION = new InjectionToken<string>('APP_VERSION');
 
 bootstrapApplication(AppComponent, {
   providers: [
-    {provide: APP_VERSION, useValue: '0.4.0'},
+    {provide: APP_VERSION, useValue: '1.0.1'},
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     provideIonicAngular(),
     provideAnimationsAsync(),

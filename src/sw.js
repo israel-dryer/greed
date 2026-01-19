@@ -1,5 +1,5 @@
 // Service worker for PWA
-const CACHE_NAME = 'greed-v1.0.0';
+const CACHE_NAME = 'greed-v1.0.1';
 
 self.addEventListener('install', (event) => {
   // Skip waiting to activate new service worker immediately
